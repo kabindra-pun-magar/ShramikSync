@@ -1,0 +1,164 @@
+/* =========================
+   GLOBAL RESET
+========================= */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+
+html {
+  scroll-behavior: smooth;
+}
+
+
+body {
+  margin: 0;
+
+  min-width: 320px;
+  min-height: 100vh;
+
+  background: var(--bg-app);
+  color: var(--text-main);
+
+  font-family: var(--font-family);
+
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-regular);
+
+  line-height: 1.5;
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
+/* =========================
+   ROOT
+========================= */
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+}
+
+
+/* =========================
+   HEADINGS
+========================= */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-top: 0;
+
+  color: var(--text-main);
+
+  font-weight: var(--font-weight-bold);
+}
+
+
+/* =========================
+   PARAGRAPHS
+========================= */
+
+p {
+  margin-top: 0;
+}
+
+
+/* =========================
+   LINKS
+========================= */
+
+a {
+  color: inherit;
+}
+
+
+/* =========================
+   BUTTONS
+========================= */
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+
+/* =========================
+   IMAGES
+========================= */
+
+img,
+svg {
+  display: block;
+
+  max-width: 100%;
+}
+
+
+/* =========================
+   FORM ELEMENTS
+========================= */
+
+input,
+textarea,
+select {
+  width: 100%;
+}
+
+
+/* =========================
+   NUMERIC DATA
+========================= */
+
+.numeric,
+[data-numeric="true"] {
+  font-variant-numeric: tabular-nums;
+}
+
+
+/* =========================
+   ACCESSIBILITY
+========================= */
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 3px solid rgba(30, 58, 138, 0.25);
+  outline-offset: 2px;
+}
+
+
+/* =========================
+   TEXT SELECTION
+========================= */
+
+::selection {
+  background: rgba(30, 58, 138, 0.15);
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 750px) {
+  body {
+    font-size: 16px;
+  }
+}
