@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import "../styles/Home.css";
 
 function Home() {
@@ -20,9 +21,9 @@ function Home() {
         </div>
 
         <div className="navbar-actions">
-          <button type="button" className="btn btn-secondary">
-            Login
-          </button>
+          <Link to="/login" className="navbar-login">
+          Login 
+          </Link>
 
           <button type="button" className="btn btn-primary">
             Get Started
