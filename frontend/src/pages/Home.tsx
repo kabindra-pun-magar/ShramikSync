@@ -31,7 +31,7 @@ function Home() {
       </nav>
 
       {/* =========================
-          MAIN CONTENT
+          MAIN
       ========================== */}
       <main>
         {/* =========================
@@ -50,8 +50,8 @@ function Home() {
             </h1>
 
             <p>
-              Manage candidates, employers, demand letters, documents, and
-              recruitment workflows from one centralized platform.
+              Manage candidates, employers, demand letters, documents,
+              and recruitment workflows from one centralized platform.
             </p>
 
             <div className="hero-actions">
@@ -88,7 +88,6 @@ function Home() {
             </div>
 
             <div className="preview-body">
-              {/* Sidebar */}
               <aside className="preview-sidebar">
                 <div className="sidebar-item active">
                   Dashboard
@@ -115,7 +114,6 @@ function Home() {
                 </div>
               </aside>
 
-              {/* Dashboard */}
               <div className="preview-main">
                 <h3>Dashboard</h3>
 
@@ -248,64 +246,66 @@ function Home() {
             HOW IT WORKS
         ========================== */}
         <section
-          className="section workflow-section"
+          className="workflow-section"
           id="how-it-works"
         >
-          <div className="section-heading">
-            <span>HOW IT WORKS</span>
+          <div className="workflow-container">
+            <div className="section-heading">
+              <span>HOW IT WORKS</span>
 
-            <h2>One connected recruitment workflow</h2>
-
-            <p>
-              Keep every stage of your recruitment operation connected.
-            </p>
-          </div>
-
-          <div className="workflow">
-            <div className="workflow-step">
-              <div className="step-number">01</div>
-
-              <h3>Employer</h3>
+              <h2>One connected recruitment workflow</h2>
 
               <p>
-                Manage employer information and recruitment requirements.
+                Keep every stage of your recruitment operation connected.
               </p>
             </div>
 
-            <div className="workflow-line"></div>
+            <div className="workflow">
+              <div className="workflow-step">
+                <div className="step-number">01</div>
 
-            <div className="workflow-step">
-              <div className="step-number">02</div>
+                <h3>Employer</h3>
 
-              <h3>Demand Letter</h3>
+                <p>
+                  Manage employer information and recruitment requirements.
+                </p>
+              </div>
 
-              <p>
-                Organize recruitment demand and job requirements.
-              </p>
-            </div>
+              <div className="workflow-line"></div>
 
-            <div className="workflow-line"></div>
+              <div className="workflow-step">
+                <div className="step-number">02</div>
 
-            <div className="workflow-step">
-              <div className="step-number">03</div>
+                <h3>Demand Letter</h3>
 
-              <h3>Candidates</h3>
+                <p>
+                  Organize recruitment demand and job requirements.
+                </p>
+              </div>
 
-              <p>
-                Manage candidates and their recruitment information.
-              </p>
-            </div>
+              <div className="workflow-line"></div>
 
-            <div className="workflow-line"></div>
+              <div className="workflow-step">
+                <div className="step-number">03</div>
 
-            <div className="workflow-step">
-              <div className="step-number">04</div>
+                <h3>Candidates</h3>
 
-              <h3>Recruitment</h3>
+                <p>
+                  Manage candidates and their recruitment information.
+                </p>
+              </div>
 
-              <p>
-                Track candidates through the recruitment pipeline.
-              </p>
+              <div className="workflow-line"></div>
+
+              <div className="workflow-step">
+                <div className="step-number">04</div>
+
+                <h3>Recruitment</h3>
+
+                <p>
+                  Track candidates through the recruitment pipeline.
+                </p>
+              </div>
             </div>
           </div>
         </section>
