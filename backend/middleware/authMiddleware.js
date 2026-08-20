@@ -2,10 +2,8 @@ import jwt from "jsonwebtoken";
 
 export const authenticateToken = (req, res, next) => {
   try {
-    // Get Authorization header
     const authHeader = req.headers.authorization;
 
-    // Check if Authorization header exists
     if (!authHeader) {
       return res.status(401).json({
         success: false,
@@ -13,47 +11,44 @@ export const authenticateToken = (req, res, next) => {
       });
     }
 
-    // Expected format:
-    // Authorization: Bearer <token>
-    const parts = authHeader.split(" ");
+    const [scheme, token] = authHeader.split(" ");
 
-    if (parts.length !== 2 || parts[0] !== "Bearer") {
+    if (scheme !== "Bearer" || !token) {
       return res.status(401).json({
         success: false,
         message: "Invalid authorization format.",
       });
     }
 
-    const token = parts[1];
-
-    // Check JWT secret
-    if (!process.env.JWT_SECRET) {
-      console.error("JWT_SECRET is missing from environment variables.");
-
-      return res.status(500).json({
-        success: false,
-        message: "Authentication configuration error.",
-      });
-    }
-
-    // Verify JWT
     const decoded = jwt.verify(
       token,
       process.env.JWT_SECRET
     );
 
-    // Attach authenticated user information
-    // to the request object
     req.user = decoded;
 
-    // Continue to the protected route
     next();
+
   } catch (error) {
-    console.error("JWT verification error:", error.message);
+    console.error("JWT authentication error:", error);
+
+    if (error.name === "TokenExpiredError") {
+      return res.status(401).json({
+        success: false,
+        message: "Token has expired.",
+      });
+    }
+
+    if (error.name === "JsonWebTokenError") {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid token.",
+      });
+    }
 
     return res.status(401).json({
       success: false,
-      message: "Invalid or expired token.",
+      message: "Authentication failed.",
     });
   }
 };

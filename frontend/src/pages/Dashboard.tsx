@@ -1,423 +1,466 @@
-import { Link } from "react-router-dom";
-// import "../styles/Dashboard.css";
+import { useNavigate } from "react-router-dom";
+import "../styles/Dashboard.css";
+
+interface StoredUser {
+  id: number;
+  name: string;
+  email: string;
+  role: string;
+}
 
 function Dashboard() {
+  const navigate = useNavigate();
+
+  let user: StoredUser | null = null;
+
+  try {
+    const storedUser = localStorage.getItem("user");
+
+    if (storedUser) {
+      user = JSON.parse(storedUser);
+    }
+  } catch {
+    user = null;
+  }
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+
+    navigate("/login", {
+      replace: true,
+    });
+  };
+
   return (
-    <div className="dashboard-layout">
-      {/* Sidebar */}
+    <div className="dashboard-page">
+
+      {/* =========================
+          SIDEBAR
+      ========================== */}
+
       <aside className="dashboard-sidebar">
-        <div className="dashboard-brand">
-          <div className="dashboard-brand-logo">S</div>
-          <span>ShramikSync</span>
+
+        <div className="dashboard-sidebar-brand">
+          <div className="dashboard-brand-icon">
+            S
+          </div>
+
+          <strong>ShramikSync</strong>
         </div>
 
-        <nav className="dashboard-nav">
-          <Link to="/dashboard" className="dashboard-nav-item active">
-            <span>▦</span>
+
+        <nav className="dashboard-navigation">
+
+          <button
+            type="button"
+            className="dashboard-nav-item active"
+          >
+            <span>01</span>
             Dashboard
-          </Link>
+          </button>
 
-          <Link to="/candidates" className="dashboard-nav-item">
-            <span>◉</span>
+          <button
+            type="button"
+            className="dashboard-nav-item"
+          >
+            <span>02</span>
             Candidates
-          </Link>
+          </button>
 
-          <Link to="/employers" className="dashboard-nav-item">
-            <span>▣</span>
+          <button
+            type="button"
+            className="dashboard-nav-item"
+          >
+            <span>03</span>
             Employers
-          </Link>
+          </button>
 
-          <Link to="/demand-letters" className="dashboard-nav-item">
-            <span>▤</span>
+          <button
+            type="button"
+            className="dashboard-nav-item"
+          >
+            <span>04</span>
             Demand Letters
-          </Link>
+          </button>
 
-          <Link to="/documents" className="dashboard-nav-item">
-            <span>▧</span>
+          <button
+            type="button"
+            className="dashboard-nav-item"
+          >
+            <span>05</span>
             Documents
-          </Link>
+          </button>
 
-          <Link to="/reports" className="dashboard-nav-item">
-            <span>◫</span>
+          <button
+            type="button"
+            className="dashboard-nav-item"
+          >
+            <span>06</span>
             Reports
-          </Link>
+          </button>
 
-          <Link to="/settings" className="dashboard-nav-item">
-            <span>⚙</span>
-            Settings
-          </Link>
         </nav>
 
-        <div className="dashboard-sidebar-bottom">
-          <button className="dashboard-logout">
-            <span>↪</span>
-            Logout
-          </button>
-        </div>
+
+        <button
+          type="button"
+          className="dashboard-logout"
+          onClick={handleLogout}
+        >
+          Logout
+        </button>
+
       </aside>
 
-      {/* Main content */}
+
+      {/* =========================
+          MAIN
+      ========================== */}
+
       <main className="dashboard-main">
-        {/* Top bar */}
+
         <header className="dashboard-header">
+
           <div>
-            <p className="dashboard-breadcrumb">Workspace</p>
+            <span className="dashboard-eyebrow">
+              RECRUITMENT MANAGEMENT
+            </span>
+
             <h1>Dashboard</h1>
-          </div>
 
-          <div className="dashboard-header-right">
-            <button className="notification-button" aria-label="Notifications">
-              ♢
-              <span className="notification-dot"></span>
-            </button>
-
-            <div className="dashboard-user">
-              <div className="dashboard-avatar">K</div>
-
-              <div>
-                <strong>Admin User</strong>
-                <span>Administrator</span>
-              </div>
-            </div>
-          </div>
-        </header>
-
-        {/* Welcome section */}
-        <section className="dashboard-welcome">
-          <div>
-            <p className="dashboard-eyebrow">RECRUITMENT MANAGEMENT</p>
-            <h2>Welcome back.</h2>
             <p>
-              Here's what's happening with your recruitment operations today.
+              Monitor your recruitment operations from one place.
             </p>
           </div>
 
-          <Link to="/candidates" className="dashboard-primary-button">
-            + Add Candidate
-          </Link>
-        </section>
 
-        {/* Statistics */}
-        <section className="dashboard-stats">
-          <div className="stat-card">
-            <div className="stat-card-top">
-              <span>Total Candidates</span>
-              <div className="stat-icon">◉</div>
+          <div className="dashboard-user">
+
+            <div className="dashboard-user-avatar">
+              {user?.name?.charAt(0).toUpperCase() || "U"}
             </div>
+
+            <div>
+              <strong>
+                {user?.name || "User"}
+              </strong>
+
+              <span>
+                {user?.role || "USER"}
+              </span>
+            </div>
+
+          </div>
+
+        </header>
+
+
+        {/* =========================
+            STATS
+        ========================== */}
+
+        <section className="dashboard-stats">
+
+          <div className="card dashboard-stat-card">
+            <span className="dashboard-stat-label">
+              Candidates
+            </span>
 
             <strong>248</strong>
 
-            <p className="stat-positive">
-              ↑ 12.5% <span>from last month</span>
-            </p>
+            <span className="dashboard-stat-success">
+              +12% this month
+            </span>
           </div>
 
-          <div className="stat-card">
-            <div className="stat-card-top">
-              <span>Active Employers</span>
-              <div className="stat-icon">▣</div>
-            </div>
 
-            <strong>36</strong>
+          <div className="card dashboard-stat-card">
+            <span className="dashboard-stat-label">
+              Employers
+            </span>
 
-            <p className="stat-positive">
-              ↑ 8.2% <span>from last month</span>
-            </p>
+            <strong>32</strong>
+
+            <span className="dashboard-stat-success">
+              +5 new
+            </span>
           </div>
 
-          <div className="stat-card">
-            <div className="stat-card-top">
-              <span>Pending Applications</span>
-              <div className="stat-icon">◷</div>
-            </div>
 
-            <strong>42</strong>
+          <div className="card dashboard-stat-card">
+            <span className="dashboard-stat-label">
+              Applications
+            </span>
 
-            <p className="stat-warning">
-              7 <span>need attention</span>
-            </p>
+            <strong>156</strong>
+
+            <span className="dashboard-stat-warning">
+              24 pending
+            </span>
           </div>
 
-          <div className="stat-card">
-            <div className="stat-card-top">
-              <span>Successful Placements</span>
-              <div className="stat-icon">✓</div>
-            </div>
 
-            <strong>124</strong>
+          <div className="card dashboard-stat-card">
+            <span className="dashboard-stat-label">
+              Documents
+            </span>
 
-            <p className="stat-positive">
-              ↑ 18.4% <span>from last month</span>
-            </p>
+            <strong>421</strong>
+
+            <span className="dashboard-stat-success">
+              398 verified
+            </span>
           </div>
+
         </section>
 
-        {/* Main dashboard grid */}
+
+        {/* =========================
+            CONTENT GRID
+        ========================== */}
+
         <section className="dashboard-content-grid">
-          {/* Recruitment activity */}
-          <div className="dashboard-panel activity-panel">
-            <div className="panel-header">
+
+          {/* Recruitment Pipeline */}
+
+          <div className="card dashboard-panel">
+
+            <div className="dashboard-panel-header">
+
               <div>
-                <h3>Recruitment Activity</h3>
-                <p>Candidate applications over the last 6 months</p>
+                <h2>Recruitment Pipeline</h2>
+
+                <p>
+                  Candidate progress across recruitment stages.
+                </p>
               </div>
 
-              <select defaultValue="6months">
-                <option value="6months">Last 6 months</option>
-                <option value="30days">Last 30 days</option>
-                <option value="12months">Last 12 months</option>
-              </select>
+              <span className="status-badge status-active">
+                Active
+              </span>
+
             </div>
 
-            <div className="chart-container">
-              <div className="chart-y-axis">
-                <span>80</span>
-                <span>60</span>
-                <span>40</span>
-                <span>20</span>
-                <span>0</span>
-              </div>
 
-              <div className="chart-area">
-                <div className="chart-grid-line"></div>
-                <div className="chart-grid-line"></div>
-                <div className="chart-grid-line"></div>
-                <div className="chart-grid-line"></div>
-                <div className="chart-grid-line"></div>
+            <div className="dashboard-pipeline">
 
-                <div className="chart-bars">
-                  <div className="chart-column">
-                    <div className="chart-bar" style={{ height: "48%" }}></div>
-                    <span>Mar</span>
-                  </div>
+              <div>
+                <span>Registered</span>
 
-                  <div className="chart-column">
-                    <div className="chart-bar" style={{ height: "62%" }}></div>
-                    <span>Apr</span>
-                  </div>
+                <strong>248</strong>
 
-                  <div className="chart-column">
-                    <div className="chart-bar" style={{ height: "54%" }}></div>
-                    <span>May</span>
-                  </div>
-
-                  <div className="chart-column">
-                    <div className="chart-bar" style={{ height: "78%" }}></div>
-                    <span>Jun</span>
-                  </div>
-
-                  <div className="chart-column">
-                    <div className="chart-bar" style={{ height: "68%" }}></div>
-                    <span>Jul</span>
-                  </div>
-
-                  <div className="chart-column">
-                    <div className="chart-bar active-bar" style={{ height: "88%" }}></div>
-                    <span>Aug</span>
-                  </div>
+                <div className="pipeline-bar">
+                  <span style={{ width: "90%" }} />
                 </div>
               </div>
+
+
+              <div>
+                <span>Screening</span>
+
+                <strong>184</strong>
+
+                <div className="pipeline-bar">
+                  <span style={{ width: "72%" }} />
+                </div>
+              </div>
+
+
+              <div>
+                <span>Interview</span>
+
+                <strong>126</strong>
+
+                <div className="pipeline-bar">
+                  <span style={{ width: "54%" }} />
+                </div>
+              </div>
+
+
+              <div>
+                <span>Selected</span>
+
+                <strong>82</strong>
+
+                <div className="pipeline-bar">
+                  <span style={{ width: "36%" }} />
+                </div>
+              </div>
+
             </div>
+
           </div>
 
-          {/* Application status */}
-          <div className="dashboard-panel">
-            <div className="panel-header">
+
+          {/* Quick Actions */}
+
+          <div className="card dashboard-panel">
+
+            <div className="dashboard-panel-header">
+
               <div>
-                <h3>Application Status</h3>
-                <p>Current candidate pipeline</p>
+                <h2>Quick Actions</h2>
+
+                <p>
+                  Common recruitment operations.
+                </p>
               </div>
+
             </div>
 
-            <div className="status-list">
-              <div className="status-row">
-                <div className="status-label">
-                  <span className="status-dot blue"></span>
-                  New
-                </div>
 
-                <strong>64</strong>
-              </div>
+            <div className="dashboard-actions">
 
-              <div className="status-row">
-                <div className="status-label">
-                  <span className="status-dot yellow"></span>
-                  Under Review
-                </div>
+              <button
+                type="button"
+                className="btn btn-primary"
+              >
+                Create Candidate
+              </button>
 
-                <strong>42</strong>
-              </div>
+              <button
+                type="button"
+                className="btn btn-secondary"
+              >
+                Add Employer
+              </button>
 
-              <div className="status-row">
-                <div className="status-label">
-                  <span className="status-dot purple"></span>
-                  Interview
-                </div>
+              <button
+                type="button"
+                className="btn btn-secondary"
+              >
+                Create Demand Letter
+              </button>
 
-                <strong>28</strong>
-              </div>
+              <button
+                type="button"
+                className="btn btn-secondary"
+              >
+                Upload Document
+              </button>
 
-              <div className="status-row">
-                <div className="status-label">
-                  <span className="status-dot green"></span>
-                  Selected
-                </div>
-
-                <strong>18</strong>
-              </div>
-
-              <div className="status-row">
-                <div className="status-label">
-                  <span className="status-dot red"></span>
-                  Rejected
-                </div>
-
-                <strong>11</strong>
-              </div>
             </div>
+
           </div>
+
         </section>
 
-        {/* Bottom section */}
-        <section className="dashboard-bottom-grid">
-          {/* Recent candidates */}
-          <div className="dashboard-panel recent-panel">
-            <div className="panel-header">
-              <div>
-                <h3>Recent Candidates</h3>
-                <p>Latest candidates added to the system</p>
-              </div>
 
-              <Link to="/candidates">View all</Link>
+        {/* =========================
+            RECENT ACTIVITY
+        ========================== */}
+
+        <section className="card dashboard-panel dashboard-activity">
+
+          <div className="dashboard-panel-header">
+
+            <div>
+              <h2>Recent Activity</h2>
+
+              <p>
+                Latest recruitment operations.
+              </p>
             </div>
 
-            <div className="candidate-table-wrapper">
-              <table className="candidate-table">
-                <thead>
-                  <tr>
-                    <th>Candidate</th>
-                    <th>Position</th>
-                    <th>Status</th>
-                    <th>Added</th>
-                  </tr>
-                </thead>
+            <button
+              type="button"
+              className="btn btn-outline"
+            >
+              View Reports
+            </button>
 
-                <tbody>
-                  <tr>
-                    <td>
-                      <div className="candidate-name">
-                        <div className="small-avatar">RS</div>
-                        <div>
-                          <strong>Ram Sharma</strong>
-                          <span>ram@example.com</span>
-                        </div>
-                      </div>
-                    </td>
-
-                    <td>Construction Worker</td>
-
-                    <td>
-                      <span className="status-badge review">
-                        Under Review
-                      </span>
-                    </td>
-
-                    <td>Today</td>
-                  </tr>
-
-                  <tr>
-                    <td>
-                      <div className="candidate-name">
-                        <div className="small-avatar">BP</div>
-                        <div>
-                          <strong>Bikash Poudel</strong>
-                          <span>bikash@example.com</span>
-                        </div>
-                      </div>
-                    </td>
-
-                    <td>Electrician</td>
-
-                    <td>
-                      <span className="status-badge selected">
-                        Selected
-                      </span>
-                    </td>
-
-                    <td>Yesterday</td>
-                  </tr>
-
-                  <tr>
-                    <td>
-                      <div className="candidate-name">
-                        <div className="small-avatar">SK</div>
-                        <div>
-                          <strong>Sita Karki</strong>
-                          <span>sita@example.com</span>
-                        </div>
-                      </div>
-                    </td>
-
-                    <td>Caregiver</td>
-
-                    <td>
-                      <span className="status-badge interview">
-                        Interview
-                      </span>
-                    </td>
-
-                    <td>2 days ago</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
           </div>
 
-          {/* Quick actions */}
-          <div className="dashboard-panel quick-actions-panel">
-            <div className="panel-header">
-              <div>
-                <h3>Quick Actions</h3>
-                <p>Common recruitment tasks</p>
-              </div>
-            </div>
 
-            <div className="quick-actions">
-              <Link to="/candidates" className="quick-action">
-                <div className="quick-action-icon">+</div>
-                <div>
-                  <strong>Add Candidate</strong>
-                  <span>Create a new candidate profile</span>
-                </div>
-              </Link>
+          <div className="dashboard-table-wrapper">
 
-              <Link to="/employers" className="quick-action">
-                <div className="quick-action-icon">+</div>
-                <div>
-                  <strong>Add Employer</strong>
-                  <span>Register a new employer</span>
-                </div>
-              </Link>
+            <table>
 
-              <Link to="/demand-letters" className="quick-action">
-                <div className="quick-action-icon">+</div>
-                <div>
-                  <strong>Create Demand Letter</strong>
-                  <span>Start a new recruitment demand</span>
-                </div>
-              </Link>
+              <thead>
+                <tr>
+                  <th>Activity</th>
+                  <th>Type</th>
+                  <th>Status</th>
+                  <th>Time</th>
+                </tr>
+              </thead>
 
-              <Link to="/documents" className="quick-action">
-                <div className="quick-action-icon">↑</div>
-                <div>
-                  <strong>Upload Document</strong>
-                  <span>Upload candidate documents</span>
-                </div>
-              </Link>
-            </div>
+
+              <tbody>
+
+                <tr>
+                  <td>
+                    Candidate profile created
+                  </td>
+
+                  <td>
+                    Candidate
+                  </td>
+
+                  <td>
+                    <span className="status-badge status-active">
+                      Active
+                    </span>
+                  </td>
+
+                  <td>
+                    10 min ago
+                  </td>
+                </tr>
+
+
+                <tr>
+                  <td>
+                    Employer requirement updated
+                  </td>
+
+                  <td>
+                    Employer
+                  </td>
+
+                  <td>
+                    <span className="status-badge status-pending">
+                      Pending
+                    </span>
+                  </td>
+
+                  <td>
+                    32 min ago
+                  </td>
+                </tr>
+
+
+                <tr>
+                  <td>
+                    Demand letter uploaded
+                  </td>
+
+                  <td>
+                    Document
+                  </td>
+
+                  <td>
+                    <span className="status-badge status-active">
+                      Verified
+                    </span>
+                  </td>
+
+                  <td>
+                    1 hour ago
+                  </td>
+                </tr>
+
+              </tbody>
+
+            </table>
+
           </div>
+
         </section>
+
       </main>
+
     </div>
   );
 }

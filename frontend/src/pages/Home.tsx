@@ -3,44 +3,54 @@ import "../styles/Home.css";
 
 function Home() {
   return (
-    <div className="home">
+    <div className="home-page">
+
       {/* =========================
           NAVBAR
       ========================== */}
-      <nav className="navbar">
-        <div className="navbar-brand">
-          <div className="brand-icon">S</div>
-          <span>ShramikSync</span>
-        </div>
 
-        <div className="navbar-links">
+      <nav className="home-navbar">
+        <Link to="/" className="home-brand">
+          <div className="home-brand-icon">S</div>
+          <span>ShramikSync</span>
+        </Link>
+
+        <div className="home-nav-links">
           <a href="#home">Home</a>
           <a href="#features">Features</a>
           <a href="#how-it-works">How It Works</a>
           <a href="#about">About</a>
         </div>
 
-        <div className="navbar-actions">
-          <Link to="/login" className="navbar-login">
-          Login 
+        <div className="home-nav-actions">
+          <Link
+            to="/login"
+            className="btn btn-outline home-login-button"
+          >
+            Login
           </Link>
 
-          <button type="button" className="btn btn-primary">
+          <Link
+            to="/login"
+            className="btn btn-primary"
+          >
             Get Started
-          </button>
+          </Link>
         </div>
       </nav>
 
+
       {/* =========================
-          MAIN
+          HERO
       ========================== */}
+
       <main>
-        {/* =========================
-            HERO
-        ========================== */}
-        <section className="hero" id="home">
-          <div className="hero-content">
-            <span className="hero-label">
+
+        <section className="home-hero" id="home">
+
+          <div className="home-hero-content">
+
+            <span className="home-eyebrow">
               RECRUITMENT MANAGEMENT PLATFORM
             </span>
 
@@ -51,309 +61,342 @@ function Home() {
             </h1>
 
             <p>
-              Manage candidates, employers, demand letters, documents,
-              and recruitment workflows from one centralized platform.
+              Manage candidates, employers, demand letters,
+              documents, and recruitment workflows from one
+              centralized platform.
             </p>
 
-            <div className="hero-actions">
-              <button
-                type="button"
-                className="btn btn-primary btn-large"
+            <div className="home-hero-actions">
+
+              <Link
+                to="/login"
+                className="btn btn-primary"
               >
                 Get Started
-              </button>
+              </Link>
 
               <a
                 href="#features"
-                className="btn btn-outline btn-large"
+                className="btn btn-outline"
               >
                 Explore Features
               </a>
+
             </div>
+
           </div>
 
-          {/* =========================
-              DASHBOARD PREVIEW
-          ========================== */}
-          <div className="dashboard-preview">
-            <div className="preview-header">
-              <div className="preview-brand">
-                <div className="preview-logo">S</div>
+
+          {/* Dashboard preview */}
+
+          <div className="home-dashboard-preview">
+
+            <div className="home-preview-header">
+
+              <div className="home-preview-brand">
+                <div className="home-brand-icon">
+                  S
+                </div>
+
                 <strong>ShramikSync</strong>
               </div>
 
-              <div className="preview-user">
-                <span></span>
-                Admin
-              </div>
+              <span className="status-badge status-active">
+                Active
+              </span>
+
             </div>
 
-            <div className="preview-body">
-              <aside className="preview-sidebar">
-                <div className="sidebar-item active">
+
+            <div className="home-preview-content">
+
+              <div className="home-preview-sidebar">
+
+                <div className="home-sidebar-item active">
                   Dashboard
                 </div>
 
-                <div className="sidebar-item">
+                <div className="home-sidebar-item">
                   Candidates
                 </div>
 
-                <div className="sidebar-item">
+                <div className="home-sidebar-item">
                   Employers
                 </div>
 
-                <div className="sidebar-item">
+                <div className="home-sidebar-item">
                   Demand Letters
                 </div>
 
-                <div className="sidebar-item">
+                <div className="home-sidebar-item">
                   Documents
                 </div>
 
-                <div className="sidebar-item">
-                  Reports
-                </div>
-              </aside>
+              </div>
 
-              <div className="preview-main">
+
+              <div className="home-preview-main">
+
                 <h3>Dashboard</h3>
 
-                <div className="stat-grid">
-                  <div className="stat-card">
+                <div className="home-stat-grid">
+
+                  <div className="card home-stat-card">
                     <span>Candidates</span>
                     <strong>248</strong>
                     <small>+12% this month</small>
                   </div>
 
-                  <div className="stat-card">
+                  <div className="card home-stat-card">
                     <span>Employers</span>
                     <strong>32</strong>
                     <small>+5 new</small>
                   </div>
 
-                  <div className="stat-card">
+                  <div className="card home-stat-card">
                     <span>Applications</span>
                     <strong>156</strong>
                     <small>24 pending</small>
                   </div>
+
                 </div>
 
-                <div className="preview-chart">
-                  <div className="chart-heading">
+
+                <div className="card home-chart-card">
+
+                  <div className="home-chart-header">
                     <strong>Recruitment Pipeline</strong>
                     <span>Monthly</span>
                   </div>
 
-                  <div className="chart-bars">
-                    <div style={{ height: "55%" }}></div>
-                    <div style={{ height: "75%" }}></div>
-                    <div style={{ height: "45%" }}></div>
-                    <div style={{ height: "85%" }}></div>
-                    <div style={{ height: "65%" }}></div>
-                    <div style={{ height: "92%" }}></div>
-                    <div style={{ height: "72%" }}></div>
+                  <div className="home-chart">
+
+                    <div style={{ height: "55%" }} />
+                    <div style={{ height: "75%" }} />
+                    <div style={{ height: "45%" }} />
+                    <div style={{ height: "85%" }} />
+                    <div style={{ height: "65%" }} />
+                    <div style={{ height: "92%" }} />
+                    <div style={{ height: "72%" }} />
+
                   </div>
+
                 </div>
+
               </div>
+
             </div>
+
           </div>
+
         </section>
+
 
         {/* =========================
             FEATURES
         ========================== */}
-        <section className="section" id="features">
-          <div className="section-heading">
+
+        <section
+          className="home-section"
+          id="features"
+        >
+
+          <div className="home-section-heading">
+
             <span>CORE FEATURES</span>
 
-            <h2>Everything your recruitment agency needs</h2>
+            <h2>
+              Everything your recruitment agency needs
+            </h2>
 
             <p>
-              A centralized platform designed to simplify and organize
-              your recruitment operations.
+              A centralized platform designed to simplify
+              and organize your recruitment operations.
             </p>
+
           </div>
 
-          <div className="features-grid">
-            <article className="feature-card">
-              <div className="feature-icon">01</div>
 
-              <h3>Candidate Management</h3>
+          <div className="home-features-grid">
 
-              <p>
-                Manage candidate profiles, skills, education, experience,
-                and recruitment information in one place.
-              </p>
-            </article>
+            {[
+              {
+                number: "01",
+                title: "Candidate Management",
+                text:
+                  "Manage candidate profiles, skills, education, experience, and recruitment information in one place.",
+              },
+              {
+                number: "02",
+                title: "Employer Management",
+                text:
+                  "Organize employer information and manage recruitment requirements efficiently.",
+              },
+              {
+                number: "03",
+                title: "Demand Letters",
+                text:
+                  "Keep employer demand information organized and connected to the recruitment process.",
+              },
+              {
+                number: "04",
+                title: "Document Management",
+                text:
+                  "Centralize candidate documents and keep track of important document information.",
+              },
+              {
+                number: "05",
+                title: "Recruitment Workflow",
+                text:
+                  "Track candidates throughout the recruitment pipeline and understand their current status.",
+              },
+              {
+                number: "06",
+                title: "Reports & Analytics",
+                text:
+                  "Turn recruitment data into useful insights for better operational decisions.",
+              },
+            ].map((feature) => (
+              <article
+                className="card home-feature-card"
+                key={feature.number}
+              >
+                <div className="home-feature-number">
+                  {feature.number}
+                </div>
 
-            <article className="feature-card">
-              <div className="feature-icon">02</div>
+                <h3>{feature.title}</h3>
 
-              <h3>Employer Management</h3>
+                <p>{feature.text}</p>
+              </article>
+            ))}
 
-              <p>
-                Organize employer information and manage recruitment
-                requirements efficiently.
-              </p>
-            </article>
-
-            <article className="feature-card">
-              <div className="feature-icon">03</div>
-
-              <h3>Demand Letters</h3>
-
-              <p>
-                Keep employer demand information organized and connected
-                to the recruitment process.
-              </p>
-            </article>
-
-            <article className="feature-card">
-              <div className="feature-icon">04</div>
-
-              <h3>Document Management</h3>
-
-              <p>
-                Centralize candidate documents and keep track of important
-                document information.
-              </p>
-            </article>
-
-            <article className="feature-card">
-              <div className="feature-icon">05</div>
-
-              <h3>Recruitment Workflow</h3>
-
-              <p>
-                Track candidates throughout the recruitment pipeline and
-                understand their current status.
-              </p>
-            </article>
-
-            <article className="feature-card">
-              <div className="feature-icon">06</div>
-
-              <h3>Reports &amp; Analytics</h3>
-
-              <p>
-                Turn recruitment data into useful insights for better
-                operational decisions.
-              </p>
-            </article>
           </div>
+
         </section>
+
 
         {/* =========================
             HOW IT WORKS
         ========================== */}
+
         <section
-          className="workflow-section"
+          className="home-workflow-section"
           id="how-it-works"
         >
-          <div className="workflow-container">
-            <div className="section-heading">
-              <span>HOW IT WORKS</span>
 
-              <h2>One connected recruitment workflow</h2>
+          <div className="home-section-heading">
 
-              <p>
-                Keep every stage of your recruitment operation connected.
-              </p>
-            </div>
+            <span>HOW IT WORKS</span>
 
-            <div className="workflow">
-              <div className="workflow-step">
-                <div className="step-number">01</div>
+            <h2>
+              One connected recruitment workflow
+            </h2>
 
-                <h3>Employer</h3>
+            <p>
+              Keep every stage of your recruitment operation
+              connected.
+            </p>
 
-                <p>
-                  Manage employer information and recruitment requirements.
-                </p>
-              </div>
-
-              <div className="workflow-line"></div>
-
-              <div className="workflow-step">
-                <div className="step-number">02</div>
-
-                <h3>Demand Letter</h3>
-
-                <p>
-                  Organize recruitment demand and job requirements.
-                </p>
-              </div>
-
-              <div className="workflow-line"></div>
-
-              <div className="workflow-step">
-                <div className="step-number">03</div>
-
-                <h3>Candidates</h3>
-
-                <p>
-                  Manage candidates and their recruitment information.
-                </p>
-              </div>
-
-              <div className="workflow-line"></div>
-
-              <div className="workflow-step">
-                <div className="step-number">04</div>
-
-                <h3>Recruitment</h3>
-
-                <p>
-                  Track candidates through the recruitment pipeline.
-                </p>
-              </div>
-            </div>
           </div>
+
+
+          <div className="home-workflow">
+
+            {[
+              ["01", "Employer", "Manage employer information and recruitment requirements."],
+              ["02", "Demand Letter", "Organize recruitment demand and job requirements."],
+              ["03", "Candidates", "Manage candidates and their recruitment information."],
+              ["04", "Recruitment", "Track candidates through the recruitment pipeline."],
+            ].map(([number, title, text], index) => (
+              <div
+                className="home-workflow-step"
+                key={number}
+              >
+
+                <div className="home-step-number">
+                  {number}
+                </div>
+
+                <h3>{title}</h3>
+
+                <p>{text}</p>
+
+                {index < 3 && (
+                  <div className="home-workflow-line" />
+                )}
+
+              </div>
+            ))}
+
+          </div>
+
         </section>
+
 
         {/* =========================
             CTA
         ========================== */}
-        <section className="cta-section" id="about">
-          <div className="cta-content">
+
+        <section
+          className="home-cta"
+          id="about"
+        >
+
+          <div>
+
             <span>READY TO GET STARTED?</span>
 
-            <h2>Bring your recruitment operation together.</h2>
+            <h2>
+              Bring your recruitment operation together.
+            </h2>
 
             <p>
-              Manage your recruitment workflow with a centralized system
-              built for modern manpower agencies.
+              Manage your recruitment workflow with a
+              centralized system built for modern manpower
+              agencies.
             </p>
+
           </div>
 
-          <button
-            type="button"
-            className="btn btn-white btn-large"
+          <Link
+            to="/login"
+            className="btn btn-primary"
           >
             Get Started
-          </button>
+          </Link>
+
         </section>
+
       </main>
+
 
       {/* =========================
           FOOTER
       ========================== */}
-      <footer className="footer">
-        <div className="footer-inner">
-          <div className="footer-brand">
-            <div className="brand-icon">S</div>
-            <strong>ShramikSync</strong>
+
+      <footer className="home-footer">
+
+        <div className="home-footer-brand">
+
+          <div className="home-brand-icon">
+            S
           </div>
 
-          <p>
-            Modern recruitment management for manpower agencies.
-          </p>
+          <strong>ShramikSync</strong>
 
-          <span>
-            © 2026 ShramikSync. All rights reserved.
-          </span>
         </div>
+
+        <p>
+          Modern recruitment management for manpower agencies.
+        </p>
+
+        <span>
+          © 2026 ShramikSync. All rights reserved.
+        </span>
+
       </footer>
+
     </div>
   );
 }

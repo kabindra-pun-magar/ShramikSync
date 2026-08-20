@@ -2,8 +2,19 @@ import { useState } from "react";
 import type { FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../services/api";
-
 import "../styles/Login.css";
+
+interface LoginResponse {
+  success: boolean;
+  message: string;
+  token?: string;
+  user?: {
+    id: number;
+    name: string;
+    email: string;
+    role: string;
+  };
+}
 
 function Login() {
   const navigate = useNavigate();
@@ -15,124 +26,209 @@ function Login() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (
+    event: FormEvent<HTMLFormElement>
+  ) => {
     event.preventDefault();
 
     setError("");
     setSuccess("");
 
-    if (!email || !password) {
-      setError("Please enter your email and password.");
+    if (!email.trim() || !password) {
+      setError(
+        "Please enter your email address and password."
+      );
       return;
     }
 
     try {
       setLoading(true);
 
-      const response = await api.post("/auth/login", {
-        email,
-        password,
-      });
-
-      console.log("Login response:", response.data);
-
-      setSuccess("Login successful!");
-
-      // Temporarily store the JWT.
-      localStorage.setItem("token", response.data.token);
-
-      // Store basic user information.
-      localStorage.setItem(
-        "user",
-        JSON.stringify(response.data.user)
+      const response = await api.post<LoginResponse>(
+        "/auth/login",
+        {
+          email: email.trim(),
+          password,
+        }
       );
 
-      // Temporary redirect.
-      setTimeout(() => {
-        navigate("/dashboard");
-      }, 500);
-    } catch (error: any) {
-      console.error("Login error:", error);
-
-      if (error.response?.data?.message) {
-        setError(error.response.data.message);
-      } else {
-        setError("Unable to connect to the server.");
+      if (!response.data.success || !response.data.token) {
+        setError(
+          response.data.message || "Login failed."
+        );
+        return;
       }
+
+      localStorage.setItem(
+        "token",
+        response.data.token
+      );
+
+      if (response.data.user) {
+        localStorage.setItem(
+          "user",
+          JSON.stringify(response.data.user)
+        );
+      }
+
+      setSuccess("Login successful. Redirecting...");
+
+      setTimeout(() => {
+        navigate("/dashboard", {
+          replace: true,
+        });
+      }, 500);
+
+    } catch (err: any) {
+      const message =
+        err?.response?.data?.message ||
+        "Unable to connect to the server. Please try again.";
+
+      setError(message);
+
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <main className="login-page">
-      <div className="login-card">
-        <div className="login-header">
-          <div className="login-logo">S</div>
+    <div className="login-page">
 
-          <h1>Welcome back</h1>
-
-          <p>
-            Sign in to your ShramikSync account.
-          </p>
-        </div>
-
-        <form onSubmit={handleSubmit} className="login-form">
-          <div className="form-group">
-            <label htmlFor="email">Email</label>
-
-            <input
-              id="email"
-              type="email"
-              placeholder="Enter your email"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
-              autoComplete="email"
-            />
+      <div className="login-brand">
+        <Link to="/" className="login-brand-link">
+          <div className="login-brand-icon">
+            S
           </div>
 
-          <div className="form-group">
-            <label htmlFor="password">Password</label>
-
-            <input
-              id="password"
-              type="password"
-              placeholder="Enter your password"
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-              autoComplete="current-password"
-            />
-          </div>
-
-          {error && (
-            <div className="login-message login-error">
-              {error}
-            </div>
-          )}
-
-          {success && (
-            <div className="login-message login-success">
-              {success}
-            </div>
-          )}
-
-          <button
-            type="submit"
-            className="login-submit"
-            disabled={loading}
-          >
-            {loading ? "Signing in..." : "Sign In"}
-          </button>
-        </form>
-
-        <div className="login-footer">
-          <p>
-            Don't have an account?{" "}
-            <Link to="/signup">Create an account</Link>
-          </p>
-        </div>
+          <strong>ShramikSync</strong>
+        </Link>
       </div>
-    </main>
+
+
+      <main className="login-container">
+
+        <section className="login-card">
+
+          <div className="login-header">
+
+            <span className="login-eyebrow">
+              RECRUITMENT MANAGEMENT PLATFORM
+            </span>
+
+            <h1>Welcome back</h1>
+
+            <p>
+              Sign in to your ShramikSync account.
+            </p>
+
+          </div>
+
+
+          <form
+            className="login-form"
+            onSubmit={handleSubmit}
+          >
+
+            <div className="form-group">
+
+              <label
+                htmlFor="email"
+                className="form-label"
+              >
+                Email
+              </label>
+
+              <input
+                id="email"
+                type="email"
+                className={`form-input ${
+                  error ? "error" : ""
+                }`}
+                value={email}
+                onChange={(event) =>
+                  setEmail(event.target.value)
+                }
+                placeholder="Enter your email"
+                autoComplete="email"
+              />
+
+            </div>
+
+
+            <div className="form-group">
+
+              <label
+                htmlFor="password"
+                className="form-label"
+              >
+                Password
+              </label>
+
+              <input
+                id="password"
+                type="password"
+                className={`form-input ${
+                  error ? "error" : ""
+                }`}
+                value={password}
+                onChange={(event) =>
+                  setPassword(event.target.value)
+                }
+                placeholder="Enter your password"
+                autoComplete="current-password"
+              />
+
+            </div>
+
+
+            {error && (
+              <div
+                className="login-message login-error"
+                role="alert"
+              >
+                {error}
+              </div>
+            )}
+
+
+            {success && (
+              <div
+                className="login-message login-success"
+                role="status"
+              >
+                {success}
+              </div>
+            )}
+
+
+            <button
+              type="submit"
+              className="btn btn-primary login-submit"
+              disabled={loading}
+            >
+              {loading ? "Signing In..." : "Sign In"}
+            </button>
+
+          </form>
+
+
+          <div className="login-footer">
+
+            <span>
+              Don't have an account?
+            </span>
+
+            <Link to="/signup">
+              Create an account
+            </Link>
+
+          </div>
+
+        </section>
+
+      </main>
+
+    </div>
   );
 }
 
