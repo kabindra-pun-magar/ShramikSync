@@ -1,9 +1,8 @@
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import "../../styles/Dashboard.css";
 
 function DashboardLayout() {
   const navigate = useNavigate();
-  const location = useLocation();
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -12,10 +11,6 @@ function DashboardLayout() {
     navigate("/login", {
       replace: true,
     });
-  };
-
-  const isActive = (path: string) => {
-    return location.pathname === path;
   };
 
   return (
@@ -44,76 +39,82 @@ function DashboardLayout() {
 
         <nav className="dashboard-navigation">
 
-          <button
-            type="button"
-            className={`dashboard-nav-item ${
-              isActive("/dashboard") ? "active" : ""
-            }`}
-            onClick={() => navigate("/dashboard")}
+          <NavLink
+            to="/dashboard"
+            className={({ isActive }) =>
+              `dashboard-nav-item ${
+                isActive ? "active" : ""
+              }`
+            }
           >
             <span>01</span>
             Dashboard
-          </button>
+          </NavLink>
 
 
-          <button
-            type="button"
-            className={`dashboard-nav-item ${
-              isActive("/candidates") ? "active" : ""
-            }`}
-            onClick={() => navigate("/candidates")}
+          <NavLink
+            to="/candidates"
+            className={({ isActive }) =>
+              `dashboard-nav-item ${
+                isActive ? "active" : ""
+              }`
+            }
           >
             <span>02</span>
             Candidates
-          </button>
+          </NavLink>
 
 
-          <button
-            type="button"
-            className={`dashboard-nav-item ${
-              isActive("/employers") ? "active" : ""
-            }`}
-            onClick={() => navigate("/employers")}
+          <NavLink
+            to="/employers"
+            className={({ isActive }) =>
+              `dashboard-nav-item ${
+                isActive ? "active" : ""
+              }`
+            }
           >
             <span>03</span>
             Employers
-          </button>
+          </NavLink>
 
 
-          <button
-            type="button"
-            className={`dashboard-nav-item ${
-              isActive("/demand-letters") ? "active" : ""
-            }`}
-            onClick={() => navigate("/demand-letters")}
+          <NavLink
+            to="/demand-letters"
+            className={({ isActive }) =>
+              `dashboard-nav-item ${
+                isActive ? "active" : ""
+              }`
+            }
           >
             <span>04</span>
             Demand Letters
-          </button>
+          </NavLink>
 
 
-          <button
-            type="button"
-            className={`dashboard-nav-item ${
-              isActive("/documents") ? "active" : ""
-            }`}
-            onClick={() => navigate("/documents")}
+          <NavLink
+            to="/documents"
+            className={({ isActive }) =>
+              `dashboard-nav-item ${
+                isActive ? "active" : ""
+              }`
+            }
           >
             <span>05</span>
             Documents
-          </button>
+          </NavLink>
 
 
-          <button
-            type="button"
-            className={`dashboard-nav-item ${
-              isActive("/reports") ? "active" : ""
-            }`}
-            onClick={() => navigate("/reports")}
+          <NavLink
+            to="/reports"
+            className={({ isActive }) =>
+              `dashboard-nav-item ${
+                isActive ? "active" : ""
+              }`
+            }
           >
             <span>06</span>
             Reports
-          </button>
+          </NavLink>
 
         </nav>
 
@@ -132,7 +133,7 @@ function DashboardLayout() {
 
 
       {/* ========================================
-          PAGE CONTENT
+          MAIN CONTENT
       ======================================== */}
 
       <main className="dashboard-main">

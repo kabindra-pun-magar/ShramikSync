@@ -14,6 +14,7 @@ interface DashboardUser {
 
 interface DashboardStats {
   totalUsers: number;
+  totalCandidates: number;
 }
 
 interface DashboardResponse {
@@ -276,11 +277,11 @@ function Dashboard() {
           </span>
 
           <strong>
-            —
+            {stats?.totalCandidates ?? 0}
           </strong>
 
-          <span className="dashboard-stat-warning">
-            Coming next
+          <span className="dashboard-stat-success">
+            From database
           </span>
 
         </div>
