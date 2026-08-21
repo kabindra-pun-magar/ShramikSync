@@ -1,42 +1,101 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Candidates from "./pages/Candidates";
+
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
-import PrivateRoute from "./components/PrivateRoute";
+import Candidates from "./pages/Candidates";
 
-import "./styles/variables.css";
-import "./styles/global.css";
+import PrivateRoute from "./components/PrivateRoute";
+import DashboardLayout from "./components/layout/DashboardLayout";
+
 
 function App() {
   return (
+
     <BrowserRouter>
+
       <Routes>
 
-        {/* Public routes */}
-        <Route path="/" element={<Home />} />
+        {/* ========================================
+            PUBLIC ROUTES
+        ======================================== */}
 
-        <Route path="/login" element={<Login />} />
+        <Route
+          path="/"
+          element={<Home />}
+        />
+
+        <Route
+          path="/login"
+          element={<Login />}
+        />
 
 
-        {/* Protected routes */}
-        {/* Protected routes */}
+        {/* ========================================
+            PROTECTED APPLICATION
+        ======================================== */}
+
         <Route element={<PrivateRoute />}>
 
-        <Route
-          path="/dashboard"
-          element={<Dashboard />}
-        />
+          <Route element={<DashboardLayout />}>
 
-        <Route
-          path="/candidates"
-          element={<Candidates />}
-        />
+            <Route
+              path="/dashboard"
+              element={<Dashboard />}
+            />
+
+            <Route
+              path="/candidates"
+              element={<Candidates />}
+            />
+
+
+            {/* Future modules */}
+
+            <Route
+              path="/employers"
+              element={
+                <div>
+                  Employers coming soon
+                </div>
+              }
+            />
+
+            <Route
+              path="/demand-letters"
+              element={
+                <div>
+                  Demand Letters coming soon
+                </div>
+              }
+            />
+
+            <Route
+              path="/documents"
+              element={
+                <div>
+                  Documents coming soon
+                </div>
+              }
+            />
+
+            <Route
+              path="/reports"
+              element={
+                <div>
+                  Reports coming soon
+                </div>
+              }
+            />
+
+          </Route>
 
         </Route>
 
       </Routes>
+
     </BrowserRouter>
+
   );
 }
 
