@@ -1,7 +1,20 @@
 import express from "express";
 import cors from "cors";
 
+import { prisma } from "./lib/prisma.js";
+
+import authRoutes from "./routes/authRoutes.js";
+
+import { authenticateToken } from "./middleware/authMiddleware.js";
+import { authorizeRoles } from "./middleware/roleMiddleware.js";
+
 const app = express();
+
+const PORT = 5000;
+
+// ========================================
+// Middleware
+// ========================================
 
 app.use(
   cors({
@@ -12,6 +25,16 @@ app.use(
 
 app.use(express.json());
 
+// ========================================
+// Authentication Routes
+// ========================================
+
+app.use("/api/auth", authRoutes);
+
+// ========================================
+// Basic Backend Test
+// ========================================
+
 app.get("/api/test", (req, res) => {
   res.status(200).json({
     success: true,
@@ -19,8 +42,77 @@ app.get("/api/test", (req, res) => {
   });
 });
 
-const PORT = 5000;
+// ========================================
+// Database Health Test
+// ========================================
+
+app.get("/api/health/db", async (req, res) => {
+  try {
+    const userCount = await prisma.user.count();
+
+    res.status(200).json({
+      success: true,
+      database: "connected",
+      users: userCount,
+    });
+  } catch (error) {
+    console.error("Database connection error:", error);
+
+    res.status(500).json({
+      success: false,
+      database: "disconnected",
+      error: error.message,
+    });
+  }
+});
+
+// ========================================
+// JWT Protected Test Route
+// ========================================
+
+app.get(
+  "/api/auth/protected",
+  authenticateToken,
+  (req, res) => {
+    res.status(200).json({
+      success: true,
+      message: "You have access to this protected route.",
+      user: req.user,
+    });
+  }
+);
+
+// ========================================
+// ADMIN Protected Test Route
+// ========================================
+
+app.get(
+  "/api/admin/test",
+  authenticateToken,
+  authorizeRoles("ADMIN"),
+  (req, res) => {
+    res.status(200).json({
+      success: true,
+      message: "Welcome Admin. You have access to this route.",
+      user: req.user,
+    });
+  }
+);
+
+// ========================================
+// Start Server
+// ========================================
 
 app.listen(PORT, () => {
   console.log(`Backend running on http://localhost:${PORT}`);
+  console.log(`Backend test: http://localhost:${PORT}/api/test`);
+  console.log(
+    `Database test: http://localhost:${PORT}/api/health/db`
+  );
+  console.log(
+    `Protected test: http://localhost:${PORT}/api/auth/protected`
+  );
+  console.log(
+    `Admin test: http://localhost:${PORT}/api/admin/test`
+  );
 });
