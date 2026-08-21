@@ -4,6 +4,7 @@ import cors from "cors";
 import { prisma } from "./lib/prisma.js";
 
 import authRoutes from "./routes/authRoutes.js";
+import dashboardRoutes from "./routes/dashboardRoutes.js";
 
 import { authenticateToken } from "./middleware/authMiddleware.js";
 import { authorizeRoles } from "./middleware/roleMiddleware.js";
@@ -30,6 +31,12 @@ app.use(express.json());
 // ========================================
 
 app.use("/api/auth", authRoutes);
+
+// ========================================
+// Dashboard Routes
+// ========================================
+
+app.use("/api/dashboard", dashboardRoutes);
 
 // ========================================
 // Basic Backend Test
@@ -105,14 +112,24 @@ app.get(
 
 app.listen(PORT, () => {
   console.log(`Backend running on http://localhost:${PORT}`);
-  console.log(`Backend test: http://localhost:${PORT}/api/test`);
+
+  console.log(
+    `Backend test: http://localhost:${PORT}/api/test`
+  );
+
   console.log(
     `Database test: http://localhost:${PORT}/api/health/db`
   );
+
   console.log(
     `Protected test: http://localhost:${PORT}/api/auth/protected`
   );
+
   console.log(
     `Admin test: http://localhost:${PORT}/api/admin/test`
+  );
+
+  console.log(
+    `Dashboard API: http://localhost:${PORT}/api/dashboard`
   );
 });

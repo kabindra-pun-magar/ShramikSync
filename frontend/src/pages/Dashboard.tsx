@@ -1,27 +1,87 @@
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+
+import api from "../services/api";
 import "../styles/Dashboard.css";
 
-interface StoredUser {
+interface DashboardUser {
   id: number;
   name: string;
   email: string;
   role: string;
+  createdAt: string;
+}
+
+interface DashboardStats {
+  totalUsers: number;
+}
+
+interface DashboardResponse {
+  success: boolean;
+  message: string;
+  user: DashboardUser;
+  stats: DashboardStats;
 }
 
 function Dashboard() {
   const navigate = useNavigate();
 
-  let user: StoredUser | null = null;
+  const [user, setUser] = useState<DashboardUser | null>(null);
+  const [stats, setStats] = useState<DashboardStats | null>(null);
 
-  try {
-    const storedUser = localStorage.getItem("user");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-    if (storedUser) {
-      user = JSON.parse(storedUser);
-    }
-  } catch {
-    user = null;
-  }
+
+  useEffect(() => {
+    const fetchDashboard = async () => {
+      try {
+        setLoading(true);
+        setError("");
+
+        const response = await api.get<DashboardResponse>(
+          "/dashboard"
+        );
+
+        if (!response.data.success) {
+          setError(
+            response.data.message ||
+              "Failed to load dashboard."
+          );
+
+          return;
+        }
+
+        setUser(response.data.user);
+        setStats(response.data.stats);
+
+      } catch (error: any) {
+        console.error(
+          "Dashboard API error:",
+          error
+        );
+
+        /*
+         * api.ts already handles 401 responses
+         * and redirects to /login.
+         */
+        if (error.response?.status === 401) {
+          return;
+        }
+
+        setError(
+          error.response?.data?.message ||
+            "Unable to load dashboard data."
+        );
+
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDashboard();
+  }, []);
+
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -31,6 +91,53 @@ function Dashboard() {
       replace: true,
     });
   };
+
+
+  /*
+   * Loading state
+   */
+  if (loading) {
+    return (
+      <div className="dashboard-state">
+        <div className="dashboard-state-card">
+          <div className="dashboard-loader" />
+
+          <h2>Loading Dashboard</h2>
+
+          <p>
+            Fetching your dashboard information...
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+
+  /*
+   * Error state
+   */
+  if (error) {
+    return (
+      <div className="dashboard-state">
+        <div className="dashboard-state-card dashboard-state-error">
+
+          <h2>Unable to Load Dashboard</h2>
+
+          <p>{error}</p>
+
+          <button
+            type="button"
+            className="btn btn-primary"
+            onClick={() => window.location.reload()}
+          >
+            Try Again
+          </button>
+
+        </div>
+      </div>
+    );
+  }
+
 
   return (
     <div className="dashboard-page">
@@ -42,11 +149,13 @@ function Dashboard() {
       <aside className="dashboard-sidebar">
 
         <div className="dashboard-sidebar-brand">
+
           <div className="dashboard-brand-icon">
             S
           </div>
 
           <strong>ShramikSync</strong>
+
         </div>
 
 
@@ -123,6 +232,7 @@ function Dashboard() {
         <header className="dashboard-header">
 
           <div>
+
             <span className="dashboard-eyebrow">
               RECRUITMENT MANAGEMENT
             </span>
@@ -130,10 +240,14 @@ function Dashboard() {
             <h1>Dashboard</h1>
 
             <p>
-              Monitor your recruitment operations from one place.
+              Monitor your recruitment operations
+              from one place.
             </p>
+
           </div>
 
+
+          {/* REAL USER FROM API */}
 
           <div className="dashboard-user">
 
@@ -142,6 +256,7 @@ function Dashboard() {
             </div>
 
             <div>
+
               <strong>
                 {user?.name || "User"}
               </strong>
@@ -149,6 +264,7 @@ function Dashboard() {
               <span>
                 {user?.role || "USER"}
               </span>
+
             </div>
 
           </div>
@@ -162,130 +278,130 @@ function Dashboard() {
 
         <section className="dashboard-stats">
 
+          {/* REAL DATABASE COUNT */}
+
           <div className="card dashboard-stat-card">
+
+            <span className="dashboard-stat-label">
+              Registered Users
+            </span>
+
+            <strong>
+              {stats?.totalUsers ?? 0}
+            </strong>
+
+            <span className="dashboard-stat-success">
+              From database
+            </span>
+
+          </div>
+
+
+          {/* Not available yet */}
+
+          <div className="card dashboard-stat-card">
+
             <span className="dashboard-stat-label">
               Candidates
             </span>
 
-            <strong>248</strong>
+            <strong>—</strong>
 
-            <span className="dashboard-stat-success">
-              +12% this month
+            <span className="dashboard-stat-warning">
+              Coming next
             </span>
+
           </div>
 
 
           <div className="card dashboard-stat-card">
+
             <span className="dashboard-stat-label">
               Employers
             </span>
 
-            <strong>32</strong>
-
-            <span className="dashboard-stat-success">
-              +5 new
-            </span>
-          </div>
-
-
-          <div className="card dashboard-stat-card">
-            <span className="dashboard-stat-label">
-              Applications
-            </span>
-
-            <strong>156</strong>
+            <strong>—</strong>
 
             <span className="dashboard-stat-warning">
-              24 pending
+              Coming next
             </span>
+
           </div>
 
 
           <div className="card dashboard-stat-card">
+
             <span className="dashboard-stat-label">
               Documents
             </span>
 
-            <strong>421</strong>
+            <strong>—</strong>
 
-            <span className="dashboard-stat-success">
-              398 verified
+            <span className="dashboard-stat-warning">
+              Coming next
             </span>
+
           </div>
 
         </section>
 
 
         {/* =========================
-            CONTENT GRID
+            ACCOUNT INFORMATION
         ========================== */}
 
         <section className="dashboard-content-grid">
-
-          {/* Recruitment Pipeline */}
 
           <div className="card dashboard-panel">
 
             <div className="dashboard-panel-header">
 
               <div>
-                <h2>Recruitment Pipeline</h2>
+
+                <h2>Account Information</h2>
 
                 <p>
-                  Candidate progress across recruitment stages.
+                  Information retrieved from your
+                  authenticated account.
                 </p>
+
               </div>
 
               <span className="status-badge status-active">
-                Active
+                Authenticated
               </span>
 
             </div>
 
 
-            <div className="dashboard-pipeline">
+            <div className="dashboard-account-grid">
 
               <div>
-                <span>Registered</span>
-
-                <strong>248</strong>
-
-                <div className="pipeline-bar">
-                  <span style={{ width: "90%" }} />
-                </div>
+                <span>Name</span>
+                <strong>
+                  {user?.name || "—"}
+                </strong>
               </div>
 
-
               <div>
-                <span>Screening</span>
-
-                <strong>184</strong>
-
-                <div className="pipeline-bar">
-                  <span style={{ width: "72%" }} />
-                </div>
+                <span>Email</span>
+                <strong>
+                  {user?.email || "—"}
+                </strong>
               </div>
 
-
               <div>
-                <span>Interview</span>
-
-                <strong>126</strong>
-
-                <div className="pipeline-bar">
-                  <span style={{ width: "54%" }} />
-                </div>
+                <span>Role</span>
+                <strong>
+                  {user?.role || "—"}
+                </strong>
               </div>
 
-
               <div>
-                <span>Selected</span>
-
-                <strong>82</strong>
-
-                <div className="pipeline-bar">
-                  <span style={{ width: "36%" }} />
-                </div>
+                <span>User ID</span>
+                <strong>
+                  {user?.id ?? "—"}
+                </strong>
               </div>
 
             </div>
@@ -300,11 +416,13 @@ function Dashboard() {
             <div className="dashboard-panel-header">
 
               <div>
+
                 <h2>Quick Actions</h2>
 
                 <p>
-                  Common recruitment operations.
+                  Recruitment operations.
                 </p>
+
               </div>
 
             </div>
@@ -348,7 +466,51 @@ function Dashboard() {
 
 
         {/* =========================
-            RECENT ACTIVITY
+            RECRUITMENT PIPELINE
+        ========================== */}
+
+        <section className="card dashboard-panel">
+
+          <div className="dashboard-panel-header">
+
+            <div>
+
+              <h2>Recruitment Pipeline</h2>
+
+              <p>
+                Recruitment statistics will appear
+                here as the database modules are added.
+              </p>
+
+            </div>
+
+            <span className="status-badge status-pending">
+              Setup in progress
+            </span>
+
+          </div>
+
+
+          <div className="dashboard-empty-state">
+
+            <h3>
+              Recruitment modules are coming next
+            </h3>
+
+            <p>
+              Candidate, employer, demand letter,
+              and document data will be connected
+              to this dashboard after their database
+              models are implemented.
+            </p>
+
+          </div>
+
+        </section>
+
+
+        {/* =========================
+            ACCOUNT STATUS
         ========================== */}
 
         <section className="card dashboard-panel dashboard-activity">
@@ -356,104 +518,38 @@ function Dashboard() {
           <div className="dashboard-panel-header">
 
             <div>
-              <h2>Recent Activity</h2>
+
+              <h2>System Status</h2>
 
               <p>
-                Latest recruitment operations.
+                Current authentication status.
               </p>
+
             </div>
 
-            <button
-              type="button"
-              className="btn btn-outline"
-            >
-              View Reports
-            </button>
+            <span className="status-badge status-active">
+              Connected
+            </span>
 
           </div>
 
 
-          <div className="dashboard-table-wrapper">
+          <div className="dashboard-status-list">
 
-            <table>
+            <div>
+              <span>Authentication</span>
+              <strong>JWT Verified</strong>
+            </div>
 
-              <thead>
-                <tr>
-                  <th>Activity</th>
-                  <th>Type</th>
-                  <th>Status</th>
-                  <th>Time</th>
-                </tr>
-              </thead>
+            <div>
+              <span>Backend API</span>
+              <strong>Connected</strong>
+            </div>
 
-
-              <tbody>
-
-                <tr>
-                  <td>
-                    Candidate profile created
-                  </td>
-
-                  <td>
-                    Candidate
-                  </td>
-
-                  <td>
-                    <span className="status-badge status-active">
-                      Active
-                    </span>
-                  </td>
-
-                  <td>
-                    10 min ago
-                  </td>
-                </tr>
-
-
-                <tr>
-                  <td>
-                    Employer requirement updated
-                  </td>
-
-                  <td>
-                    Employer
-                  </td>
-
-                  <td>
-                    <span className="status-badge status-pending">
-                      Pending
-                    </span>
-                  </td>
-
-                  <td>
-                    32 min ago
-                  </td>
-                </tr>
-
-
-                <tr>
-                  <td>
-                    Demand letter uploaded
-                  </td>
-
-                  <td>
-                    Document
-                  </td>
-
-                  <td>
-                    <span className="status-badge status-active">
-                      Verified
-                    </span>
-                  </td>
-
-                  <td>
-                    1 hour ago
-                  </td>
-                </tr>
-
-              </tbody>
-
-            </table>
+            <div>
+              <span>Database</span>
+              <strong>Connected</strong>
+            </div>
 
           </div>
 
