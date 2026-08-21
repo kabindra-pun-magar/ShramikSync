@@ -172,8 +172,9 @@ function Dashboard() {
           <button
             type="button"
             className="dashboard-nav-item"
+            onClick={() => navigate("/candidates")}
           >
-            <span>02</span>
+          <span>02</span>
             Candidates
           </button>
 

@@ -7,6 +7,15 @@ datasource db {
   provider = "postgresql"
 }
 
+enum CandidateStatus {
+  REGISTERED
+  SCREENING
+  INTERVIEW
+  SELECTED
+  REJECTED
+  PLACED
+}
+
 model User {
   id        Int      @id @default(autoincrement())
   name      String
@@ -15,4 +24,39 @@ model User {
   role      String   @default("USER")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  candidates Candidate[]
+}
+
+model Candidate {
+  id Int @id @default(autoincrement())
+
+  fullName String
+  email    String?
+  phone    String?
+
+  dateOfBirth DateTime?
+  gender      String?
+
+  nationality String?
+  address     String?
+
+  passportNumber String?
+  passportExpiry DateTime?
+
+  education  String?
+  experience String?
+  skills     String?
+
+  status CandidateStatus @default(REGISTERED)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  createdById Int
+  createdBy   User @relation(fields: [createdById], references: [id], onDelete: Cascade)
+
+  @@index([createdById])
+  @@index([status])
+  @@index([passportNumber])
 }

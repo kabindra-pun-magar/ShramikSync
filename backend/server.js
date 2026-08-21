@@ -5,6 +5,7 @@ import { prisma } from "./lib/prisma.js";
 
 import authRoutes from "./routes/authRoutes.js";
 import dashboardRoutes from "./routes/dashboardRoutes.js";
+import candidateRoutes from "./routes/candidateRoutes.js";
 
 import { authenticateToken } from "./middleware/authMiddleware.js";
 import { authorizeRoles } from "./middleware/roleMiddleware.js";
@@ -41,6 +42,8 @@ app.use("/api/dashboard", dashboardRoutes);
 // ========================================
 // Basic Backend Test
 // ========================================
+
+app.use("/api/candidates", candidateRoutes);
 
 app.get("/api/test", (req, res) => {
   res.status(200).json({
