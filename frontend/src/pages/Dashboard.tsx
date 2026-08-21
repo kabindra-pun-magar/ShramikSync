@@ -433,7 +433,7 @@ function Dashboard() {
 
               <button
                 type="button"
-                className="btn btn-primary"
+                className="btn btn-secondary"
               >
                 Create Candidate
               </button>
