@@ -19,3 +19,12 @@ export const CandidateStatus = {
 } as const
 
 export type CandidateStatus = (typeof CandidateStatus)[keyof typeof CandidateStatus]
+
+
+export const EmployerStatus = {
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE',
+  PENDING: 'PENDING'
+} as const
+
+export type EmployerStatus = (typeof EmployerStatus)[keyof typeof EmployerStatus]

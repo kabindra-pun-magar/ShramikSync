@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Candidates from "./pages/Candidates";
+import Employers from "./pages/Employers";
 
 import PrivateRoute from "./components/PrivateRoute";
 import DashboardLayout from "./components/layout/DashboardLayout";
@@ -54,11 +55,7 @@ function App() {
 
             <Route
               path="/employers"
-              element={
-                <div>
-                  Employers coming soon
-                </div>
-              }
+              element={<Employers />}
             />
 
             <Route
@@ -86,6 +83,11 @@ function App() {
                   Reports coming soon
                 </div>
               }
+            />
+
+            <Route
+              path="/employers"
+              element={<Employers />}
             />
 
           </Route>

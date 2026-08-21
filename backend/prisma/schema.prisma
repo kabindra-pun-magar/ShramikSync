@@ -16,6 +16,12 @@ enum CandidateStatus {
   PLACED
 }
 
+enum EmployerStatus {
+  ACTIVE
+  INACTIVE
+  PENDING
+}
+
 model User {
   id        Int      @id @default(autoincrement())
   name      String
@@ -26,6 +32,7 @@ model User {
   updatedAt DateTime @updatedAt
 
   candidates Candidate[]
+  employers  Employer[]
 }
 
 model Candidate {
@@ -60,3 +67,34 @@ model Candidate {
   @@index([status])
   @@index([passportNumber])
 }
+
+
+model Employer {
+  id Int @id @default(autoincrement())
+
+  companyName  String
+  contactPerson String?
+
+  email   String?
+  phone   String?
+
+  country String?
+  city    String?
+  address String?
+
+  industry    String?
+  companyType String?
+
+  status EmployerStatus @default(PENDING)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  createdById Int
+  createdBy User @relation(fields: [createdById], references: [id], onDelete: Cascade)
+
+  @@index([createdById])
+  @@index([status])
+  @@index([companyName])
+}
+

@@ -398,7 +398,8 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 export const ModelName = {
   User: 'User',
-  Candidate: 'Candidate'
+  Candidate: 'Candidate',
+  Employer: 'Employer'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -414,7 +415,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "candidate"
+    modelProps: "user" | "candidate" | "employer"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -566,6 +567,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Employer: {
+      payload: Prisma.$EmployerPayload<ExtArgs>
+      fields: Prisma.EmployerFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.EmployerFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployerPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.EmployerFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployerPayload>
+        }
+        findFirst: {
+          args: Prisma.EmployerFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployerPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.EmployerFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployerPayload>
+        }
+        findMany: {
+          args: Prisma.EmployerFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployerPayload>[]
+        }
+        create: {
+          args: Prisma.EmployerCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployerPayload>
+        }
+        createMany: {
+          args: Prisma.EmployerCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.EmployerCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployerPayload>[]
+        }
+        delete: {
+          args: Prisma.EmployerDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployerPayload>
+        }
+        update: {
+          args: Prisma.EmployerUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployerPayload>
+        }
+        deleteMany: {
+          args: Prisma.EmployerDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.EmployerUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.EmployerUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployerPayload>[]
+        }
+        upsert: {
+          args: Prisma.EmployerUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployerPayload>
+        }
+        aggregate: {
+          args: Prisma.EmployerAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateEmployer>
+        }
+        groupBy: {
+          args: Prisma.EmployerGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EmployerGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.EmployerCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EmployerCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -639,6 +714,26 @@ export const CandidateScalarFieldEnum = {
 } as const
 
 export type CandidateScalarFieldEnum = (typeof CandidateScalarFieldEnum)[keyof typeof CandidateScalarFieldEnum]
+
+
+export const EmployerScalarFieldEnum = {
+  id: 'id',
+  companyName: 'companyName',
+  contactPerson: 'contactPerson',
+  email: 'email',
+  phone: 'phone',
+  country: 'country',
+  city: 'city',
+  address: 'address',
+  industry: 'industry',
+  companyType: 'companyType',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdById: 'createdById'
+} as const
+
+export type EmployerScalarFieldEnum = (typeof EmployerScalarFieldEnum)[keyof typeof EmployerScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -724,6 +819,20 @@ export type EnumCandidateStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$
  * Reference to a field of type 'CandidateStatus[]'
  */
 export type ListEnumCandidateStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CandidateStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'EmployerStatus'
+ */
+export type EnumEmployerStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EmployerStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'EmployerStatus[]'
+ */
+export type ListEnumEmployerStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EmployerStatus[]'>
     
 
 
@@ -893,6 +1002,7 @@ export type PrismaClientOptions = PrismaClientOptionsWithAccelerateUrl | PrismaC
 export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
   candidate?: Prisma.CandidateOmit
+  employer?: Prisma.EmployerOmit
 }
 
 /* Types for Logging */

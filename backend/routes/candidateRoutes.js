@@ -89,27 +89,109 @@ router.post("/", authenticateToken, async (req, res) => {
 // GET /api/candidates
 // ========================================
 
+// ========================================
+// GET ALL CANDIDATES
+// GET /api/candidates
+//
+// Optional query parameters:
+//
+// ?search=ram
+// ?status=SCREENING
+// ?search=ram&status=SCREENING
+// ========================================
+
 router.get("/", authenticateToken, async (req, res) => {
   try {
-    const candidates = await prisma.candidate.findMany({
-      where: {
-        // Only return candidates created
-        // by the authenticated user
-        createdById: req.user.userId,
-      },
+    // ========================================
+    // READ QUERY PARAMETERS
+    // ========================================
 
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
+    const search =
+      typeof req.query.search === "string"
+        ? req.query.search.trim()
+        : "";
+
+    const status =
+      typeof req.query.status === "string"
+        ? req.query.status.trim()
+        : "";
+
+
+    // ========================================
+    // BUILD FILTER
+    // ========================================
+
+    const where = {
+      // Ownership protection
+      createdById: req.user.userId,
+
+      // Add search only when provided
+      ...(search && {
+        OR: [
+          {
+            fullName: {
+              contains: search,
+              mode: "insensitive",
+            },
+          },
+          {
+            email: {
+              contains: search,
+              mode: "insensitive",
+            },
+          },
+          {
+            phone: {
+              contains: search,
+              mode: "insensitive",
+            },
+          },
+          {
+            passportNumber: {
+              contains: search,
+              mode: "insensitive",
+            },
+          },
+        ],
+      }),
+
+      // Add status filter only when provided
+      ...(status && {
+        status,
+      }),
+    };
+
+
+    // ========================================
+    // FETCH FILTERED CANDIDATES
+    // ========================================
+
+    const candidates =
+      await prisma.candidate.findMany({
+        where,
+
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+
+
+    // ========================================
+    // RESPONSE
+    // ========================================
 
     return res.status(200).json({
       success: true,
       count: candidates.length,
       candidates,
     });
+
   } catch (error) {
-    console.error("Get candidates error:", error);
+
+    console.error(
+      "Get candidates error:",
+      error
+    );
 
     return res.status(500).json({
       success: false,

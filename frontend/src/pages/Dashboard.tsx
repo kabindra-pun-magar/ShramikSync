@@ -1,8 +1,20 @@
-import { useEffect, useState } from "react";
+import {
+  useEffect,
+  useState,
+} from "react";
+
+import {
+  useNavigate,
+} from "react-router-dom";
 
 import api from "../services/api";
 
 import "../styles/Dashboard.css";
+
+
+// ========================================
+// TYPES
+// ========================================
 
 interface DashboardUser {
   id: number;
@@ -12,28 +24,61 @@ interface DashboardUser {
   createdAt: string;
 }
 
+
 interface DashboardStats {
   totalUsers: number;
   totalCandidates: number;
+  registeredCandidates: number;
+  totalEmployers: number;
 }
+
 
 interface DashboardResponse {
   success: boolean;
   message: string;
+
   user: DashboardUser;
+
   stats: DashboardStats;
 }
 
+
+// ========================================
+// COMPONENT
+// ========================================
+
 function Dashboard() {
+
+  // ========================================
+  // NAVIGATION
+  // ========================================
+
+  const navigate = useNavigate();
+
+
+  // ========================================
+  // USER
+  // ========================================
 
   const [user, setUser] =
     useState<DashboardUser | null>(null);
 
+
+  // ========================================
+  // STATISTICS
+  // ========================================
+
   const [stats, setStats] =
     useState<DashboardStats | null>(null);
 
+
+  // ========================================
+  // UI STATES
+  // ========================================
+
   const [loading, setLoading] =
     useState(true);
+
 
   const [error, setError] =
     useState("");
@@ -50,13 +95,19 @@ function Dashboard() {
       try {
 
         setLoading(true);
+
         setError("");
+
 
         const response =
           await api.get<DashboardResponse>(
             "/dashboard"
           );
 
+
+        // ========================================
+        // API ERROR RESPONSE
+        // ========================================
 
         if (!response.data.success) {
 
@@ -69,9 +120,19 @@ function Dashboard() {
         }
 
 
-        setUser(response.data.user);
+        // ========================================
+        // STORE API DATA
+        // ========================================
 
-        setStats(response.data.stats);
+        setUser(
+          response.data.user
+        );
+
+
+        setStats(
+          response.data.stats
+        );
+
 
       } catch (error: any) {
 
@@ -83,7 +144,7 @@ function Dashboard() {
 
         /*
          * api.ts already handles 401 responses
-         * and redirects to /login.
+         * and redirects the user to /login.
          */
 
         if (
@@ -98,6 +159,7 @@ function Dashboard() {
           "Unable to load dashboard data."
         );
 
+
       } finally {
 
         setLoading(false);
@@ -110,6 +172,7 @@ function Dashboard() {
     fetchDashboard();
 
   }, []);
+
 
 
   // ========================================
@@ -143,6 +206,7 @@ function Dashboard() {
   }
 
 
+
   // ========================================
   // ERROR STATE
   // ========================================
@@ -163,6 +227,7 @@ function Dashboard() {
             {error}
           </p>
 
+
           <button
             type="button"
             className="btn btn-primary"
@@ -182,6 +247,7 @@ function Dashboard() {
   }
 
 
+
   // ========================================
   // DASHBOARD
   // ========================================
@@ -189,6 +255,7 @@ function Dashboard() {
   return (
 
     <div className="dashboard-content">
+
 
       {/* ========================================
           HEADER
@@ -202,9 +269,11 @@ function Dashboard() {
             RECRUITMENT MANAGEMENT
           </span>
 
+
           <h1>
             Dashboard
           </h1>
+
 
           <p>
             Monitor your recruitment operations
@@ -214,7 +283,9 @@ function Dashboard() {
         </div>
 
 
-        {/* REAL USER FROM API */}
+        {/* ========================================
+            AUTHENTICATED USER
+        ======================================== */}
 
         <div className="dashboard-user">
 
@@ -226,11 +297,13 @@ function Dashboard() {
 
           </div>
 
+
           <div>
 
             <strong>
               {user?.name || "User"}
             </strong>
+
 
             <span>
               {user?.role || "USER"}
@@ -243,13 +316,17 @@ function Dashboard() {
       </header>
 
 
+
       {/* ========================================
           STATS
       ======================================== */}
 
       <section className="dashboard-stats">
 
-        {/* REGISTERED USERS */}
+
+        {/* ========================================
+            REGISTERED USERS
+        ======================================== */}
 
         <div className="card dashboard-stat-card">
 
@@ -257,9 +334,11 @@ function Dashboard() {
             Registered Users
           </span>
 
+
           <strong>
             {stats?.totalUsers ?? 0}
           </strong>
+
 
           <span className="dashboard-stat-success">
             From database
@@ -268,7 +347,10 @@ function Dashboard() {
         </div>
 
 
-        {/* CANDIDATES */}
+
+        {/* ========================================
+            TOTAL CANDIDATES
+        ======================================== */}
 
         <div className="card dashboard-stat-card">
 
@@ -276,9 +358,11 @@ function Dashboard() {
             Candidates
           </span>
 
+
           <strong>
             {stats?.totalCandidates ?? 0}
           </strong>
+
 
           <span className="dashboard-stat-success">
             From database
@@ -287,7 +371,34 @@ function Dashboard() {
         </div>
 
 
-        {/* EMPLOYERS */}
+
+        {/* ========================================
+            REGISTERED CANDIDATES
+        ======================================== */}
+
+        <div className="card dashboard-stat-card">
+
+          <span className="dashboard-stat-label">
+            Registered Candidates
+          </span>
+
+
+          <strong>
+            {stats?.registeredCandidates ?? 0}
+          </strong>
+
+
+          <span className="dashboard-stat-success">
+            Current status
+          </span>
+
+        </div>
+
+
+
+        {/* ========================================
+    EMPLOYERS
+======================================== */}
 
         <div className="card dashboard-stat-card">
 
@@ -296,35 +407,17 @@ function Dashboard() {
           </span>
 
           <strong>
-            —
+            {stats?.totalEmployers ?? 0}
           </strong>
 
-          <span className="dashboard-stat-warning">
-            Coming next
-          </span>
-
-        </div>
-
-
-        {/* DOCUMENTS */}
-
-        <div className="card dashboard-stat-card">
-
-          <span className="dashboard-stat-label">
-            Documents
-          </span>
-
-          <strong>
-            —
-          </strong>
-
-          <span className="dashboard-stat-warning">
-            Coming next
+          <span className="dashboard-stat-success">
+            From database
           </span>
 
         </div>
 
       </section>
+
 
 
       {/* ========================================
@@ -333,7 +426,10 @@ function Dashboard() {
 
       <section className="dashboard-content-grid">
 
-        {/* ACCOUNT INFORMATION */}
+
+        {/* ========================================
+            ACCOUNT INFORMATION
+        ======================================== */}
 
         <div className="card dashboard-panel">
 
@@ -345,12 +441,14 @@ function Dashboard() {
                 Account Information
               </h2>
 
+
               <p>
                 Information retrieved from your
                 authenticated account.
               </p>
 
             </div>
+
 
             <span className="status-badge status-active">
               Authenticated
@@ -359,13 +457,18 @@ function Dashboard() {
           </div>
 
 
+
           <div className="dashboard-account-grid">
+
+
+            {/* NAME */}
 
             <div>
 
               <span>
                 Name
               </span>
+
 
               <strong>
                 {user?.name || "—"}
@@ -374,11 +477,15 @@ function Dashboard() {
             </div>
 
 
+
+            {/* EMAIL */}
+
             <div>
 
               <span>
                 Email
               </span>
+
 
               <strong>
                 {user?.email || "—"}
@@ -387,11 +494,15 @@ function Dashboard() {
             </div>
 
 
+
+            {/* ROLE */}
+
             <div>
 
               <span>
                 Role
               </span>
+
 
               <strong>
                 {user?.role || "—"}
@@ -400,11 +511,15 @@ function Dashboard() {
             </div>
 
 
+
+            {/* USER ID */}
+
             <div>
 
               <span>
                 User ID
               </span>
+
 
               <strong>
                 {user?.id ?? "—"}
@@ -417,7 +532,10 @@ function Dashboard() {
         </div>
 
 
-        {/* QUICK ACTIONS */}
+
+        {/* ========================================
+            QUICK ACTIONS
+        ======================================== */}
 
         <div className="card dashboard-panel">
 
@@ -429,6 +547,7 @@ function Dashboard() {
                 Quick Actions
               </h2>
 
+
               <p>
                 Recruitment operations.
               </p>
@@ -438,35 +557,68 @@ function Dashboard() {
           </div>
 
 
+
           <div className="dashboard-actions">
+
+
+            {/* ========================================
+                CREATE CANDIDATE
+            ======================================== */}
 
             <button
               type="button"
               className="btn btn-secondary"
+              onClick={() =>
+                navigate("/candidates")
+              }
             >
               Create Candidate
             </button>
 
 
+
+            {/* ========================================
+                ADD EMPLOYER
+            ======================================== */}
+
             <button
               type="button"
               className="btn btn-secondary"
+              onClick={() =>
+                navigate("/employers")
+              }
             >
               Add Employer
             </button>
 
 
+
+            {/* ========================================
+                CREATE DEMAND LETTER
+            ======================================== */}
+
             <button
               type="button"
               className="btn btn-secondary"
+              onClick={() =>
+                navigate("/demand-letters")
+              }
             >
               Create Demand Letter
             </button>
 
 
+
+            {/* ========================================
+                UPLOAD DOCUMENT
+            ======================================== */}
+
             <button
               type="button"
               className="btn btn-secondary"
+              onClick={() =>
+                navigate("/documents")
+              }
             >
               Upload Document
             </button>
@@ -476,6 +628,7 @@ function Dashboard() {
         </div>
 
       </section>
+
 
 
       {/* ========================================
@@ -492,36 +645,82 @@ function Dashboard() {
               Recruitment Pipeline
             </h2>
 
+
             <p>
-              Recruitment statistics will appear
-              here as the database modules are added.
+              Current candidate registration status.
             </p>
 
           </div>
 
-          <span className="status-badge status-pending">
-            Setup in progress
+
+          <span className="status-badge status-active">
+            Connected
           </span>
 
         </div>
 
 
-        <div className="dashboard-empty-state">
 
-          <h3>
-            Recruitment modules are coming next
-          </h3>
+        <div className="dashboard-pipeline">
 
-          <p>
-            Candidate, employer, demand letter,
-            and document data will be connected
-            to this dashboard after their database
-            models are implemented.
-          </p>
+
+          {/* REGISTERED */}
+
+          <div className="dashboard-pipeline-item">
+
+            <span>
+              Registered
+            </span>
+
+
+            <strong>
+              {stats?.registeredCandidates ?? 0}
+            </strong>
+
+          </div>
+
+
+
+          {/* TOTAL */}
+
+          <div className="dashboard-pipeline-item">
+
+            <span>
+              Total Candidates
+            </span>
+
+
+            <strong>
+              {stats?.totalCandidates ?? 0}
+            </strong>
+
+          </div>
+
+
+
+          {/* OTHER STATUSES */}
+
+          <div className="dashboard-pipeline-item">
+
+            <span>
+              Other Statuses
+            </span>
+
+
+            <strong>
+              {Math.max(
+                0,
+                (stats?.totalCandidates ?? 0) -
+                (stats?.registeredCandidates ?? 0)
+              )}
+            </strong>
+
+          </div>
 
         </div>
 
       </section>
+
 
 
       {/* ========================================
@@ -538,11 +737,14 @@ function Dashboard() {
               System Status
             </h2>
 
+
             <p>
-              Current authentication status.
+              Current authentication and
+              application status.
             </p>
 
           </div>
+
 
           <span className="status-badge status-active">
             Connected
@@ -551,13 +753,18 @@ function Dashboard() {
         </div>
 
 
+
         <div className="dashboard-status-list">
+
+
+          {/* AUTHENTICATION */}
 
           <div>
 
             <span>
               Authentication
             </span>
+
 
             <strong>
               JWT Verified
@@ -566,11 +773,15 @@ function Dashboard() {
           </div>
 
 
+
+          {/* BACKEND */}
+
           <div>
 
             <span>
               Backend API
             </span>
+
 
             <strong>
               Connected
@@ -579,11 +790,15 @@ function Dashboard() {
           </div>
 
 
+
+          {/* DATABASE */}
+
           <div>
 
             <span>
               Database
             </span>
+
 
             <strong>
               Connected
@@ -600,5 +815,6 @@ function Dashboard() {
   );
 
 }
+
 
 export default Dashboard;

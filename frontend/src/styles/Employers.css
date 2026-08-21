@@ -1,10 +1,10 @@
-.candidates-page {
+.employers-page {
   min-height: 100vh;
   padding: var(--space-8);
   background: var(--bg-app);
 }
 
-.candidates-header {
+.employers-header {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
@@ -12,7 +12,7 @@
   margin-bottom: var(--space-6);
 }
 
-.candidates-eyebrow {
+.employers-eyebrow {
   display: block;
   margin-bottom: var(--space-2);
   color: var(--text-muted);
@@ -21,143 +21,53 @@
   letter-spacing: 0.12em;
 }
 
-.candidates-header h1 {
+.employers-header h1 {
   margin: 0;
   font-size: 32px;
 }
 
-.candidates-header p {
+.employers-header p {
   margin-top: var(--space-2);
   color: var(--text-muted);
 }
 
-.candidate-message {
-  margin-bottom: var(--space-4);
-  padding: var(--space-3) var(--space-4);
-  border-radius: var(--radius-sm);
-  font-size: 14px;
-}
-
-.candidate-success {
-  background: #ecfdf5;
-  border: 1px solid #a7f3d0;
-  color: #047857;
-}
-
-.candidate-error {
-  background: #fef2f2;
-  border: 1px solid #fecaca;
-  color: #b91c1c;
-}
-
-.candidate-form-panel,
-.candidates-list-panel {
-  margin-bottom: var(--space-6);
+.employers-list-panel {
   padding: var(--space-6);
 }
 
-.candidate-panel-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: var(--space-4);
+.employers-panel-header {
   margin-bottom: var(--space-5);
 }
 
-.candidate-panel-header h2 {
+.employers-panel-header h2 {
   margin: 0;
   font-size: 20px;
 }
 
-.candidate-panel-header p {
+.employers-panel-header p {
   margin-top: var(--space-1);
   color: var(--text-muted);
   font-size: 14px;
 }
 
-.candidate-form-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--space-4);
-}
-
-.candidate-field {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-}
-
-.candidate-field-full {
-  grid-column: 1 / -1;
-}
-
-.candidate-field label {
-  font-size: 13px;
-  font-weight: 600;
-}
-
-.candidate-field input,
-.candidate-field select,
-.candidate-field textarea {
-  width: 100%;
-  padding: 11px 13px;
-
-  border: 1px solid var(--border-light);
-  border-radius: var(--radius-sm);
-
-  background: var(--surface);
-  color: var(--text-primary);
-
-  font: inherit;
-}
-
-.candidate-field textarea {
-  resize: vertical;
-}
-
-.candidate-field input:focus,
-.candidate-field select:focus,
-.candidate-field textarea:focus {
-  outline: none;
-  border-color: var(--primary);
-}
-
-.candidate-form-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: var(--space-3);
-  margin-top: var(--space-6);
-}
-
-.candidate-empty-state {
-  padding: var(--space-8);
-  text-align: center;
-  color: var(--text-muted);
-}
-
-.candidate-empty-state h3 {
-  margin-bottom: var(--space-2);
-  color: var(--text-primary);
-}
-
-.candidates-table-wrapper {
+.employers-table-wrapper {
   width: 100%;
   overflow-x: auto;
 }
 
-.candidates-table {
+.employers-table {
   width: 100%;
   border-collapse: collapse;
 }
 
-.candidates-table th,
-.candidates-table td {
+.employers-table th,
+.employers-table td {
   padding: var(--space-4);
   text-align: left;
   border-bottom: 1px solid var(--border-light);
 }
 
-.candidates-table th {
+.employers-table th {
   color: var(--text-muted);
   font-size: 12px;
   font-weight: 700;
@@ -165,111 +75,250 @@
   letter-spacing: 0.05em;
 }
 
-.candidates-table td {
+.employers-table td {
   font-size: 14px;
 }
 
-.candidates-table td strong,
-.candidate-id,
-.candidate-secondary {
+.employers-table td strong,
+.employer-id,
+.employer-secondary {
   display: block;
 }
 
-.candidate-id,
-.candidate-secondary {
+.employer-id,
+.employer-secondary {
   margin-top: 4px;
   color: var(--text-muted);
   font-size: 12px;
 }
 
-.candidates-table tbody tr:hover {
+.employers-table tbody tr:hover {
   background: #f8fafc;
 }
 
+/* ========================================
+   STATUS
+======================================== */
+
+.employer-status {
+  display: inline-flex;
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.employer-status-active {
+  background: #ecfdf5;
+  color: #047857;
+}
+
+.employer-status-inactive {
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+.employer-status-pending {
+  background: #fffbeb;
+  color: #b45309;
+}
+
+/* ========================================
+   EMPTY / LOADING / ERROR
+======================================== */
+
+.employer-empty-state,
+.employers-state {
+  padding: var(--space-8);
+  text-align: center;
+  color: var(--text-muted);
+}
+
+.employer-empty-state h3,
+.employers-state h2 {
+  margin-bottom: var(--space-2);
+  color: var(--text-primary);
+}
+
+.employers-error {
+  color: #b91c1c;
+}
+
+/* ========================================
+   RESPONSIVE
+======================================== */
+
 @media (max-width: 768px) {
-  .candidates-page {
+
+  .employers-page {
     padding: var(--space-4);
   }
 
-  .candidates-header {
+  .employers-header {
     align-items: flex-start;
     flex-direction: column;
   }
 
-  .candidate-form-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .candidate-field-full {
-    grid-column: auto;
-  }
-
-  .candidate-form-actions {
-    flex-direction: column-reverse;
-  }
-
-  .candidate-form-actions button {
+  .employers-header .btn {
     width: 100%;
   }
+
 }
 
 /* ========================================
-   CANDIDATE ACTIONS
+   EMPLOYER FORM
 ======================================== */
 
-.candidate-actions {
+.employer-form-panel {
+  margin-bottom: var(--space-6);
+  padding: var(--space-6);
+}
+
+.employer-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-4);
+}
+
+.employer-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.employer-field-full {
+  grid-column: 1 / -1;
+}
+
+.employer-field label {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.employer-field input,
+.employer-field select,
+.employer-field textarea {
+  width: 100%;
+  padding: 11px 13px;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text-primary);
+  font: inherit;
+}
+
+.employer-field textarea {
+  resize: vertical;
+}
+
+.employer-field input:focus,
+.employer-field select:focus,
+.employer-field textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.employer-form-actions {
+  grid-column: 1 / -1;
+
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
+
+  margin-top: var(--space-2);
+}
+
+
+/* ========================================
+   MESSAGES
+======================================== */
+
+.employer-message {
+  margin-bottom: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+}
+
+.employer-success {
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  color: #047857;
+}
+
+.employer-error {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #b91c1c;
+}
+
+
+/* ========================================
+   RESPONSIVE
+======================================== */
+
+@media (max-width: 768px) {
+
+  .employer-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .employer-field-full {
+    grid-column: auto;
+  }
+
+  .employer-form-actions {
+    grid-column: auto;
+    flex-direction: column-reverse;
+  }
+
+  .employer-form-actions button {
+    width: 100%;
+  }
+
+}
+
+/* ========================================
+   EMPLOYER ACTIONS
+======================================== */
+
+.employer-actions {
   display: flex;
   align-items: center;
   gap: 6px;
 }
 
-.candidate-action-btn {
+.employer-action-btn {
   padding: 6px 10px;
-
   border: 1px solid var(--border-light);
   border-radius: var(--radius-sm);
-
   background: var(--surface);
   color: var(--text-primary);
-
   font-size: 12px;
   font-weight: 600;
-
   cursor: pointer;
 }
 
-.candidate-action-btn:hover {
+.employer-action-btn:hover {
   background: #f8fafc;
 }
 
-.candidate-action-btn:disabled {
+.employer-action-btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
 
-.candidate-delete-btn {
-  color: #b91c1c;
-  border-color: #fecaca;
-}
-
-.candidate-delete-btn:hover {
-  background: #fef2f2;
-}
-
 
 /* ========================================
-   CANDIDATE MODAL
+   EMPLOYER MODAL
 ======================================== */
 
-.candidate-modal-overlay {
+.employer-modal-overlay {
   position: fixed;
-
   inset: 0;
-
   z-index: 1000;
 
   display: flex;
-
   align-items: center;
   justify-content: center;
 
@@ -278,10 +327,9 @@
   background: rgba(15, 23, 42, 0.45);
 }
 
-.candidate-modal {
+.employer-modal {
   width: 100%;
   max-width: 760px;
-
   max-height: 90vh;
 
   overflow-y: auto;
@@ -295,35 +343,29 @@
   box-shadow: var(--shadow-card);
 }
 
-.candidate-modal-header {
+.employer-modal-header {
   display: flex;
-
   align-items: flex-start;
   justify-content: space-between;
 
   gap: var(--space-4);
 
   margin-bottom: var(--space-6);
-
   padding-bottom: var(--space-4);
 
-  border-bottom:
-    1px solid
-    var(--border-light);
+  border-bottom: 1px solid var(--border-light);
 }
 
-.candidate-modal-header h2 {
+.employer-modal-header h2 {
   margin: 0;
-
   font-size: 24px;
 }
 
-.candidate-modal-close {
+.employer-modal-close {
   width: 34px;
   height: 34px;
 
   border: 1px solid var(--border-light);
-
   border-radius: 50%;
 
   background: var(--surface);
@@ -334,68 +376,68 @@
   cursor: pointer;
 }
 
-.candidate-modal-close:hover {
+.employer-modal-close:hover {
   background: #f8fafc;
 }
 
-.candidate-details-grid {
+
+/* ========================================
+   EMPLOYER DETAILS
+======================================== */
+
+.employer-details-grid {
   display: grid;
 
-  grid-template-columns:
-    repeat(2, 1fr);
+  grid-template-columns: repeat(2, 1fr);
 
   gap: var(--space-4);
 }
 
-.candidate-details-grid > div {
+.employer-details-grid > div {
   padding: var(--space-3);
 
   background: #f8fafc;
 
-  border:
-    1px solid
-    var(--border-light);
+  border: 1px solid var(--border-light);
 
   border-radius: var(--radius-sm);
 }
 
-.candidate-details-grid span,
-.candidate-details-grid strong {
+.employer-details-grid span,
+.employer-details-grid strong {
   display: block;
 }
 
-.candidate-details-grid span {
+.employer-details-grid span {
   color: var(--text-muted);
-
   font-size: 12px;
 }
 
-.candidate-details-grid strong {
+.employer-details-grid strong {
   margin-top: 4px;
-
   font-size: 14px;
-
   overflow-wrap: anywhere;
 }
 
-.candidate-detail-full {
+.employer-detail-full {
   grid-column: 1 / -1;
 }
 
-.candidate-modal-actions {
-  display: flex;
 
+/* ========================================
+   MODAL ACTIONS
+======================================== */
+
+.employer-modal-actions {
+  display: flex;
   justify-content: flex-end;
 
   gap: var(--space-3);
 
   margin-top: var(--space-6);
-
   padding-top: var(--space-4);
 
-  border-top:
-    1px solid
-    var(--border-light);
+  border-top: 1px solid var(--border-light);
 }
 
 
@@ -405,34 +447,25 @@
 
 @media (max-width: 768px) {
 
-  .candidate-actions {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .candidate-action-btn {
-    width: 100%;
-  }
-
-  .candidate-details-grid {
+  .employer-details-grid {
     grid-template-columns: 1fr;
   }
 
-  .candidate-detail-full {
+  .employer-detail-full {
     grid-column: auto;
   }
 
-  .candidate-modal {
+  .employer-modal {
     max-height: 95vh;
   }
 
 }
 
 /* ========================================
-   CANDIDATE SEARCH & FILTERS
+   EMPLOYER SEARCH & FILTERS
 ======================================== */
 
-.candidate-filters {
+.employer-filters {
 
   display: flex;
 
@@ -461,7 +494,7 @@
    SEARCH
 ======================================== */
 
-.candidate-search {
+.employer-search {
 
   flex: 1;
 
@@ -476,9 +509,9 @@
 }
 
 
-.candidate-search label,
+.employer-search label,
 
-.candidate-status-filter label {
+.employer-status-filter label {
 
   color: var(--text-muted);
 
@@ -493,7 +526,7 @@
 }
 
 
-.candidate-search input {
+.employer-search input {
 
   width: 100%;
 
@@ -517,17 +550,19 @@
 
   outline: none;
 
+  box-sizing: border-box;
+
 }
 
 
-.candidate-search input::placeholder {
+.employer-search input::placeholder {
 
   color: var(--text-muted);
 
 }
 
 
-.candidate-search input:focus {
+.employer-search input:focus {
 
   border-color: var(--primary);
 
@@ -542,7 +577,7 @@
    STATUS FILTER
 ======================================== */
 
-.candidate-status-filter {
+.employer-status-filter {
 
   min-width: 180px;
 
@@ -555,7 +590,7 @@
 }
 
 
-.candidate-status-filter select {
+.employer-status-filter select {
 
   width: 100%;
 
@@ -581,10 +616,12 @@
 
   outline: none;
 
+  box-sizing: border-box;
+
 }
 
 
-.candidate-status-filter select:focus {
+.employer-status-filter select:focus {
 
   border-color: var(--primary);
 
@@ -599,7 +636,7 @@
    CLEAR FILTER BUTTON
 ======================================== */
 
-.candidate-clear-filter {
+.employer-clear-filter {
 
   height: 42px;
 
@@ -614,7 +651,7 @@
 
 @media (max-width: 768px) {
 
-  .candidate-filters {
+  .employer-filters {
 
     align-items: stretch;
 
@@ -623,9 +660,9 @@
   }
 
 
-  .candidate-search,
+  .employer-search,
 
-  .candidate-status-filter {
+  .employer-status-filter {
 
     width: 100%;
 
@@ -634,7 +671,7 @@
   }
 
 
-  .candidate-clear-filter {
+  .employer-clear-filter {
 
     width: 100%;
 

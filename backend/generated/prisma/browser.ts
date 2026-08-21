@@ -27,3 +27,8 @@ export type User = Prisma.UserModel
  * 
  */
 export type Candidate = Prisma.CandidateModel
+/**
+ * Model Employer
+ * 
+ */
+export type Employer = Prisma.EmployerModel

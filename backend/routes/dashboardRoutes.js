@@ -5,28 +5,17 @@ import { authenticateToken } from "../middleware/authMiddleware.js";
 const router = express.Router();
 
 /*
- * ========================================
- * PROTECTED DASHBOARD API
- * ========================================
- *
+ * Protected Dashboard API
  * GET /api/dashboard
- *
- * Returns:
- * - Authenticated user information
- * - Total users
- * - Total candidates created by
- *   the authenticated user
- *
- * Authentication:
- * authenticateToken()
  */
 router.get("/", authenticateToken, async (req, res) => {
   try {
-    // ========================================
-    // AUTHENTICATED USER
-    // ========================================
-
+    // User ID comes from JWT middleware
     const userId = req.user.userId;
+
+    // ========================================
+    // GET CURRENT USER
+    // ========================================
 
     const user = await prisma.user.findUnique({
       where: {
@@ -42,10 +31,6 @@ router.get("/", authenticateToken, async (req, res) => {
       },
     });
 
-    // ========================================
-    // USER NOT FOUND
-    // ========================================
-
     if (!user) {
       return res.status(404).json({
         success: false,
@@ -53,26 +38,14 @@ router.get("/", authenticateToken, async (req, res) => {
       });
     }
 
-
     // ========================================
     // DASHBOARD STATISTICS
     // ========================================
 
-    /*
-     * Total registered users.
-     *
-     * This is currently a system-wide count.
-     */
+    // Total users in the system
     const totalUsers = await prisma.user.count();
 
-
-    /*
-     * Total candidates belonging to the
-     * authenticated user.
-     *
-     * This matches the ownership rule used
-     * in candidateRoutes.js.
-     */
+    // Total candidates created by current user
     const totalCandidates =
       await prisma.candidate.count({
         where: {
@@ -80,6 +53,22 @@ router.get("/", authenticateToken, async (req, res) => {
         },
       });
 
+    // Registered candidates created by current user
+    const registeredCandidates =
+      await prisma.candidate.count({
+        where: {
+          createdById: userId,
+          status: "REGISTERED",
+        },
+      });
+
+    // Total employers created by current user
+    const totalEmployers =
+      await prisma.employer.count({
+        where: {
+          createdById: userId,
+        },
+      });
 
     // ========================================
     // RESPONSE
@@ -96,11 +85,12 @@ router.get("/", authenticateToken, async (req, res) => {
       stats: {
         totalUsers,
         totalCandidates,
+        registeredCandidates,
+        totalEmployers,
       },
     });
 
   } catch (error) {
-
     console.error(
       "Dashboard API error:",
       error
@@ -108,7 +98,8 @@ router.get("/", authenticateToken, async (req, res) => {
 
     return res.status(500).json({
       success: false,
-      message: "Failed to load dashboard data.",
+      message:
+        "Failed to load dashboard data.",
     });
   }
 });
