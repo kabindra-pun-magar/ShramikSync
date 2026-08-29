@@ -196,6 +196,23 @@ export type EnumEmployerStatusWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumEmployerStatusFilter<$PrismaModel>
 }
 
+export type EnumDemandLetterStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.DemandLetterStatus | Prisma.EnumDemandLetterStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.DemandLetterStatus[] | Prisma.ListEnumDemandLetterStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.DemandLetterStatus[] | Prisma.ListEnumDemandLetterStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDemandLetterStatusFilter<$PrismaModel> | $Enums.DemandLetterStatus
+}
+
+export type EnumDemandLetterStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.DemandLetterStatus | Prisma.EnumDemandLetterStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.DemandLetterStatus[] | Prisma.ListEnumDemandLetterStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.DemandLetterStatus[] | Prisma.ListEnumDemandLetterStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDemandLetterStatusWithAggregatesFilter<$PrismaModel> | $Enums.DemandLetterStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumDemandLetterStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumDemandLetterStatusFilter<$PrismaModel>
+}
+
 export type NestedIntFilter<$PrismaModel = never> = {
   equals?: number | Prisma.IntFieldRefInput<$PrismaModel>
   in?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel>
@@ -389,6 +406,23 @@ export type NestedEnumEmployerStatusWithAggregatesFilter<$PrismaModel = never> =
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumEmployerStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumEmployerStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumDemandLetterStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.DemandLetterStatus | Prisma.EnumDemandLetterStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.DemandLetterStatus[] | Prisma.ListEnumDemandLetterStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.DemandLetterStatus[] | Prisma.ListEnumDemandLetterStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDemandLetterStatusFilter<$PrismaModel> | $Enums.DemandLetterStatus
+}
+
+export type NestedEnumDemandLetterStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.DemandLetterStatus | Prisma.EnumDemandLetterStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.DemandLetterStatus[] | Prisma.ListEnumDemandLetterStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.DemandLetterStatus[] | Prisma.ListEnumDemandLetterStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDemandLetterStatusWithAggregatesFilter<$PrismaModel> | $Enums.DemandLetterStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumDemandLetterStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumDemandLetterStatusFilter<$PrismaModel>
 }
 
 

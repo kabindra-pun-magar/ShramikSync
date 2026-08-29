@@ -53,7 +53,8 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   User: 'User',
   Candidate: 'Candidate',
-  Employer: 'Employer'
+  Employer: 'Employer',
+  DemandLetter: 'DemandLetter'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -126,6 +127,27 @@ export const EmployerScalarFieldEnum = {
 } as const
 
 export type EmployerScalarFieldEnum = (typeof EmployerScalarFieldEnum)[keyof typeof EmployerScalarFieldEnum]
+
+
+export const DemandLetterScalarFieldEnum = {
+  id: 'id',
+  referenceNumber: 'referenceNumber',
+  jobTitle: 'jobTitle',
+  numberOfWorkers: 'numberOfWorkers',
+  salary: 'salary',
+  contractDuration: 'contractDuration',
+  country: 'country',
+  city: 'city',
+  description: 'description',
+  status: 'status',
+  issueDate: 'issueDate',
+  expiryDate: 'expiryDate',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdById: 'createdById'
+} as const
+
+export type DemandLetterScalarFieldEnum = (typeof DemandLetterScalarFieldEnum)[keyof typeof DemandLetterScalarFieldEnum]
 
 
 export const SortOrder = {

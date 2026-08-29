@@ -11,4 +11,5 @@
 export type * from './models/User.ts'
 export type * from './models/Candidate.ts'
 export type * from './models/Employer.ts'
+export type * from './models/DemandLetter.ts'
 export type * from './commonInputTypes.ts'

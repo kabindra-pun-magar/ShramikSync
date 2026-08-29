@@ -56,3 +56,8 @@ export type Candidate = Prisma.CandidateModel
  * 
  */
 export type Employer = Prisma.EmployerModel
+/**
+ * Model DemandLetter
+ * 
+ */
+export type DemandLetter = Prisma.DemandLetterModel

@@ -7,6 +7,10 @@ datasource db {
   provider = "postgresql"
 }
 
+// ========================================
+// ENUMS
+// ========================================
+
 enum CandidateStatus {
   REGISTERED
   SCREENING
@@ -22,6 +26,18 @@ enum EmployerStatus {
   PENDING
 }
 
+enum DemandLetterStatus {
+  DRAFT
+  ACTIVE
+  EXPIRED
+  CANCELLED
+  COMPLETED
+}
+
+// ========================================
+// USER
+// ========================================
+
 model User {
   id        Int      @id @default(autoincrement())
   name      String
@@ -31,9 +47,14 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  candidates Candidate[]
-  employers  Employer[]
+  candidates    Candidate[]
+  employers     Employer[]
+  demandLetters DemandLetter[]
 }
+
+// ========================================
+// CANDIDATE
+// ========================================
 
 model Candidate {
   id Int @id @default(autoincrement())
@@ -68,6 +89,9 @@ model Candidate {
   @@index([passportNumber])
 }
 
+// ========================================
+// EMPLOYER
+// ========================================
 
 model Employer {
   id Int @id @default(autoincrement())
@@ -91,10 +115,68 @@ model Employer {
   updatedAt DateTime @updatedAt
 
   createdById Int
-  createdBy User @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  createdBy   User @relation(fields: [createdById], references: [id], onDelete: Cascade)
 
   @@index([createdById])
   @@index([status])
   @@index([companyName])
 }
 
+// ========================================
+// DEMAND LETTER
+// ========================================
+
+model DemandLetter {
+  id Int @id @default(autoincrement())
+
+  // ========================================
+  // DEMAND LETTER INFORMATION
+  // ========================================
+
+  referenceNumber String @unique
+
+  jobTitle String
+
+  numberOfWorkers Int
+
+  salary String?
+
+  contractDuration String?
+
+  country String
+  city    String?
+
+  description String?
+
+  // ========================================
+  // STATUS
+  // ========================================
+
+  status DemandLetterStatus @default(DRAFT)
+
+  // ========================================
+  // DATES
+  // ========================================
+
+  issueDate  DateTime?
+  expiryDate DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // ========================================
+  // OWNERSHIP
+  // ========================================
+
+  createdById Int
+  createdBy   User @relation(fields: [createdById], references: [id], onDelete: Cascade)
+
+  // ========================================
+  // INDEXES
+  // ========================================
+
+  @@index([createdById])
+  @@index([status])
+  @@index([country])
+  @@index([referenceNumber])
+}

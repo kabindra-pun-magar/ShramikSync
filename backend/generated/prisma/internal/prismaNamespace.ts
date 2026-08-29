@@ -399,7 +399,8 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 export const ModelName = {
   User: 'User',
   Candidate: 'Candidate',
-  Employer: 'Employer'
+  Employer: 'Employer',
+  DemandLetter: 'DemandLetter'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -415,7 +416,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "candidate" | "employer"
+    modelProps: "user" | "candidate" | "employer" | "demandLetter"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -641,6 +642,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    DemandLetter: {
+      payload: Prisma.$DemandLetterPayload<ExtArgs>
+      fields: Prisma.DemandLetterFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.DemandLetterFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemandLetterPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.DemandLetterFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemandLetterPayload>
+        }
+        findFirst: {
+          args: Prisma.DemandLetterFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemandLetterPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.DemandLetterFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemandLetterPayload>
+        }
+        findMany: {
+          args: Prisma.DemandLetterFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemandLetterPayload>[]
+        }
+        create: {
+          args: Prisma.DemandLetterCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemandLetterPayload>
+        }
+        createMany: {
+          args: Prisma.DemandLetterCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.DemandLetterCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemandLetterPayload>[]
+        }
+        delete: {
+          args: Prisma.DemandLetterDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemandLetterPayload>
+        }
+        update: {
+          args: Prisma.DemandLetterUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemandLetterPayload>
+        }
+        deleteMany: {
+          args: Prisma.DemandLetterDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.DemandLetterUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.DemandLetterUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemandLetterPayload>[]
+        }
+        upsert: {
+          args: Prisma.DemandLetterUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemandLetterPayload>
+        }
+        aggregate: {
+          args: Prisma.DemandLetterAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateDemandLetter>
+        }
+        groupBy: {
+          args: Prisma.DemandLetterGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DemandLetterGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.DemandLetterCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DemandLetterCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -734,6 +809,27 @@ export const EmployerScalarFieldEnum = {
 } as const
 
 export type EmployerScalarFieldEnum = (typeof EmployerScalarFieldEnum)[keyof typeof EmployerScalarFieldEnum]
+
+
+export const DemandLetterScalarFieldEnum = {
+  id: 'id',
+  referenceNumber: 'referenceNumber',
+  jobTitle: 'jobTitle',
+  numberOfWorkers: 'numberOfWorkers',
+  salary: 'salary',
+  contractDuration: 'contractDuration',
+  country: 'country',
+  city: 'city',
+  description: 'description',
+  status: 'status',
+  issueDate: 'issueDate',
+  expiryDate: 'expiryDate',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdById: 'createdById'
+} as const
+
+export type DemandLetterScalarFieldEnum = (typeof DemandLetterScalarFieldEnum)[keyof typeof DemandLetterScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -833,6 +929,20 @@ export type EnumEmployerStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$P
  * Reference to a field of type 'EmployerStatus[]'
  */
 export type ListEnumEmployerStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EmployerStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'DemandLetterStatus'
+ */
+export type EnumDemandLetterStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DemandLetterStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'DemandLetterStatus[]'
+ */
+export type ListEnumDemandLetterStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DemandLetterStatus[]'>
     
 
 
@@ -1003,6 +1113,7 @@ export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
   candidate?: Prisma.CandidateOmit
   employer?: Prisma.EmployerOmit
+  demandLetter?: Prisma.DemandLetterOmit
 }
 
 /* Types for Logging */

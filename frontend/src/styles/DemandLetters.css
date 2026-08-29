@@ -1,0 +1,423 @@
+/* ========================================
+   DEMAND LETTERS PAGE
+======================================== */
+
+.demand-letters-page {
+  min-height: 100vh;
+  padding: var(--space-8);
+  background: var(--bg-app);
+}
+
+
+/* ========================================
+   HEADER
+======================================== */
+
+.demand-letters-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-6);
+  margin-bottom: var(--space-6);
+}
+
+.demand-letters-eyebrow {
+  display: block;
+  margin-bottom: var(--space-2);
+
+  color: var(--text-muted);
+
+  font-size: 12px;
+  font-weight: 700;
+
+  letter-spacing: 0.12em;
+}
+
+.demand-letters-header h1 {
+  margin: 0;
+  font-size: 32px;
+}
+
+.demand-letters-header p {
+  margin-top: var(--space-2);
+  color: var(--text-muted);
+}
+
+
+/* ========================================
+   MESSAGES
+======================================== */
+
+.demand-letter-message {
+  margin-bottom: var(--space-4);
+
+  padding:
+    var(--space-3)
+    var(--space-4);
+
+  border-radius: var(--radius-sm);
+
+  font-size: 14px;
+}
+
+.demand-letter-success {
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  color: #047857;
+}
+
+.demand-letter-error {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #b91c1c;
+}
+
+
+/* ========================================
+   FORM PANEL
+======================================== */
+
+.demand-letter-form-panel {
+  margin-bottom: var(--space-6);
+  padding: var(--space-6);
+}
+
+.demand-letter-panel-header {
+  display: flex;
+
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: var(--space-4);
+
+  margin-bottom: var(--space-5);
+}
+
+.demand-letter-panel-header h2 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.demand-letter-panel-header p {
+  margin-top: var(--space-1);
+
+  color: var(--text-muted);
+
+  font-size: 14px;
+}
+
+
+/* ========================================
+   FORM GRID
+======================================== */
+
+.demand-letter-form-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, 1fr);
+
+  gap: var(--space-4);
+}
+
+
+/* ========================================
+   FORM FIELD
+======================================== */
+
+.demand-letter-field {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: var(--space-2);
+}
+
+.demand-letter-field-full {
+  grid-column: 1 / -1;
+}
+
+.demand-letter-field label {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.demand-letter-field input,
+.demand-letter-field select,
+.demand-letter-field textarea {
+  width: 100%;
+
+  padding:
+    11px
+    13px;
+
+  border:
+    1px solid
+    var(--border-light);
+
+  border-radius:
+    var(--radius-sm);
+
+  background:
+    var(--surface);
+
+  color:
+    var(--text-primary);
+
+  font: inherit;
+}
+
+.demand-letter-field textarea {
+  resize: vertical;
+}
+
+.demand-letter-field input:focus,
+.demand-letter-field select:focus,
+.demand-letter-field textarea:focus {
+  outline: none;
+
+  border-color:
+    var(--primary);
+}
+
+
+/* ========================================
+   FORM ACTIONS
+======================================== */
+
+.demand-letter-form-actions {
+  grid-column: 1 / -1;
+
+  display: flex;
+
+  justify-content: flex-end;
+
+  gap: var(--space-3);
+
+  margin-top: var(--space-2);
+}
+
+
+/* ========================================
+   LIST PANEL
+======================================== */
+
+.demand-letters-list-panel {
+  padding: var(--space-6);
+}
+
+
+/* ========================================
+   EMPTY STATE
+======================================== */
+
+.demand-letter-empty-state {
+  padding: var(--space-8);
+
+  text-align: center;
+
+  color: var(--text-muted);
+}
+
+.demand-letter-empty-state h3 {
+  margin-bottom: var(--space-2);
+
+  color: var(--text-primary);
+}
+
+
+/* ========================================
+   TABLE
+======================================== */
+
+.demand-letters-table-wrapper {
+  width: 100%;
+
+  overflow-x: auto;
+}
+
+.demand-letters-table {
+  width: 100%;
+
+  border-collapse: collapse;
+}
+
+.demand-letters-table th,
+.demand-letters-table td {
+  padding: var(--space-4);
+
+  text-align: left;
+
+  border-bottom:
+    1px solid
+    var(--border-light);
+}
+
+.demand-letters-table th {
+  color: var(--text-muted);
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.05em;
+}
+
+.demand-letters-table td {
+  font-size: 14px;
+}
+
+.demand-letters-table td strong,
+.demand-letter-id,
+.demand-letter-secondary {
+  display: block;
+}
+
+.demand-letter-id,
+.demand-letter-secondary {
+  margin-top: 4px;
+
+  color: var(--text-muted);
+
+  font-size: 12px;
+}
+
+.demand-letters-table tbody tr:hover {
+  background: #f8fafc;
+}
+
+
+/* ========================================
+   STATUS
+======================================== */
+
+.demand-letter-status {
+  display: inline-flex;
+
+  padding:
+    5px
+    10px;
+
+  border-radius: 999px;
+
+  font-size: 11px;
+
+  font-weight: 700;
+}
+
+
+/* ========================================
+   DRAFT
+======================================== */
+
+.demand-letter-status-draft {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+
+/* ========================================
+   ACTIVE
+======================================== */
+
+.demand-letter-status-active {
+  background: #ecfdf5;
+  color: #047857;
+}
+
+
+/* ========================================
+   EXPIRED
+======================================== */
+
+.demand-letter-status-expired {
+  background: #fff7ed;
+  color: #c2410c;
+}
+
+
+/* ========================================
+   CANCELLED
+======================================== */
+
+.demand-letter-status-cancelled {
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+
+/* ========================================
+   COMPLETED
+======================================== */
+
+.demand-letter-status-completed {
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+
+
+/* ========================================
+   LOADING STATE
+======================================== */
+
+.demand-letters-state {
+  padding: var(--space-8);
+
+  text-align: center;
+
+  color: var(--text-muted);
+}
+
+.demand-letters-state h2 {
+  margin-bottom: var(--space-2);
+
+  color: var(--text-primary);
+}
+
+
+/* ========================================
+   RESPONSIVE
+======================================== */
+
+@media (max-width: 768px) {
+
+  .demand-letters-page {
+    padding: var(--space-4);
+  }
+
+  .demand-letters-header {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+  .demand-letters-header .btn {
+    width: 100%;
+  }
+
+  .demand-letter-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .demand-letter-field-full {
+    grid-column: auto;
+  }
+
+  .demand-letter-form-actions {
+    grid-column: auto;
+
+    flex-direction: column-reverse;
+  }
+
+  .demand-letter-form-actions button {
+    width: 100%;
+  }
+
+  .demand-letters-table th,
+  .demand-letters-table td {
+    padding: var(--space-3);
+  }
+
+}

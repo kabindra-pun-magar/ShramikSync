@@ -5,14 +5,13 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Candidates from "./pages/Candidates";
 import Employers from "./pages/Employers";
+import DemandLetters from "./pages/DemandLetters";
 
 import PrivateRoute from "./components/PrivateRoute";
 import DashboardLayout from "./components/layout/DashboardLayout";
 
-
 function App() {
   return (
-
     <BrowserRouter>
 
       <Routes>
@@ -40,10 +39,19 @@ function App() {
 
           <Route element={<DashboardLayout />}>
 
+            {/* ========================================
+                DASHBOARD
+            ======================================== */}
+
             <Route
               path="/dashboard"
               element={<Dashboard />}
             />
+
+
+            {/* ========================================
+                CANDIDATES
+            ======================================== */}
 
             <Route
               path="/candidates"
@@ -51,21 +59,29 @@ function App() {
             />
 
 
-            {/* Future modules */}
+            {/* ========================================
+                EMPLOYERS
+            ======================================== */}
 
             <Route
               path="/employers"
               element={<Employers />}
             />
 
+
+            {/* ========================================
+                DEMAND LETTERS
+            ======================================== */}
+
             <Route
               path="/demand-letters"
-              element={
-                <div>
-                  Demand Letters coming soon
-                </div>
-              }
+              element={<DemandLetters />}
             />
+
+
+            {/* ========================================
+                FUTURE MODULES
+            ======================================== */}
 
             <Route
               path="/documents"
@@ -85,11 +101,6 @@ function App() {
               }
             />
 
-            <Route
-              path="/employers"
-              element={<Employers />}
-            />
-
           </Route>
 
         </Route>
@@ -97,7 +108,6 @@ function App() {
       </Routes>
 
     </BrowserRouter>
-
   );
 }
 

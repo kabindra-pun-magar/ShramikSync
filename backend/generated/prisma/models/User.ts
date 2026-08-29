@@ -234,6 +234,7 @@ export type UserWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   candidates?: Prisma.CandidateListRelationFilter
   employers?: Prisma.EmployerListRelationFilter
+  demandLetters?: Prisma.DemandLetterListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -246,6 +247,7 @@ export type UserOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   candidates?: Prisma.CandidateOrderByRelationAggregateInput
   employers?: Prisma.EmployerOrderByRelationAggregateInput
+  demandLetters?: Prisma.DemandLetterOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -261,6 +263,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   candidates?: Prisma.CandidateListRelationFilter
   employers?: Prisma.EmployerListRelationFilter
+  demandLetters?: Prisma.DemandLetterListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -300,6 +303,7 @@ export type UserCreateInput = {
   updatedAt?: Date | string
   candidates?: Prisma.CandidateCreateNestedManyWithoutCreatedByInput
   employers?: Prisma.EmployerCreateNestedManyWithoutCreatedByInput
+  demandLetters?: Prisma.DemandLetterCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -312,6 +316,7 @@ export type UserUncheckedCreateInput = {
   updatedAt?: Date | string
   candidates?: Prisma.CandidateUncheckedCreateNestedManyWithoutCreatedByInput
   employers?: Prisma.EmployerUncheckedCreateNestedManyWithoutCreatedByInput
+  demandLetters?: Prisma.DemandLetterUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUpdateInput = {
@@ -323,6 +328,7 @@ export type UserUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   candidates?: Prisma.CandidateUpdateManyWithoutCreatedByNestedInput
   employers?: Prisma.EmployerUpdateManyWithoutCreatedByNestedInput
+  demandLetters?: Prisma.DemandLetterUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -335,6 +341,7 @@ export type UserUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   candidates?: Prisma.CandidateUncheckedUpdateManyWithoutCreatedByNestedInput
   employers?: Prisma.EmployerUncheckedUpdateManyWithoutCreatedByNestedInput
+  demandLetters?: Prisma.DemandLetterUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -453,6 +460,20 @@ export type UserUpdateOneRequiredWithoutEmployersNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutEmployersInput, Prisma.UserUpdateWithoutEmployersInput>, Prisma.UserUncheckedUpdateWithoutEmployersInput>
 }
 
+export type UserCreateNestedOneWithoutDemandLettersInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutDemandLettersInput, Prisma.UserUncheckedCreateWithoutDemandLettersInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutDemandLettersInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutDemandLettersNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutDemandLettersInput, Prisma.UserUncheckedCreateWithoutDemandLettersInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutDemandLettersInput
+  upsert?: Prisma.UserUpsertWithoutDemandLettersInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutDemandLettersInput, Prisma.UserUpdateWithoutDemandLettersInput>, Prisma.UserUncheckedUpdateWithoutDemandLettersInput>
+}
+
 export type UserCreateWithoutCandidatesInput = {
   name: string
   email: string
@@ -461,6 +482,7 @@ export type UserCreateWithoutCandidatesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   employers?: Prisma.EmployerCreateNestedManyWithoutCreatedByInput
+  demandLetters?: Prisma.DemandLetterCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutCandidatesInput = {
@@ -472,6 +494,7 @@ export type UserUncheckedCreateWithoutCandidatesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   employers?: Prisma.EmployerUncheckedCreateNestedManyWithoutCreatedByInput
+  demandLetters?: Prisma.DemandLetterUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutCandidatesInput = {
@@ -498,6 +521,7 @@ export type UserUpdateWithoutCandidatesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   employers?: Prisma.EmployerUpdateManyWithoutCreatedByNestedInput
+  demandLetters?: Prisma.DemandLetterUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCandidatesInput = {
@@ -509,6 +533,7 @@ export type UserUncheckedUpdateWithoutCandidatesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   employers?: Prisma.EmployerUncheckedUpdateManyWithoutCreatedByNestedInput
+  demandLetters?: Prisma.DemandLetterUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutEmployersInput = {
@@ -519,6 +544,7 @@ export type UserCreateWithoutEmployersInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   candidates?: Prisma.CandidateCreateNestedManyWithoutCreatedByInput
+  demandLetters?: Prisma.DemandLetterCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutEmployersInput = {
@@ -530,6 +556,7 @@ export type UserUncheckedCreateWithoutEmployersInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   candidates?: Prisma.CandidateUncheckedCreateNestedManyWithoutCreatedByInput
+  demandLetters?: Prisma.DemandLetterUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutEmployersInput = {
@@ -556,6 +583,7 @@ export type UserUpdateWithoutEmployersInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   candidates?: Prisma.CandidateUpdateManyWithoutCreatedByNestedInput
+  demandLetters?: Prisma.DemandLetterUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutEmployersInput = {
@@ -567,6 +595,69 @@ export type UserUncheckedUpdateWithoutEmployersInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   candidates?: Prisma.CandidateUncheckedUpdateManyWithoutCreatedByNestedInput
+  demandLetters?: Prisma.DemandLetterUncheckedUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserCreateWithoutDemandLettersInput = {
+  name: string
+  email: string
+  password: string
+  role?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  candidates?: Prisma.CandidateCreateNestedManyWithoutCreatedByInput
+  employers?: Prisma.EmployerCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserUncheckedCreateWithoutDemandLettersInput = {
+  id?: number
+  name: string
+  email: string
+  password: string
+  role?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  candidates?: Prisma.CandidateUncheckedCreateNestedManyWithoutCreatedByInput
+  employers?: Prisma.EmployerUncheckedCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserCreateOrConnectWithoutDemandLettersInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutDemandLettersInput, Prisma.UserUncheckedCreateWithoutDemandLettersInput>
+}
+
+export type UserUpsertWithoutDemandLettersInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutDemandLettersInput, Prisma.UserUncheckedUpdateWithoutDemandLettersInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutDemandLettersInput, Prisma.UserUncheckedCreateWithoutDemandLettersInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutDemandLettersInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutDemandLettersInput, Prisma.UserUncheckedUpdateWithoutDemandLettersInput>
+}
+
+export type UserUpdateWithoutDemandLettersInput = {
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  candidates?: Prisma.CandidateUpdateManyWithoutCreatedByNestedInput
+  employers?: Prisma.EmployerUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutDemandLettersInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  candidates?: Prisma.CandidateUncheckedUpdateManyWithoutCreatedByNestedInput
+  employers?: Prisma.EmployerUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 
@@ -577,11 +668,13 @@ export type UserUncheckedUpdateWithoutEmployersInput = {
 export type UserCountOutputType = {
   candidates: number
   employers: number
+  demandLetters: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   candidates?: boolean | UserCountOutputTypeCountCandidatesArgs
   employers?: boolean | UserCountOutputTypeCountEmployersArgs
+  demandLetters?: boolean | UserCountOutputTypeCountDemandLettersArgs
 }
 
 /**
@@ -608,6 +701,13 @@ export type UserCountOutputTypeCountEmployersArgs<ExtArgs extends runtime.Types.
   where?: Prisma.EmployerWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountDemandLettersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.DemandLetterWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -619,6 +719,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   updatedAt?: boolean
   candidates?: boolean | Prisma.User$candidatesArgs<ExtArgs>
   employers?: boolean | Prisma.User$employersArgs<ExtArgs>
+  demandLetters?: boolean | Prisma.User$demandLettersArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -656,6 +757,7 @@ export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = run
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   candidates?: boolean | Prisma.User$candidatesArgs<ExtArgs>
   employers?: boolean | Prisma.User$employersArgs<ExtArgs>
+  demandLetters?: boolean | Prisma.User$demandLettersArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -666,6 +768,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   objects: {
     candidates: Prisma.$CandidatePayload<ExtArgs>[]
     employers: Prisma.$EmployerPayload<ExtArgs>[]
+    demandLetters: Prisma.$DemandLetterPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -1071,6 +1174,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   readonly [Symbol.toStringTag]: "PrismaPromise"
   candidates<T extends Prisma.User$candidatesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$candidatesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CandidatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   employers<T extends Prisma.User$employersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$employersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EmployerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  demandLetters<T extends Prisma.User$demandLettersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$demandLettersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DemandLetterPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1545,6 +1649,30 @@ export type User$employersArgs<ExtArgs extends runtime.Types.Extensions.Internal
   take?: number
   skip?: number
   distinct?: Prisma.EmployerScalarFieldEnum | Prisma.EmployerScalarFieldEnum[]
+}
+
+/**
+ * User.demandLetters
+ */
+export type User$demandLettersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the DemandLetter
+   */
+  select?: Prisma.DemandLetterSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the DemandLetter
+   */
+  omit?: Prisma.DemandLetterOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DemandLetterInclude<ExtArgs> | null
+  where?: Prisma.DemandLetterWhereInput
+  orderBy?: Prisma.DemandLetterOrderByWithRelationInput | Prisma.DemandLetterOrderByWithRelationInput[]
+  cursor?: Prisma.DemandLetterWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.DemandLetterScalarFieldEnum | Prisma.DemandLetterScalarFieldEnum[]
 }
 
 /**
