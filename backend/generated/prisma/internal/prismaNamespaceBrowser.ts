@@ -54,7 +54,8 @@ export const ModelName = {
   User: 'User',
   Candidate: 'Candidate',
   Employer: 'Employer',
-  DemandLetter: 'DemandLetter'
+  DemandLetter: 'DemandLetter',
+  DemandLetterCandidate: 'DemandLetterCandidate'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -148,6 +149,16 @@ export const DemandLetterScalarFieldEnum = {
 } as const
 
 export type DemandLetterScalarFieldEnum = (typeof DemandLetterScalarFieldEnum)[keyof typeof DemandLetterScalarFieldEnum]
+
+
+export const DemandLetterCandidateScalarFieldEnum = {
+  id: 'id',
+  demandLetterId: 'demandLetterId',
+  candidateId: 'candidateId',
+  assignedAt: 'assignedAt'
+} as const
+
+export type DemandLetterCandidateScalarFieldEnum = (typeof DemandLetterCandidateScalarFieldEnum)[keyof typeof DemandLetterCandidateScalarFieldEnum]
 
 
 export const SortOrder = {

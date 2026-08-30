@@ -51,9 +51,7 @@
 .demand-letter-message {
   margin-bottom: var(--space-4);
 
-  padding:
-    var(--space-3)
-    var(--space-4);
+  padding: var(--space-3) var(--space-4);
 
   border-radius: var(--radius-sm);
 
@@ -74,11 +72,145 @@
 
 
 /* ========================================
+   SEARCH & FILTERS
+======================================== */
+
+.demand-letter-filters {
+  display: flex;
+  align-items: flex-end;
+
+  gap: var(--space-4);
+
+  margin-bottom: var(--space-6);
+
+  padding: var(--space-4);
+
+  background: var(--surface);
+
+  border: 1px solid var(--border-light);
+
+  border-radius: var(--radius-md);
+
+  box-shadow: var(--shadow-card);
+}
+
+
+/* ========================================
+   SEARCH
+======================================== */
+
+.demand-letter-search {
+  flex: 1;
+
+  min-width: 240px;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: var(--space-2);
+}
+
+.demand-letter-search label,
+.demand-letter-status-filter label {
+  color: var(--text-muted);
+
+  font-size: 12px;
+  font-weight: 700;
+
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.demand-letter-search input {
+  width: 100%;
+  height: 42px;
+
+  padding: 10px 13px;
+
+  border: 1px solid var(--border-light);
+
+  border-radius: var(--radius-sm);
+
+  background: var(--surface);
+
+  color: var(--text-primary);
+
+  font: inherit;
+  outline: none;
+}
+
+.demand-letter-search input::placeholder {
+  color: var(--text-muted);
+}
+
+.demand-letter-search input:focus {
+  border-color: var(--primary);
+
+  box-shadow:
+    0 0 0 3px
+    rgba(37, 99, 235, 0.08);
+}
+
+
+/* ========================================
+   STATUS FILTER
+======================================== */
+
+.demand-letter-status-filter {
+  min-width: 180px;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: var(--space-2);
+}
+
+.demand-letter-status-filter select {
+  width: 100%;
+  height: 42px;
+
+  padding: 10px 13px;
+
+  border: 1px solid var(--border-light);
+
+  border-radius: var(--radius-sm);
+
+  background: var(--surface);
+
+  color: var(--text-primary);
+
+  font: inherit;
+
+  cursor: pointer;
+  outline: none;
+}
+
+.demand-letter-status-filter select:focus {
+  border-color: var(--primary);
+
+  box-shadow:
+    0 0 0 3px
+    rgba(37, 99, 235, 0.08);
+}
+
+
+/* ========================================
+   CLEAR FILTER
+======================================== */
+
+.demand-letter-clear-filter {
+  height: 42px;
+  white-space: nowrap;
+}
+
+
+/* ========================================
    FORM PANEL
 ======================================== */
 
 .demand-letter-form-panel {
   margin-bottom: var(--space-6);
+
   padding: var(--space-6);
 }
 
@@ -114,16 +246,10 @@
 .demand-letter-form-grid {
   display: grid;
 
-  grid-template-columns:
-    repeat(2, 1fr);
+  grid-template-columns: repeat(2, 1fr);
 
   gap: var(--space-4);
 }
-
-
-/* ========================================
-   FORM FIELD
-======================================== */
 
 .demand-letter-field {
   display: flex;
@@ -147,28 +273,22 @@
 .demand-letter-field textarea {
   width: 100%;
 
-  padding:
-    11px
-    13px;
+  padding: 11px 13px;
 
-  border:
-    1px solid
-    var(--border-light);
+  border: 1px solid var(--border-light);
 
-  border-radius:
-    var(--radius-sm);
+  border-radius: var(--radius-sm);
 
-  background:
-    var(--surface);
+  background: var(--surface);
 
-  color:
-    var(--text-primary);
+  color: var(--text-primary);
 
   font: inherit;
 }
 
 .demand-letter-field textarea {
   resize: vertical;
+  min-height: 100px;
 }
 
 .demand-letter-field input:focus,
@@ -176,8 +296,7 @@
 .demand-letter-field textarea:focus {
   outline: none;
 
-  border-color:
-    var(--primary);
+  border-color: var(--primary);
 }
 
 
@@ -203,26 +322,27 @@
 ======================================== */
 
 .demand-letters-list-panel {
+  margin-bottom: var(--space-6);
+
   padding: var(--space-6);
 }
 
-
-/* ========================================
-   EMPTY STATE
-======================================== */
-
-.demand-letter-empty-state {
-  padding: var(--space-8);
-
-  text-align: center;
-
-  color: var(--text-muted);
+.demand-letters-list-header {
+  margin-bottom: var(--space-5);
 }
 
-.demand-letter-empty-state h3 {
-  margin-bottom: var(--space-2);
+.demand-letters-list-header h2 {
+  margin: 0;
 
-  color: var(--text-primary);
+  font-size: 20px;
+}
+
+.demand-letters-list-header p {
+  margin-top: var(--space-1);
+
+  color: var(--text-muted);
+
+  font-size: 14px;
 }
 
 
@@ -248,16 +368,13 @@
 
   text-align: left;
 
-  border-bottom:
-    1px solid
-    var(--border-light);
+  border-bottom: 1px solid var(--border-light);
 }
 
 .demand-letters-table th {
   color: var(--text-muted);
 
   font-size: 12px;
-
   font-weight: 700;
 
   text-transform: uppercase;
@@ -296,61 +413,33 @@
 .demand-letter-status {
   display: inline-flex;
 
-  padding:
-    5px
-    10px;
+  padding: 5px 10px;
 
   border-radius: 999px;
 
   font-size: 11px;
-
   font-weight: 700;
 }
-
-
-/* ========================================
-   DRAFT
-======================================== */
 
 .demand-letter-status-draft {
   background: #f1f5f9;
   color: #475569;
 }
 
-
-/* ========================================
-   ACTIVE
-======================================== */
-
 .demand-letter-status-active {
   background: #ecfdf5;
   color: #047857;
 }
-
-
-/* ========================================
-   EXPIRED
-======================================== */
 
 .demand-letter-status-expired {
   background: #fff7ed;
   color: #c2410c;
 }
 
-
-/* ========================================
-   CANCELLED
-======================================== */
-
 .demand-letter-status-cancelled {
   background: #fef2f2;
   color: #b91c1c;
 }
-
-
-/* ========================================
-   COMPLETED
-======================================== */
 
 .demand-letter-status-completed {
   background: #eff6ff;
@@ -359,9 +448,60 @@
 
 
 /* ========================================
-   LOADING STATE
+   ACTIONS
 ======================================== */
 
+.demand-letter-actions {
+  display: flex;
+
+  align-items: center;
+
+  gap: 6px;
+}
+
+.demand-letter-action-btn {
+  padding: 6px 10px;
+
+  border: 1px solid var(--border-light);
+
+  border-radius: var(--radius-sm);
+
+  background: var(--surface);
+
+  color: var(--text-primary);
+
+  font-size: 12px;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.demand-letter-action-btn:hover {
+  background: #f8fafc;
+}
+
+.demand-letter-action-btn:disabled {
+  opacity: 0.6;
+
+  cursor: not-allowed;
+}
+
+.demand-letter-delete-btn {
+  color: #b91c1c;
+
+  border-color: #fecaca;
+}
+
+.demand-letter-delete-btn:hover {
+  background: #fef2f2;
+}
+
+
+/* ========================================
+   EMPTY / LOADING / ERROR STATES
+======================================== */
+
+.demand-letter-empty-state,
 .demand-letters-state {
   padding: var(--space-8);
 
@@ -370,10 +510,169 @@
   color: var(--text-muted);
 }
 
+.demand-letter-empty-state h3,
 .demand-letters-state h2 {
   margin-bottom: var(--space-2);
 
   color: var(--text-primary);
+}
+
+.demand-letters-error {
+  color: #b91c1c;
+}
+
+
+/* ========================================
+   MODAL
+======================================== */
+
+.demand-letter-modal-overlay {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 1000;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding: var(--space-4);
+
+  background: rgba(15, 23, 42, 0.45);
+}
+
+.demand-letter-modal {
+  width: 100%;
+
+  max-width: 760px;
+
+  max-height: 90vh;
+
+  overflow-y: auto;
+
+  padding: var(--space-6);
+
+  background: var(--surface);
+
+  border-radius: var(--radius-md);
+
+  box-shadow: var(--shadow-card);
+}
+
+
+/* ========================================
+   MODAL HEADER
+======================================== */
+
+.demand-letter-modal-header {
+  display: flex;
+
+  align-items: flex-start;
+
+  justify-content: space-between;
+
+  gap: var(--space-4);
+
+  margin-bottom: var(--space-6);
+
+  padding-bottom: var(--space-4);
+
+  border-bottom: 1px solid var(--border-light);
+}
+
+.demand-letter-modal-header h2 {
+  margin: 0;
+
+  font-size: 24px;
+}
+
+.demand-letter-modal-close {
+  width: 34px;
+  height: 34px;
+
+  border: 1px solid var(--border-light);
+
+  border-radius: 50%;
+
+  background: var(--surface);
+
+  font-size: 22px;
+
+  line-height: 1;
+
+  cursor: pointer;
+}
+
+.demand-letter-modal-close:hover {
+  background: #f8fafc;
+}
+
+
+/* ========================================
+   DETAILS GRID
+======================================== */
+
+.demand-letter-details-grid {
+  display: grid;
+
+  grid-template-columns: repeat(2, 1fr);
+
+  gap: var(--space-4);
+}
+
+.demand-letter-details-grid > div {
+  padding: var(--space-3);
+
+  background: #f8fafc;
+
+  border: 1px solid var(--border-light);
+
+  border-radius: var(--radius-sm);
+}
+
+.demand-letter-details-grid span,
+.demand-letter-details-grid strong {
+  display: block;
+}
+
+.demand-letter-details-grid span {
+  color: var(--text-muted);
+
+  font-size: 12px;
+}
+
+.demand-letter-details-grid strong {
+  margin-top: 4px;
+
+  font-size: 14px;
+
+  overflow-wrap: anywhere;
+}
+
+.demand-letter-detail-full {
+  grid-column: 1 / -1;
+}
+
+
+/* ========================================
+   MODAL ACTIONS
+======================================== */
+
+.demand-letter-modal-actions {
+  display: flex;
+
+  justify-content: flex-end;
+
+  gap: var(--space-3);
+
+  margin-top: var(--space-6);
+
+  padding-top: var(--space-4);
+
+  border-top: 1px solid var(--border-light);
 }
 
 
@@ -397,6 +696,27 @@
     width: 100%;
   }
 
+  /* Filters */
+
+  .demand-letter-filters {
+    align-items: stretch;
+
+    flex-direction: column;
+  }
+
+  .demand-letter-search,
+  .demand-letter-status-filter {
+    width: 100%;
+
+    min-width: 0;
+  }
+
+  .demand-letter-clear-filter {
+    width: 100%;
+  }
+
+  /* Form */
+
   .demand-letter-form-grid {
     grid-template-columns: 1fr;
   }
@@ -415,9 +735,223 @@
     width: 100%;
   }
 
-  .demand-letters-table th,
-  .demand-letters-table td {
-    padding: var(--space-3);
+  /* Actions */
+
+  .demand-letter-actions {
+    flex-direction: column;
+
+    align-items: stretch;
+  }
+
+  .demand-letter-action-btn {
+    width: 100%;
+  }
+
+  /* Modal */
+
+  .demand-letter-details-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .demand-letter-detail-full {
+    grid-column: auto;
+  }
+
+  .demand-letter-modal {
+    max-height: 95vh;
+  }
+}
+
+/* ========================================
+   DEMAND LETTER - WORKER SUMMARY
+======================================== */
+
+.demand-letter-worker-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-5);
+  padding: var(--space-4);
+  background: #f8fafc;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-sm);
+}
+
+.demand-letter-worker-summary > div:first-child {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.demand-letter-worker-summary span {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.demand-letter-worker-summary strong {
+  font-size: 20px;
+}
+
+.demand-letter-capacity-available,
+.demand-letter-capacity-full {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.demand-letter-capacity-available {
+  color: #047857;
+}
+
+.demand-letter-capacity-full {
+  color: #b91c1c;
+}
+
+
+/* ========================================
+   ASSIGN CANDIDATE
+======================================== */
+
+.demand-letter-assign-action {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: var(--space-5);
+}
+
+.demand-letter-assign-section {
+  margin-bottom: var(--space-6);
+  padding: var(--space-4);
+  background: #f8fafc;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-sm);
+}
+
+.demand-letter-assign-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-4);
+}
+
+.demand-letter-assign-header h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.demand-letter-assign-header p {
+  margin-top: 4px;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+
+/* ========================================
+   AVAILABLE CANDIDATES
+======================================== */
+
+.demand-letter-available-candidates {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 360px;
+  overflow-y: auto;
+}
+
+.demand-letter-available-candidate {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-3);
+  background: var(--surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-sm);
+}
+
+.demand-letter-available-candidate-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.demand-letter-available-candidate-info strong {
+  font-size: 14px;
+}
+
+.demand-letter-available-candidate-info span,
+.demand-letter-available-candidate-info small {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.demand-letter-available-candidate-info small {
+  font-weight: 600;
+}
+
+
+/* ========================================
+   ASSIGNED SECTION
+======================================== */
+
+.demand-letter-assigned-section {
+  margin-top: var(--space-5);
+}
+
+.demand-letter-section-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-3);
+}
+
+.demand-letter-section-title h3 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.demand-letter-section-title span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  height: 28px;
+  padding: 0 8px;
+  border-radius: 999px;
+  background: #f1f5f9;
+  color: var(--text-primary);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+
+/* ========================================
+   RESPONSIVE
+======================================== */
+
+@media (max-width: 768px) {
+
+  .demand-letter-worker-summary {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .demand-letter-assign-header {
+    flex-direction: column;
+  }
+
+  .demand-letter-assign-header button {
+    width: 100%;
+  }
+
+  .demand-letter-available-candidate {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .demand-letter-available-candidate button {
+    width: 100%;
   }
 
 }

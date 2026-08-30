@@ -81,8 +81,22 @@ model Candidate {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  // ========================================
+  // OWNERSHIP
+  // ========================================
+
   createdById Int
-  createdBy   User @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  createdBy User @relation(fields: [createdById], references: [id], onDelete: Cascade)
+
+  // ========================================
+  // DEMAND LETTER ASSIGNMENTS
+  // ========================================
+
+  demandLetterAssignments DemandLetterCandidate[]
+
+  // ========================================
+  // INDEXES
+  // ========================================
 
   @@index([createdById])
   @@index([status])
@@ -114,8 +128,16 @@ model Employer {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  // ========================================
+  // OWNERSHIP
+  // ========================================
+
   createdById Int
-  createdBy   User @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  createdBy User @relation(fields: [createdById], references: [id], onDelete: Cascade)
+
+  // ========================================
+  // INDEXES
+  // ========================================
 
   @@index([createdById])
   @@index([status])
@@ -169,7 +191,13 @@ model DemandLetter {
   // ========================================
 
   createdById Int
-  createdBy   User @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  createdBy User @relation(fields: [createdById], references: [id], onDelete: Cascade)
+
+  // ========================================
+  // CANDIDATE ASSIGNMENTS
+  // ========================================
+
+  candidateAssignments DemandLetterCandidate[]
 
   // ========================================
   // INDEXES
@@ -179,4 +207,33 @@ model DemandLetter {
   @@index([status])
   @@index([country])
   @@index([referenceNumber])
+}
+
+// ========================================
+// DEMAND LETTER ↔ CANDIDATE
+// ========================================
+
+model DemandLetterCandidate {
+  id Int @id @default(autoincrement())
+
+  demandLetterId Int
+  candidateId    Int
+
+  assignedAt DateTime @default(now())
+
+  // ========================================
+  // RELATIONS
+  // ========================================
+
+  demandLetter DemandLetter @relation(fields: [demandLetterId], references: [id], onDelete: Cascade)
+
+  candidate Candidate @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+
+  // ========================================
+  // CONSTRAINTS / INDEXES
+  // ========================================
+
+  @@unique([demandLetterId, candidateId])
+  @@index([demandLetterId])
+  @@index([candidateId])
 }

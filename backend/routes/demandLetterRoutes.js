@@ -129,7 +129,6 @@ router.post("/", authenticateToken, async (req, res) => {
       message: "Demand letter created successfully.",
       demandLetter,
     });
-
   } catch (error) {
     console.error(
       "Create demand letter error:",
@@ -169,7 +168,6 @@ router.get("/", authenticateToken, async (req, res) => {
       count: demandLetters.length,
       demandLetters,
     });
-
   } catch (error) {
     console.error(
       "Get demand letters error:",
@@ -237,7 +235,6 @@ router.get("/:id", authenticateToken, async (req, res) => {
       success: true,
       demandLetter,
     });
-
   } catch (error) {
     console.error(
       "Get single demand letter error:",
@@ -488,7 +485,6 @@ router.put("/:id", authenticateToken, async (req, res) => {
       message: "Demand letter updated successfully.",
       demandLetter: updatedDemandLetter,
     });
-
   } catch (error) {
     console.error(
       "Update demand letter error:",
@@ -565,7 +561,6 @@ router.delete("/:id", authenticateToken, async (req, res) => {
       success: true,
       message: "Demand letter deleted successfully.",
     });
-
   } catch (error) {
     console.error(
       "Delete demand letter error:",
@@ -632,7 +627,6 @@ router.get("/:id", authenticateToken, async (req, res) => {
       success: true,
       demandLetter,
     });
-
   } catch (error) {
     console.error(
       "Get single demand letter error:",
@@ -647,5 +641,371 @@ router.get("/:id", authenticateToken, async (req, res) => {
   }
 });
 
+// ========================================
+// ASSIGN CANDIDATE TO DEMAND LETTER
+// POST /api/demand-letters/:id/candidates
+// ========================================
+
+router.post(
+  "/:id/candidates",
+  authenticateToken,
+  async (req, res) => {
+    try {
+      const demandLetterId = Number(req.params.id);
+      const candidateId = Number(req.body.candidateId);
+      const userId = req.user.userId;
+
+      // ========================================
+      // VALIDATION
+      // ========================================
+
+      if (!Number.isInteger(demandLetterId)) {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid demand letter ID.",
+        });
+      }
+
+      if (!Number.isInteger(candidateId)) {
+        return res.status(400).json({
+          success: false,
+          message: "Valid candidate ID is required.",
+        });
+      }
+
+      // ========================================
+      // CHECK DEMAND LETTER OWNERSHIP
+      // ========================================
+
+      const demandLetter =
+        await prisma.demandLetter.findFirst({
+          where: {
+            id: demandLetterId,
+            createdById: userId,
+          },
+        });
+
+      if (!demandLetter) {
+        return res.status(404).json({
+          success: false,
+          message: "Demand letter not found.",
+        });
+      }
+
+      // ========================================
+      // CHECK CANDIDATE OWNERSHIP
+      // ========================================
+
+      const candidate =
+        await prisma.candidate.findFirst({
+          where: {
+            id: candidateId,
+            createdById: userId,
+          },
+        });
+
+      if (!candidate) {
+        return res.status(404).json({
+          success: false,
+          message: "Candidate not found.",
+        });
+      }
+
+      // ========================================
+      // CHECK DUPLICATE ASSIGNMENT
+      // ========================================
+
+      const existingAssignment =
+        await prisma.demandLetterCandidate.findUnique({
+          where: {
+            demandLetterId_candidateId: {
+              demandLetterId,
+              candidateId,
+            },
+          },
+        });
+
+      if (existingAssignment) {
+        return res.status(409).json({
+          success: false,
+          message:
+            "Candidate is already assigned to this demand letter.",
+        });
+      }
+
+      // ========================================
+      // CHECK WORKER CAPACITY
+      // ========================================
+
+      const assignedCandidateCount =
+        await prisma.demandLetterCandidate.count({
+          where: {
+            demandLetterId: demandLetterId,
+          },
+        });
+
+      if (
+        assignedCandidateCount >=
+        demandLetter.numberOfWorkers
+      ) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "Worker limit reached. No more candidates can be assigned to this demand letter.",
+        });
+      }
+
+      // ========================================
+      // CREATE ASSIGNMENT
+      // ========================================
+
+      const assignment =
+        await prisma.demandLetterCandidate.create({
+          data: {
+            demandLetterId,
+            candidateId,
+          },
+
+          include: {
+            candidate: true,
+            demandLetter: true,
+          },
+        });
+
+      // ========================================
+      // RESPONSE
+      // ========================================
+
+      return res.status(201).json({
+        success: true,
+        message:
+          "Candidate assigned to demand letter successfully.",
+        assignment,
+      });
+    } catch (error) {
+      console.error(
+        "Assign candidate error:",
+        error
+      );
+
+      return res.status(500).json({
+        success: false,
+        message:
+          "Failed to assign candidate to demand letter.",
+        error: error.message,
+      });
+    }
+  }
+);
+
+// ========================================
+// GET ASSIGNED CANDIDATES
+// GET /api/demand-letters/:id/candidates
+// ========================================
+
+router.get(
+  "/:id/candidates",
+  authenticateToken,
+  async (req, res) => {
+    try {
+      const demandLetterId = Number(req.params.id);
+      const userId = req.user.userId;
+
+      // ========================================
+      // VALIDATION
+      // ========================================
+
+      if (!Number.isInteger(demandLetterId)) {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid demand letter ID.",
+        });
+      }
+
+      // ========================================
+      // CHECK DEMAND LETTER OWNERSHIP
+      // ========================================
+
+      const demandLetter =
+        await prisma.demandLetter.findFirst({
+          where: {
+            id: demandLetterId,
+            createdById: userId,
+          },
+        });
+
+      if (!demandLetter) {
+        return res.status(404).json({
+          success: false,
+          message: "Demand letter not found.",
+        });
+      }
+
+      // ========================================
+      // GET ASSIGNED CANDIDATES
+      // ========================================
+
+      const assignments =
+        await prisma.demandLetterCandidate.findMany({
+          where: {
+            demandLetterId,
+          },
+
+          include: {
+            candidate: true,
+          },
+
+          orderBy: {
+            assignedAt: "desc",
+          },
+        });
+
+      // ========================================
+      // RESPONSE
+      // ========================================
+
+      return res.status(200).json({
+        success: true,
+        count: assignments.length,
+        demandLetter: {
+          id: demandLetter.id,
+          referenceNumber:
+            demandLetter.referenceNumber,
+          jobTitle: demandLetter.jobTitle,
+        },
+        candidates: assignments.map(
+          (assignment) => ({
+            assignmentId: assignment.id,
+            assignedAt: assignment.assignedAt,
+            candidate: assignment.candidate,
+          })
+        ),
+      });
+    } catch (error) {
+      console.error(
+        "Get assigned candidates error:",
+        error
+      );
+
+      return res.status(500).json({
+        success: false,
+        message:
+          "Failed to fetch assigned candidates.",
+        error: error.message,
+      });
+    }
+  }
+);
+
+// ========================================
+// REMOVE CANDIDATE FROM DEMAND LETTER
+// DELETE /api/demand-letters/:id/candidates/:candidateId
+// ========================================
+
+router.delete(
+  "/:id/candidates/:candidateId",
+  authenticateToken,
+  async (req, res) => {
+    try {
+      const demandLetterId = Number(req.params.id);
+      const candidateId = Number(req.params.candidateId);
+      const userId = req.user.userId;
+
+      // ========================================
+      // VALIDATION
+      // ========================================
+
+      if (!Number.isInteger(demandLetterId)) {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid demand letter ID.",
+        });
+      }
+
+      if (!Number.isInteger(candidateId)) {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid candidate ID.",
+        });
+      }
+
+      // ========================================
+      // CHECK DEMAND LETTER OWNERSHIP
+      // ========================================
+
+      const demandLetter =
+        await prisma.demandLetter.findFirst({
+          where: {
+            id: demandLetterId,
+            createdById: userId,
+          },
+        });
+
+      if (!demandLetter) {
+        return res.status(404).json({
+          success: false,
+          message: "Demand letter not found.",
+        });
+      }
+
+      // ========================================
+      // CHECK ASSIGNMENT
+      // ========================================
+
+      const assignment =
+        await prisma.demandLetterCandidate.findUnique({
+          where: {
+            demandLetterId_candidateId: {
+              demandLetterId,
+              candidateId,
+            },
+          },
+        });
+
+      if (!assignment) {
+        return res.status(404).json({
+          success: false,
+          message:
+            "Candidate is not assigned to this demand letter.",
+        });
+      }
+
+      // ========================================
+      // DELETE ASSIGNMENT
+      // ========================================
+
+      await prisma.demandLetterCandidate.delete({
+        where: {
+          demandLetterId_candidateId: {
+            demandLetterId,
+            candidateId,
+          },
+        },
+      });
+
+      // ========================================
+      // RESPONSE
+      // ========================================
+
+      return res.status(200).json({
+        success: true,
+        message:
+          "Candidate removed from demand letter successfully.",
+      });
+    } catch (error) {
+      console.error(
+        "Remove candidate error:",
+        error
+      );
+
+      return res.status(500).json({
+        success: false,
+        message:
+          "Failed to remove candidate from demand letter.",
+        error: error.message,
+      });
+    }
+  }
+);
 
 export default router;

@@ -400,7 +400,8 @@ export const ModelName = {
   User: 'User',
   Candidate: 'Candidate',
   Employer: 'Employer',
-  DemandLetter: 'DemandLetter'
+  DemandLetter: 'DemandLetter',
+  DemandLetterCandidate: 'DemandLetterCandidate'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -416,7 +417,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "candidate" | "employer" | "demandLetter"
+    modelProps: "user" | "candidate" | "employer" | "demandLetter" | "demandLetterCandidate"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -716,6 +717,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    DemandLetterCandidate: {
+      payload: Prisma.$DemandLetterCandidatePayload<ExtArgs>
+      fields: Prisma.DemandLetterCandidateFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.DemandLetterCandidateFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemandLetterCandidatePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.DemandLetterCandidateFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemandLetterCandidatePayload>
+        }
+        findFirst: {
+          args: Prisma.DemandLetterCandidateFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemandLetterCandidatePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.DemandLetterCandidateFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemandLetterCandidatePayload>
+        }
+        findMany: {
+          args: Prisma.DemandLetterCandidateFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemandLetterCandidatePayload>[]
+        }
+        create: {
+          args: Prisma.DemandLetterCandidateCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemandLetterCandidatePayload>
+        }
+        createMany: {
+          args: Prisma.DemandLetterCandidateCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.DemandLetterCandidateCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemandLetterCandidatePayload>[]
+        }
+        delete: {
+          args: Prisma.DemandLetterCandidateDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemandLetterCandidatePayload>
+        }
+        update: {
+          args: Prisma.DemandLetterCandidateUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemandLetterCandidatePayload>
+        }
+        deleteMany: {
+          args: Prisma.DemandLetterCandidateDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.DemandLetterCandidateUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.DemandLetterCandidateUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemandLetterCandidatePayload>[]
+        }
+        upsert: {
+          args: Prisma.DemandLetterCandidateUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemandLetterCandidatePayload>
+        }
+        aggregate: {
+          args: Prisma.DemandLetterCandidateAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateDemandLetterCandidate>
+        }
+        groupBy: {
+          args: Prisma.DemandLetterCandidateGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DemandLetterCandidateGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.DemandLetterCandidateCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DemandLetterCandidateCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -830,6 +905,16 @@ export const DemandLetterScalarFieldEnum = {
 } as const
 
 export type DemandLetterScalarFieldEnum = (typeof DemandLetterScalarFieldEnum)[keyof typeof DemandLetterScalarFieldEnum]
+
+
+export const DemandLetterCandidateScalarFieldEnum = {
+  id: 'id',
+  demandLetterId: 'demandLetterId',
+  candidateId: 'candidateId',
+  assignedAt: 'assignedAt'
+} as const
+
+export type DemandLetterCandidateScalarFieldEnum = (typeof DemandLetterCandidateScalarFieldEnum)[keyof typeof DemandLetterCandidateScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1114,6 +1199,7 @@ export type GlobalOmitConfig = {
   candidate?: Prisma.CandidateOmit
   employer?: Prisma.EmployerOmit
   demandLetter?: Prisma.DemandLetterOmit
+  demandLetterCandidate?: Prisma.DemandLetterCandidateOmit
 }
 
 /* Types for Logging */
