@@ -28,6 +28,11 @@ export type User = Prisma.UserModel
  */
 export type Candidate = Prisma.CandidateModel
 /**
+ * Model Document
+ * 
+ */
+export type Document = Prisma.DocumentModel
+/**
  * Model Employer
  * 
  */

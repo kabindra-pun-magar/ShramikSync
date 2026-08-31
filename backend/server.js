@@ -1,5 +1,7 @@
 import express from "express";
 import cors from "cors";
+import path from "path";
+import { fileURLToPath } from "url";
 
 import { prisma } from "./lib/prisma.js";
 
@@ -8,16 +10,37 @@ import dashboardRoutes from "./routes/dashboardRoutes.js";
 import candidateRoutes from "./routes/candidateRoutes.js";
 import employerRoutes from "./routes/employerRoutes.js";
 import demandLetterRoutes from "./routes/demandLetterRoutes.js";
+import documentRoutes from "./routes/documents.js";
 
 import { authenticateToken } from "./middleware/authMiddleware.js";
 import { authorizeRoles } from "./middleware/roleMiddleware.js";
+
+// ========================================
+// ES MODULE PATH SETUP
+// ========================================
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// ========================================
+// APP
+// ========================================
 
 const app = express();
 
 const PORT = 5000;
 
 // ========================================
-// Middleware
+// STATIC UPLOADS
+// ========================================
+
+app.use(
+  "/uploads",
+  express.static(path.join(__dirname, "uploads"))
+);
+
+// ========================================
+// MIDDLEWARE
 // ========================================
 
 app.use(
@@ -30,30 +53,47 @@ app.use(
 app.use(express.json());
 
 // ========================================
-// Authentication Routes
+// DOCUMENT ROUTES
+// ========================================
+
+app.use("/api/documents", documentRoutes);
+
+// ========================================
+// AUTHENTICATION ROUTES
 // ========================================
 
 app.use("/api/auth", authRoutes);
 
 // ========================================
-// Dashboard Routes
+// DASHBOARD ROUTES
 // ========================================
 
 app.use("/api/dashboard", dashboardRoutes);
 
 // ========================================
-// Basic Backend Test
+// CANDIDATE ROUTES
 // ========================================
 
 app.use("/api/candidates", candidateRoutes);
 
+// ========================================
+// EMPLOYER ROUTES
+// ========================================
 
 app.use("/api/employers", employerRoutes);
+
+// ========================================
+// DEMAND LETTER ROUTES
+// ========================================
 
 app.use(
   "/api/demand-letters",
   demandLetterRoutes
 );
+
+// ========================================
+// BASIC BACKEND TEST
+// ========================================
 
 app.get("/api/test", (req, res) => {
   res.status(200).json({
@@ -63,7 +103,7 @@ app.get("/api/test", (req, res) => {
 });
 
 // ========================================
-// Database Health Test
+// DATABASE HEALTH TEST
 // ========================================
 
 app.get("/api/health/db", async (req, res) => {
@@ -87,7 +127,7 @@ app.get("/api/health/db", async (req, res) => {
 });
 
 // ========================================
-// JWT Protected Test Route
+// JWT PROTECTED TEST ROUTE
 // ========================================
 
 app.get(
@@ -103,7 +143,7 @@ app.get(
 );
 
 // ========================================
-// ADMIN Protected Test Route
+// ADMIN PROTECTED TEST ROUTE
 // ========================================
 
 app.get(
@@ -120,7 +160,7 @@ app.get(
 );
 
 // ========================================
-// Start Server
+// START SERVER
 // ========================================
 
 app.listen(PORT, () => {
@@ -144,5 +184,9 @@ app.listen(PORT, () => {
 
   console.log(
     `Dashboard API: http://localhost:${PORT}/api/dashboard`
+  );
+
+  console.log(
+    `Documents API: http://localhost:${PORT}/api/documents`
   );
 });

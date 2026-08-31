@@ -1,0 +1,21 @@
+Experiment 2 – HDFS Commands
+
+Name: Kabindra Pun Magar
+Roll No:71812301170
+Branch: CSE
+
+This file is created to demonstrate Hadoop Distributed File System operations.
+
+The following HDFS commands were executed:
+
+1. mkdir – to create directory
+2. touchz – to create empty file
+3. put – to upload file
+4. cat – to read file
+5. cp – to copy file
+6. mv – to move file
+7. rm – to delete file
+
+Result:
+Basic HDFS commands were successfully executed.
+

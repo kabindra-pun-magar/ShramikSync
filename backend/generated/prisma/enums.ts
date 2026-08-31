@@ -39,3 +39,18 @@ export const DemandLetterStatus = {
 } as const
 
 export type DemandLetterStatus = (typeof DemandLetterStatus)[keyof typeof DemandLetterStatus]
+
+
+export const DocumentType = {
+  PASSPORT: 'PASSPORT',
+  CITIZENSHIP: 'CITIZENSHIP',
+  EDUCATION_CERTIFICATE: 'EDUCATION_CERTIFICATE',
+  EXPERIENCE_LETTER: 'EXPERIENCE_LETTER',
+  MEDICAL_REPORT: 'MEDICAL_REPORT',
+  POLICE_CLEARANCE: 'POLICE_CLEARANCE',
+  CONTRACT: 'CONTRACT',
+  VISA: 'VISA',
+  OTHER: 'OTHER'
+} as const
+
+export type DocumentType = (typeof DocumentType)[keyof typeof DocumentType]

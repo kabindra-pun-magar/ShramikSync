@@ -34,6 +34,18 @@ enum DemandLetterStatus {
   COMPLETED
 }
 
+enum DocumentType {
+  PASSPORT
+  CITIZENSHIP
+  EDUCATION_CERTIFICATE
+  EXPERIENCE_LETTER
+  MEDICAL_REPORT
+  POLICE_CLEARANCE
+  CONTRACT
+  VISA
+  OTHER
+}
+
 // ========================================
 // USER
 // ========================================
@@ -86,13 +98,19 @@ model Candidate {
   // ========================================
 
   createdById Int
-  createdBy User @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  createdBy   User @relation(fields: [createdById], references: [id], onDelete: Cascade)
 
   // ========================================
   // DEMAND LETTER ASSIGNMENTS
   // ========================================
 
   demandLetterAssignments DemandLetterCandidate[]
+
+  // ========================================
+  // DOCUMENTS
+  // ========================================
+
+  documents Document[]
 
   // ========================================
   // INDEXES
@@ -104,17 +122,64 @@ model Candidate {
 }
 
 // ========================================
+// DOCUMENT
+// ========================================
+
+model Document {
+  id Int @id @default(autoincrement())
+
+  // ========================================
+  // DOCUMENT INFORMATION
+  // ========================================
+
+  name String
+
+  type DocumentType @default(OTHER)
+
+  fileUrl String
+
+  fileName String?
+
+  mimeType String?
+
+  fileSize Int?
+
+  description String?
+
+  // ========================================
+  // CANDIDATE RELATION
+  // ========================================
+
+  candidateId Int
+  candidate   Candidate @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+
+  // ========================================
+  // DATES
+  // ========================================
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // ========================================
+  // INDEXES
+  // ========================================
+
+  @@index([candidateId])
+  @@index([type])
+}
+
+// ========================================
 // EMPLOYER
 // ========================================
 
 model Employer {
   id Int @id @default(autoincrement())
 
-  companyName  String
+  companyName   String
   contactPerson String?
 
-  email   String?
-  phone   String?
+  email String?
+  phone String?
 
   country String?
   city    String?
@@ -133,7 +198,7 @@ model Employer {
   // ========================================
 
   createdById Int
-  createdBy User @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  createdBy   User @relation(fields: [createdById], references: [id], onDelete: Cascade)
 
   // ========================================
   // INDEXES
@@ -191,7 +256,7 @@ model DemandLetter {
   // ========================================
 
   createdById Int
-  createdBy User @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  createdBy   User @relation(fields: [createdById], references: [id], onDelete: Cascade)
 
   // ========================================
   // CANDIDATE ASSIGNMENTS
