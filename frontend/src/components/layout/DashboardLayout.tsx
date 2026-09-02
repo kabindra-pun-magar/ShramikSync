@@ -116,6 +116,18 @@ function DashboardLayout() {
             Reports
           </NavLink>
 
+          <NavLink
+            to="/settings"
+            className={({ isActive }) =>
+              `dashboard-nav-item ${
+                isActive ? "active" : ""
+              }`
+            }
+          >
+            <span>07</span>
+            Setting
+          </NavLink>
+
         </nav>
 
 

@@ -1,0 +1,297 @@
+/* ========================================
+   SETTINGS PAGE
+======================================== */
+
+.settings-page {
+  min-height: 100vh;
+  padding: var(--space-8);
+  background: var(--bg-app);
+}
+
+
+/* ========================================
+   HEADER
+======================================== */
+
+.settings-header {
+  margin-bottom: var(--space-6);
+}
+
+.settings-eyebrow {
+  display: block;
+  margin-bottom: var(--space-2);
+
+  color: var(--text-muted);
+
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.settings-header h1 {
+  margin: 0;
+
+  color: var(--text-primary);
+
+  font-size: 32px;
+  line-height: 1.2;
+}
+
+.settings-header p {
+  margin: var(--space-2) 0 0;
+
+  color: var(--text-muted);
+
+  font-size: 14px;
+}
+
+
+/* ========================================
+   CONTENT
+======================================== */
+
+.settings-content {
+  width: 100%;
+  max-width: 760px;
+}
+
+
+/* ========================================
+   CARD
+======================================== */
+
+.settings-card {
+  padding: var(--space-6);
+
+  background: var(--surface);
+
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+
+  box-shadow: var(--shadow-card);
+}
+
+.settings-card-header {
+  margin-bottom: var(--space-5);
+}
+
+.settings-card-header h2 {
+  margin: 0;
+
+  color: var(--text-primary);
+
+  font-size: 20px;
+}
+
+.settings-card-header p {
+  margin: var(--space-2) 0 0;
+
+  color: var(--text-muted);
+
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+
+/* ========================================
+   ALERTS
+======================================== */
+
+.settings-alert {
+  margin-bottom: var(--space-5);
+
+  padding: 12px 14px;
+
+  border-radius: var(--radius-sm);
+
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.settings-alert-success {
+  border: 1px solid #bbf7d0;
+
+  background: #f0fdf4;
+
+  color: #166534;
+}
+
+.settings-alert-error {
+  border: 1px solid #fecaca;
+
+  background: #fef2f2;
+
+  color: #991b1b;
+}
+
+
+/* ========================================
+   FORM
+======================================== */
+
+.settings-form {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: var(--space-5);
+}
+
+.settings-form-group {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: var(--space-2);
+}
+
+.settings-form-group label {
+  color: var(--text-primary);
+
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.settings-form-group input {
+  width: 100%;
+  min-height: 46px;
+
+  padding: 0 14px;
+
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-sm);
+
+  background: var(--surface);
+
+  color: var(--text-primary);
+
+  font: inherit;
+  font-size: 14px;
+
+  outline: none;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.settings-form-group input::placeholder {
+  color: #94a3b8;
+}
+
+.settings-form-group input:focus {
+  border-color: var(--primary);
+
+  box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
+}
+
+.settings-form-group input:disabled {
+  cursor: not-allowed;
+
+  background: #f8fafc;
+}
+
+.settings-help {
+  color: var(--text-muted);
+
+  font-size: 12px;
+}
+
+
+/* ========================================
+   ACTIONS
+======================================== */
+
+.settings-form-actions {
+  display: flex;
+
+  justify-content: flex-end;
+
+  gap: var(--space-3);
+
+  padding-top: var(--space-2);
+
+  border-top: 1px solid var(--border-light);
+}
+
+.settings-primary-btn,
+.settings-secondary-btn {
+  min-height: 44px;
+
+  padding: 0 18px;
+
+  border-radius: var(--radius-sm);
+
+  font: inherit;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.settings-primary-btn {
+  border: 1px solid var(--primary);
+
+  background: var(--primary);
+
+  color: #ffffff;
+}
+
+.settings-primary-btn:hover {
+  background: var(--primary-hover);
+
+  border-color: var(--primary-hover);
+}
+
+.settings-secondary-btn {
+  border: 1px solid var(--border-light);
+
+  background: var(--surface);
+
+  color: var(--text-primary);
+}
+
+.settings-secondary-btn:hover {
+  background: #f8fafc;
+}
+
+.settings-primary-btn:disabled,
+.settings-secondary-btn:disabled {
+  opacity: 0.6;
+
+  cursor: not-allowed;
+}
+
+
+/* ========================================
+   RESPONSIVE
+======================================== */
+
+@media (max-width: 768px) {
+  .settings-page {
+    padding: var(--space-4);
+  }
+
+  .settings-header h1 {
+    font-size: 28px;
+  }
+
+  .settings-card {
+    padding: var(--space-4);
+  }
+
+  .settings-form-actions {
+    flex-direction: column-reverse;
+  }
+
+  .settings-primary-btn,
+  .settings-secondary-btn {
+    width: 100%;
+  }
+}
