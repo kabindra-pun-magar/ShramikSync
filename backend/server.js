@@ -11,6 +11,7 @@ import candidateRoutes from "./routes/candidateRoutes.js";
 import employerRoutes from "./routes/employerRoutes.js";
 import demandLetterRoutes from "./routes/demandLetterRoutes.js";
 import documentRoutes from "./routes/documents.js";
+import reportsRoutes from "./routes/reportsRoutes.js";
 
 import { authenticateToken } from "./middleware/authMiddleware.js";
 import { authorizeRoles } from "./middleware/roleMiddleware.js";
@@ -81,6 +82,9 @@ app.use("/api/candidates", candidateRoutes);
 // ========================================
 
 app.use("/api/employers", employerRoutes);
+
+
+app.use("/api/reports", reportsRoutes);
 
 // ========================================
 // DEMAND LETTER ROUTES

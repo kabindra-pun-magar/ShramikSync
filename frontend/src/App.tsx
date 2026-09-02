@@ -10,6 +10,8 @@ import Documents from "./pages/Documents";
 
 import PrivateRoute from "./components/PrivateRoute";
 import DashboardLayout from "./components/layout/DashboardLayout";
+import Reports from "./pages/Reports";
+
 
 function App() {
   return (
@@ -85,17 +87,9 @@ function App() {
             />
 
 
-            {/* ========================================
-                FUTURE MODULES
-            ======================================== */}
-
             <Route
               path="/reports"
-              element={
-                <div>
-                  Reports coming soon
-                </div>
-              }
+              element={<Reports />}
             />
 
           </Route>
