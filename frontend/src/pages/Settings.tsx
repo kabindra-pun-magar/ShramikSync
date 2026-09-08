@@ -154,14 +154,14 @@ function Settings() {
                             </label>
 
                             <input
-  id="currentPassword"
-  name="currentPassword"
-  type="password"
-  value={form.currentPassword}
-  onChange={handleChange}
-  placeholder="Enter current password"
-  autoComplete="off"
-/>
+                                id="currentPassword"
+                                name="currentPassword"
+                                type="password"
+                                value={form.currentPassword}
+                                onChange={handleChange}
+                                placeholder="Enter current password"
+                                autoComplete="off"
+                            />
                         </div>
 
                         <div className="settings-form-group">
@@ -170,14 +170,14 @@ function Settings() {
                             </label>
 
                             <input
-  id="newPassword"
-  name="newPassword"
-  type="password"
-  value={form.newPassword}
-  onChange={handleChange}
-  placeholder="Enter new password"
-  autoComplete="off"
-/>
+                                id="newPassword"
+                                name="newPassword"
+                                type="password"
+                                value={form.newPassword}
+                                onChange={handleChange}
+                                placeholder="Enter new password"
+                                autoComplete="off"
+                            />
 
                             <span className="settings-help">
                                 Password must contain at least 6 characters.
@@ -190,14 +190,14 @@ function Settings() {
                             </label>
 
                             <input
-  id="confirmPassword"
-  name="confirmPassword"
-  type="password"
-  value={form.confirmPassword}
-  onChange={handleChange}
-  placeholder="Confirm new password"
-  autoComplete="off"
-/>
+                                id="confirmPassword"
+                                name="confirmPassword"
+                                type="password"
+                                value={form.confirmPassword}
+                                onChange={handleChange}
+                                placeholder="Confirm new password"
+                                autoComplete="off"
+                            />
                         </div>
 
                         <div className="settings-form-actions">
