@@ -8,6 +8,7 @@ import Employers from "./pages/Employers";
 import DemandLetters from "./pages/DemandLetters";
 import Documents from "./pages/Documents";
 import Settings from "./pages/Settings";
+import Users from "./pages/Users";
 
 import PrivateRoute from "./components/PrivateRoute";
 import DashboardLayout from "./components/layout/DashboardLayout";
@@ -96,6 +97,11 @@ function App() {
             <Route
               path="/settings"
               element={<Settings />}
+            />
+
+            <Route 
+              path="/users" 
+              element={<Users />} 
             />
 
 
