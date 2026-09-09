@@ -218,7 +218,7 @@ function Login() {
               Don't have an account?
             </span>
 
-            <Link to="/signup">
+            <Link to="/register">
               Create an account
             </Link>
 

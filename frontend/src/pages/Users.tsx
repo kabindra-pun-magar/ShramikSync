@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { FormEvent } from "react";
 import API from "../services/api";
 import "../styles/Users.css";
@@ -11,7 +11,26 @@ interface UserForm {
   role: "USER" | "ADMIN";
 }
 
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  role: "USER" | "ADMIN";
+  createdAt: string;
+  updatedAt?: string;
+}
+
+interface EditUserForm {
+  name: string;
+  email: string;
+  role: "USER" | "ADMIN";
+}
+
 function Users() {
+  // ========================================
+  // CREATE USER FORM
+  // ========================================
+
   const [form, setForm] = useState<UserForm>({
     name: "",
     email: "",
@@ -20,9 +39,71 @@ function Users() {
     role: "USER",
   });
 
+  // ========================================
+  // USERS LIST
+  // ========================================
+
+  const [users, setUsers] = useState<User[]>([]);
+  const [usersLoading, setUsersLoading] = useState(false);
+
+  // ========================================
+  // CREATE USER STATE
+  // ========================================
+
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState("");
   const [error, setError] = useState("");
+
+  // ========================================
+  // EDIT USER STATE
+  // ========================================
+
+  const [editingUser, setEditingUser] = useState<User | null>(
+    null
+  );
+
+  const [editForm, setEditForm] = useState<EditUserForm>({
+    name: "",
+    email: "",
+    role: "USER",
+  });
+
+  const [editLoading, setEditLoading] = useState(false);
+  const [editError, setEditError] = useState("");
+  const [editSuccess, setEditSuccess] = useState("");
+
+  // ========================================
+  // FETCH USERS
+  // ========================================
+
+  const fetchUsers = async () => {
+    setUsersLoading(true);
+
+    try {
+      const response = await API.get("/users");
+
+      setUsers(response.data.users || []);
+    } catch (err: any) {
+      setError(
+        err.response?.data?.message ||
+          "Failed to fetch users."
+      );
+    } finally {
+      setUsersLoading(false);
+    }
+  };
+
+  // ========================================
+  // LOAD USERS WHEN PAGE OPENS
+  // ========================================
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  // ========================================
+  // CREATE FORM CHANGE
+  // ========================================
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -38,6 +119,10 @@ function Users() {
     setSuccess("");
   };
 
+  // ========================================
+  // RESET CREATE FORM
+  // ========================================
+
   const resetForm = () => {
     setForm({
       name: "",
@@ -50,6 +135,10 @@ function Users() {
     setError("");
     setSuccess("");
   };
+
+  // ========================================
+  // CREATE USER
+  // ========================================
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -93,6 +182,9 @@ function Users() {
       );
 
       resetForm();
+
+      // Refresh user list after creating a user
+      await fetchUsers();
     } catch (err: any) {
       setError(
         err.response?.data?.message ||
@@ -103,8 +195,139 @@ function Users() {
     }
   };
 
+  // ========================================
+  // OPEN EDIT MODAL
+  // ========================================
+
+  const handleEditClick = (user: User) => {
+    setEditingUser(user);
+
+    setEditForm({
+      name: user.name,
+      email: user.email,
+      role: user.role,
+    });
+
+    setEditError("");
+    setEditSuccess("");
+  };
+
+  // ========================================
+  // EDIT FORM CHANGE
+  // ========================================
+
+  const handleEditChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+
+    setEditForm((previous) => ({
+      ...previous,
+      [name]: value,
+    }));
+
+    setEditError("");
+    setEditSuccess("");
+  };
+
+  // ========================================
+  // CLOSE EDIT MODAL
+  // ========================================
+
+  const closeEditModal = () => {
+    if (editLoading) {
+      return;
+    }
+
+    setEditingUser(null);
+
+    setEditForm({
+      name: "",
+      email: "",
+      role: "USER",
+    });
+
+    setEditError("");
+    setEditSuccess("");
+  };
+
+  // ========================================
+  // UPDATE USER
+  // ========================================
+
+  const handleUpdateUser = async (e: FormEvent) => {
+    e.preventDefault();
+
+    setEditError("");
+    setEditSuccess("");
+
+    if (!editingUser) {
+      return;
+    }
+
+    const name = editForm.name.trim();
+    const email = editForm.email.trim();
+
+    if (!name || !email || !editForm.role) {
+      setEditError(
+        "Name, email, and role are required."
+      );
+      return;
+    }
+
+    setEditLoading(true);
+
+    try {
+      const response = await API.put(
+        `/users/${editingUser.id}`,
+        {
+          name,
+          email,
+          role: editForm.role,
+        }
+      );
+
+      setEditSuccess(
+        response.data.message ||
+          "User updated successfully."
+      );
+
+      // Refresh users list
+      await fetchUsers();
+
+      // Close modal after successful update
+      setTimeout(() => {
+        setEditingUser(null);
+        setEditSuccess("");
+      }, 700);
+    } catch (err: any) {
+      setEditError(
+        err.response?.data?.message ||
+          "Failed to update user."
+      );
+    } finally {
+      setEditLoading(false);
+    }
+  };
+
+  // ========================================
+  // FORMAT DATE
+  // ========================================
+
+  const formatDate = (date: string) => {
+    return new Date(date).toLocaleDateString("en-IN", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+  };
+
   return (
     <div className="users-page">
+      {/* ========================================
+          PAGE HEADER
+      ======================================== */}
+
       <div className="users-header">
         <div>
           <span className="users-eyebrow">
@@ -120,6 +343,10 @@ function Users() {
       </div>
 
       <div className="users-content">
+        {/* ========================================
+            CREATE USER CARD
+        ======================================== */}
+
         <section className="users-card">
           <div className="users-card-header">
             <div>
@@ -234,13 +461,8 @@ function Users() {
                 onChange={handleChange}
                 disabled={loading}
               >
-                <option value="USER">
-                  USER
-                </option>
-
-                <option value="ADMIN">
-                  ADMIN
-                </option>
+                <option value="USER">USER</option>
+                <option value="ADMIN">ADMIN</option>
               </select>
 
               <span className="users-help">
@@ -271,7 +493,247 @@ function Users() {
             </div>
           </form>
         </section>
+
+        {/* ========================================
+            USER LIST
+        ======================================== */}
+
+        <section className="users-card users-list-card">
+          <div className="users-card-header users-list-header">
+            <div>
+              <h2>System Users</h2>
+
+              <p>
+                View and manage registered ShramikSync
+                users.
+              </p>
+            </div>
+
+            <span className="users-count">
+              {users.length}{" "}
+              {users.length === 1 ? "User" : "Users"}
+            </span>
+          </div>
+
+          {usersLoading ? (
+            <div className="users-table-state">
+              Loading users...
+            </div>
+          ) : users.length === 0 ? (
+            <div className="users-table-state">
+              No users found.
+            </div>
+          ) : (
+            <div className="users-table-wrapper">
+              <table className="users-table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>User</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Created</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  {users.map((user) => (
+                    <tr key={user.id}>
+                      <td className="users-id">
+                        #{user.id}
+                      </td>
+
+                      <td>
+                        <div className="users-name">
+                          {user.name}
+                        </div>
+                      </td>
+
+                      <td>
+                        <div className="users-email">
+                          {user.email}
+                        </div>
+                      </td>
+
+                      <td>
+                        <span
+                          className={`users-role-badge ${
+                            user.role === "ADMIN"
+                              ? "users-role-admin"
+                              : "users-role-user"
+                          }`}
+                        >
+                          {user.role}
+                        </span>
+                      </td>
+
+                      <td>
+                        <span className="users-date">
+                          {formatDate(user.createdAt)}
+                        </span>
+                      </td>
+
+                      <td>
+                        <button
+                          type="button"
+                          className="users-edit-btn"
+                          onClick={() =>
+                            handleEditClick(user)
+                          }
+                        >
+                          Edit
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </section>
       </div>
+
+      {/* ========================================
+          EDIT USER MODAL
+      ======================================== */}
+
+      {editingUser && (
+        <div
+          className="users-modal-overlay"
+          onMouseDown={(e) => {
+            if (e.target === e.currentTarget) {
+              closeEditModal();
+            }
+          }}
+        >
+          <div
+            className="users-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="edit-user-title"
+          >
+            <div className="users-modal-header">
+              <div>
+                <span className="users-modal-eyebrow">
+                  USER MANAGEMENT
+                </span>
+
+                <h2 id="edit-user-title">
+                  Edit User
+                </h2>
+
+                <p>
+                  Update the account information for this
+                  user.
+                </p>
+              </div>
+
+              <button
+                type="button"
+                className="users-modal-close"
+                onClick={closeEditModal}
+                disabled={editLoading}
+                aria-label="Close"
+              >
+                ×
+              </button>
+            </div>
+
+            {editSuccess && (
+              <div className="users-alert users-alert-success">
+                {editSuccess}
+              </div>
+            )}
+
+            {editError && (
+              <div className="users-alert users-alert-error">
+                {editError}
+              </div>
+            )}
+
+            <form
+              className="users-form"
+              onSubmit={handleUpdateUser}
+            >
+              <div className="users-form-group">
+                <label htmlFor="edit-name">
+                  Full Name
+                </label>
+
+                <input
+                  id="edit-name"
+                  name="name"
+                  type="text"
+                  value={editForm.name}
+                  onChange={handleEditChange}
+                  placeholder="Enter full name"
+                  disabled={editLoading}
+                />
+              </div>
+
+              <div className="users-form-group">
+                <label htmlFor="edit-email">
+                  Email Address
+                </label>
+
+                <input
+                  id="edit-email"
+                  name="email"
+                  type="email"
+                  value={editForm.email}
+                  onChange={handleEditChange}
+                  placeholder="Enter email address"
+                  disabled={editLoading}
+                />
+              </div>
+
+              <div className="users-form-group">
+                <label htmlFor="edit-role">
+                  User Role
+                </label>
+
+                <select
+                  id="edit-role"
+                  name="role"
+                  value={editForm.role}
+                  onChange={handleEditChange}
+                  disabled={editLoading}
+                >
+                  <option value="USER">USER</option>
+                  <option value="ADMIN">ADMIN</option>
+                </select>
+              </div>
+
+              <div className="users-edit-info">
+                Editing user #
+                {editingUser.id}
+              </div>
+
+              <div className="users-modal-actions">
+                <button
+                  type="button"
+                  className="users-secondary-btn"
+                  onClick={closeEditModal}
+                  disabled={editLoading}
+                >
+                  Cancel
+                </button>
+
+                <button
+                  type="submit"
+                  className="users-primary-btn"
+                  disabled={editLoading}
+                >
+                  {editLoading
+                    ? "Saving Changes..."
+                    : "Save Changes"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

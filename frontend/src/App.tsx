@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Home from "./pages/Home";
 import Login from "./pages/Login";
+import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import Candidates from "./pages/Candidates";
 import Employers from "./pages/Employers";
@@ -9,16 +10,14 @@ import DemandLetters from "./pages/DemandLetters";
 import Documents from "./pages/Documents";
 import Settings from "./pages/Settings";
 import Users from "./pages/Users";
+import Reports from "./pages/Reports";
 
 import PrivateRoute from "./components/PrivateRoute";
 import DashboardLayout from "./components/layout/DashboardLayout";
-import Reports from "./pages/Reports";
-
 
 function App() {
   return (
     <BrowserRouter>
-
       <Routes>
 
         {/* ========================================
@@ -33,6 +32,11 @@ function App() {
         <Route
           path="/login"
           element={<Login />}
+        />
+
+        <Route
+          path="/register"
+          element={<Register />}
         />
 
 
@@ -83,35 +87,51 @@ function App() {
               element={<DemandLetters />}
             />
 
+
+            {/* ========================================
+                DOCUMENTS
+            ======================================== */}
+
             <Route
               path="/documents"
               element={<Documents />}
             />
 
 
+            {/* ========================================
+                REPORTS
+            ======================================== */}
+
             <Route
               path="/reports"
               element={<Reports />}
             />
+
+
+            {/* ========================================
+                SETTINGS
+            ======================================== */}
 
             <Route
               path="/settings"
               element={<Settings />}
             />
 
-            <Route 
-              path="/users" 
-              element={<Users />} 
+
+            {/* ========================================
+                USERS
+            ======================================== */}
+
+            <Route
+              path="/users"
+              element={<Users />}
             />
-
-
 
           </Route>
 
         </Route>
 
       </Routes>
-
     </BrowserRouter>
   );
 }
