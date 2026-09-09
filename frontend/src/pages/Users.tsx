@@ -146,7 +146,7 @@ function Users() {
     } catch (err: any) {
       setError(
         err.response?.data?.message ||
-          "Failed to fetch users."
+        "Failed to fetch users."
       );
     } finally {
       setUsersLoading(false);
@@ -251,7 +251,7 @@ function Users() {
 
       setSuccess(
         response.data.message ||
-          "User created successfully."
+        "User created successfully."
       );
 
       resetForm();
@@ -260,7 +260,7 @@ function Users() {
     } catch (err: any) {
       setError(
         err.response?.data?.message ||
-          "Failed to create user."
+        "Failed to create user."
       );
     } finally {
       setLoading(false);
@@ -329,6 +329,10 @@ function Users() {
   // UPDATE USER
   // ========================================
 
+  // ========================================
+  // UPDATE USER
+  // ========================================
+
   const handleUpdateUser = async (e: FormEvent) => {
     e.preventDefault();
 
@@ -349,6 +353,21 @@ function Users() {
       return;
     }
 
+    // ========================================
+    // PREVENT ADMIN FROM CHANGING THEIR OWN ROLE
+    // ========================================
+
+    if (
+      currentUser &&
+      editingUser.id === currentUser.id &&
+      editForm.role !== currentUser.role
+    ) {
+      setEditError(
+        "You cannot change your own role."
+      );
+      return;
+    }
+
     setEditLoading(true);
 
     try {
@@ -363,7 +382,7 @@ function Users() {
 
       setEditSuccess(
         response.data.message ||
-          "User updated successfully."
+        "User updated successfully."
       );
 
       await fetchUsers();
@@ -373,10 +392,15 @@ function Users() {
         setEditSuccess("");
       }, 700);
     } catch (err: any) {
-      setEditError(
-        err.response?.data?.message ||
-          "Failed to update user."
-      );
+      console.error("Update user error:", err);
+
+      const message =
+        err?.response?.data?.message ||
+        err?.response?.data?.error ||
+        err?.message ||
+        "Failed to update user.";
+
+      setEditError(message);
     } finally {
       setEditLoading(false);
     }
@@ -444,9 +468,8 @@ function Users() {
 
       setSuccess(
         response.data.message ||
-          `User ${
-            newStatus ? "activated" : "deactivated"
-          } successfully.`
+        `User ${newStatus ? "activated" : "deactivated"
+        } successfully.`
       );
 
       setStatusUser(null);
@@ -455,7 +478,7 @@ function Users() {
     } catch (err: any) {
       setStatusError(
         err.response?.data?.message ||
-          "Failed to update user status."
+        "Failed to update user status."
       );
     } finally {
       setStatusLoading(false);
@@ -769,11 +792,10 @@ function Users() {
 
                         <td>
                           <span
-                            className={`users-role-badge ${
-                              user.role === "ADMIN"
-                                ? "users-role-admin"
-                                : "users-role-user"
-                            }`}
+                            className={`users-role-badge ${user.role === "ADMIN"
+                              ? "users-role-admin"
+                              : "users-role-user"
+                              }`}
                           >
                             {user.role}
                           </span>
@@ -781,11 +803,10 @@ function Users() {
 
                         <td>
                           <span
-                            className={`users-status-badge ${
-                              user.isActive
-                                ? "users-status-active"
-                                : "users-status-inactive"
-                            }`}
+                            className={`users-status-badge ${user.isActive
+                              ? "users-status-active"
+                              : "users-status-inactive"
+                              }`}
                           >
                             <span className="users-status-dot">
                               ●
@@ -818,7 +839,7 @@ function Users() {
                             </button>
 
                             {isCurrentUser &&
-                            user.isActive ? (
+                              user.isActive ? (
                               <button
                                 type="button"
                                 className="users-status-btn users-status-btn-disabled"
@@ -834,11 +855,10 @@ function Users() {
                             ) : (
                               <button
                                 type="button"
-                                className={`users-status-btn ${
-                                  user.isActive
-                                    ? "users-deactivate-btn"
-                                    : "users-activate-btn"
-                                }`}
+                                className={`users-status-btn ${user.isActive
+                                  ? "users-deactivate-btn"
+                                  : "users-activate-btn"
+                                  }`}
                                 onClick={() =>
                                   handleStatusClick(
                                     user
