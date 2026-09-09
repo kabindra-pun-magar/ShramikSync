@@ -4,6 +4,7 @@ import {
   createUser,
   getUsers,
   updateUser,
+  updateUserStatus,
 } from "../controllers/userController.js";
 
 import { authenticateToken } from "../middleware/authMiddleware.js";
@@ -47,6 +48,19 @@ router.put(
   authenticateToken,
   authorizeRoles("ADMIN"),
   updateUser
+);
+
+// ========================================
+// ACTIVATE / DEACTIVATE USER
+// ADMIN ONLY
+// PATCH /api/users/:id/status
+// ========================================
+
+router.patch(
+  "/:id/status",
+  authenticateToken,
+  authorizeRoles("ADMIN"),
+  updateUserStatus
 );
 
 export default router;

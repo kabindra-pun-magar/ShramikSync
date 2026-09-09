@@ -13,6 +13,7 @@ export const getUsers = async (req, res) => {
         id: true,
         name: true,
         email: true,
+        isActive: true,
         role: true,
         createdAt: true,
         updatedAt: true,
@@ -314,6 +315,115 @@ export const updateUser = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: "Failed to update user.",
+    });
+  }
+};
+
+// ========================================
+// UPDATE USER STATUS
+// ADMIN ONLY
+// PATCH /api/users/:id/status
+// ========================================
+
+export const updateUserStatus = async (req, res) => {
+  try {
+    const userId = Number(req.params.id);
+
+    // ========================================
+    // VALIDATE USER ID
+    // ========================================
+
+    if (!Number.isInteger(userId)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid user ID.",
+      });
+    }
+
+    const { isActive } = req.body;
+
+    // ========================================
+    // VALIDATE STATUS
+    // ========================================
+
+    if (typeof isActive !== "boolean") {
+      return res.status(400).json({
+        success: false,
+        message: "isActive must be a boolean value.",
+      });
+    }
+
+    // ========================================
+    // FIND USER
+    // ========================================
+
+    const user = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found.",
+      });
+    }
+
+    // ========================================
+    // PREVENT ADMIN FROM DEACTIVATING
+    // THEMSELVES
+    // ========================================
+
+    if (
+      userId === req.user.userId &&
+      isActive === false
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "You cannot deactivate your own account.",
+      });
+    }
+
+    // ========================================
+    // UPDATE STATUS
+    // ========================================
+
+    const updatedUser = await prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        isActive,
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        isActive: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+
+    // ========================================
+    // RESPONSE
+    // ========================================
+
+    return res.status(200).json({
+      success: true,
+      message: isActive
+        ? "User activated successfully."
+        : "User deactivated successfully.",
+      user: updatedUser,
+    });
+  } catch (error) {
+    console.error("Update user status error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Failed to update user status.",
     });
   }
 };

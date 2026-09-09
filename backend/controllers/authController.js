@@ -2,9 +2,18 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { prisma } from "../lib/prisma.js";
 
+// ========================================
+// REGISTER USER
+// PUBLIC
+// ========================================
+
 export const registerUser = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, confirmPassword } = req.body;
+
+    // ========================================
+    // VALIDATE INPUT
+    // ========================================
 
     if (!name || !email || !password) {
       return res.status(400).json({
@@ -13,6 +22,24 @@ export const registerUser = async (req, res) => {
       });
     }
 
+    // ========================================
+    // CONFIRM PASSWORD
+    // ========================================
+
+    if (
+      confirmPassword !== undefined &&
+      password !== confirmPassword
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "Passwords do not match.",
+      });
+    }
+
+    // ========================================
+    // PASSWORD LENGTH
+    // ========================================
+
     if (password.length < 6) {
       return res.status(400).json({
         success: false,
@@ -20,7 +47,30 @@ export const registerUser = async (req, res) => {
       });
     }
 
+    // ========================================
+    // NORMALIZE INPUT
+    // ========================================
+
+    const normalizedName = name.trim();
     const normalizedEmail = email.toLowerCase().trim();
+
+    if (!normalizedName) {
+      return res.status(400).json({
+        success: false,
+        message: "Name cannot be empty.",
+      });
+    }
+
+    if (!normalizedEmail) {
+      return res.status(400).json({
+        success: false,
+        message: "Email cannot be empty.",
+      });
+    }
+
+    // ========================================
+    // CHECK EXISTING USER
+    // ========================================
 
     const existingUser = await prisma.user.findUnique({
       where: {
@@ -35,15 +85,29 @@ export const registerUser = async (req, res) => {
       });
     }
 
+    // ========================================
+    // HASH PASSWORD
+    // ========================================
+
     const hashedPassword = await bcrypt.hash(password, 12);
+
+    // ========================================
+    // CREATE USER
+    // PUBLIC REGISTRATION = USER + ACTIVE
+    // ========================================
 
     const user = await prisma.user.create({
       data: {
-        name: name.trim(),
+        name: normalizedName,
         email: normalizedEmail,
         password: hashedPassword,
+        isActive: true,
       },
     });
+
+    // ========================================
+    // RETURN SAFE USER DATA
+    // ========================================
 
     return res.status(201).json({
       success: true,
@@ -53,6 +117,7 @@ export const registerUser = async (req, res) => {
         name: user.name,
         email: user.email,
         role: user.role,
+        isActive: user.isActive,
         createdAt: user.createdAt,
       },
     });
@@ -66,11 +131,19 @@ export const registerUser = async (req, res) => {
   }
 };
 
+// ========================================
+// LOGIN USER
+// PUBLIC
+// ========================================
+
 export const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // 1. Validate input
+    // ========================================
+    // VALIDATE INPUT
+    // ========================================
+
     if (!email || !password) {
       return res.status(400).json({
         success: false,
@@ -78,17 +151,26 @@ export const loginUser = async (req, res) => {
       });
     }
 
-    // 2. Normalize email
+    // ========================================
+    // NORMALIZE EMAIL
+    // ========================================
+
     const normalizedEmail = email.toLowerCase().trim();
 
-    // 3. Find user
+    // ========================================
+    // FIND USER
+    // ========================================
+
     const user = await prisma.user.findUnique({
       where: {
         email: normalizedEmail,
       },
     });
 
-    // 4. Don't reveal whether the email exists
+    // ========================================
+    // INVALID USER
+    // ========================================
+
     if (!user) {
       return res.status(401).json({
         success: false,
@@ -96,7 +178,10 @@ export const loginUser = async (req, res) => {
       });
     }
 
-    // 5. Compare password with stored bcrypt hash
+    // ========================================
+    // VERIFY PASSWORD
+    // ========================================
+
     const passwordMatch = await bcrypt.compare(
       password,
       user.password
@@ -109,9 +194,26 @@ export const loginUser = async (req, res) => {
       });
     }
 
-    // 6. Check JWT secret
+    // ========================================
+    // CHECK ACCOUNT STATUS
+    // ========================================
+
+    if (!user.isActive) {
+      return res.status(403).json({
+        success: false,
+        message:
+          "Your account has been deactivated. Please contact an administrator.",
+      });
+    }
+
+    // ========================================
+    // CHECK JWT SECRET
+    // ========================================
+
     if (!process.env.JWT_SECRET) {
-      console.error("JWT_SECRET is missing from environment variables.");
+      console.error(
+        "JWT_SECRET is missing from environment variables."
+      );
 
       return res.status(500).json({
         success: false,
@@ -119,7 +221,10 @@ export const loginUser = async (req, res) => {
       });
     }
 
-    // 7. Create JWT
+    // ========================================
+    // CREATE JWT
+    // ========================================
+
     const token = jwt.sign(
       {
         userId: user.id,
@@ -131,7 +236,10 @@ export const loginUser = async (req, res) => {
       }
     );
 
-    // 8. Return safe user data
+    // ========================================
+    // RETURN SAFE USER DATA
+    // ========================================
+
     return res.status(200).json({
       success: true,
       message: "Login successful.",
@@ -141,6 +249,7 @@ export const loginUser = async (req, res) => {
         name: user.name,
         email: user.email,
         role: user.role,
+        isActive: user.isActive,
       },
     });
   } catch (error) {
@@ -153,6 +262,11 @@ export const loginUser = async (req, res) => {
   }
 };
 
+// ========================================
+// GET CURRENT USER
+// PROTECTED
+// ========================================
+
 export const getCurrentUser = async (req, res) => {
   try {
     const user = await prisma.user.findUnique({
@@ -164,6 +278,7 @@ export const getCurrentUser = async (req, res) => {
         name: true,
         email: true,
         role: true,
+        isActive: true,
         createdAt: true,
       },
     });
@@ -184,20 +299,34 @@ export const getCurrentUser = async (req, res) => {
 
     return res.status(500).json({
       success: false,
-      message: "Something went wrong while fetching user information.",
+      message:
+        "Something went wrong while fetching user information.",
     });
   }
 };
 
+// ========================================
+// CHANGE PASSWORD
+// PROTECTED
+// ========================================
+
 export const changePassword = async (req, res) => {
   try {
-    const { currentPassword, newPassword, confirmPassword } = req.body;
+    const {
+      currentPassword,
+      newPassword,
+      confirmPassword,
+    } = req.body;
 
     // ========================================
     // VALIDATE INPUT
     // ========================================
 
-    if (!currentPassword || !newPassword || !confirmPassword) {
+    if (
+      !currentPassword ||
+      !newPassword ||
+      !confirmPassword
+    ) {
       return res.status(400).json({
         success: false,
         message: "All password fields are required.",
@@ -222,7 +351,8 @@ export const changePassword = async (req, res) => {
     if (newPassword.length < 6) {
       return res.status(400).json({
         success: false,
-        message: "New password must be at least 6 characters long.",
+        message:
+          "New password must be at least 6 characters long.",
       });
     }
 
@@ -233,7 +363,8 @@ export const changePassword = async (req, res) => {
     if (currentPassword === newPassword) {
       return res.status(400).json({
         success: false,
-        message: "New password must be different from the current password.",
+        message:
+          "New password must be different from the current password.",
       });
     }
 
@@ -274,7 +405,10 @@ export const changePassword = async (req, res) => {
     // HASH NEW PASSWORD
     // ========================================
 
-    const hashedPassword = await bcrypt.hash(newPassword, 12);
+    const hashedPassword = await bcrypt.hash(
+      newPassword,
+      12
+    );
 
     // ========================================
     // UPDATE PASSWORD
@@ -289,6 +423,10 @@ export const changePassword = async (req, res) => {
       },
     });
 
+    // ========================================
+    // RESPONSE
+    // ========================================
+
     return res.status(200).json({
       success: true,
       message: "Password changed successfully.",
@@ -298,7 +436,8 @@ export const changePassword = async (req, res) => {
 
     return res.status(500).json({
       success: false,
-      message: "Something went wrong while changing the password.",
+      message:
+        "Something went wrong while changing the password.",
     });
   }
 };
