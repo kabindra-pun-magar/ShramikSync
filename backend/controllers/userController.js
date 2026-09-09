@@ -252,6 +252,16 @@ export const updateUser = async (req, res) => {
       },
     });
 
+    if (
+      userId === req.user.userId &&
+      role !== user.role
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "You cannot change your own role.",
+      });
+    }
+
     if (!existingUser) {
       return res.status(404).json({
         success: false,
