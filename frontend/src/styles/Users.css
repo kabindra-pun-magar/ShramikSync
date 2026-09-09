@@ -48,7 +48,7 @@
 
 .users-content {
   width: 100%;
-  max-width: 1200px;
+  max-width: 1400px;
 }
 
 /* ========================================
@@ -232,10 +232,6 @@
     color 0.2s ease;
 }
 
-/* ========================================
-   PRIMARY BUTTON
-======================================== */
-
 .users-primary-btn {
   border: 1px solid var(--primary);
   background: var(--primary);
@@ -247,10 +243,6 @@
   border-color: var(--primary-hover);
 }
 
-/* ========================================
-   SECONDARY BUTTON
-======================================== */
-
 .users-secondary-btn {
   border: 1px solid var(--border-light);
   background: var(--surface);
@@ -260,10 +252,6 @@
 .users-secondary-btn:hover:not(:disabled) {
   background: #f8fafc;
 }
-
-/* ========================================
-   DISABLED BUTTONS
-======================================== */
 
 .users-primary-btn:disabled,
 .users-secondary-btn:disabled {
@@ -282,7 +270,7 @@
 
 .users-table {
   width: 100%;
-  min-width: 780px;
+  min-width: 1000px;
   border-collapse: collapse;
 }
 
@@ -330,6 +318,9 @@
 }
 
 .users-name {
+  display: flex;
+  align-items: center;
+  gap: 7px;
   color: var(--text-primary);
   font-weight: 600;
 }
@@ -342,6 +333,23 @@
   color: var(--text-muted);
   font-size: 13px;
   white-space: nowrap;
+}
+
+/* ========================================
+   YOU BADGE
+======================================== */
+
+.users-you-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 7px;
+  border: 1px solid var(--border-light);
+  border-radius: 999px;
+  background: var(--bg-app);
+  color: var(--text-muted);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
 }
 
 /* ========================================
@@ -373,6 +381,49 @@
 }
 
 /* ========================================
+   STATUS BADGES
+======================================== */
+
+.users-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 88px;
+  padding: 5px 9px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.users-status-active {
+  border: 1px solid #bbf7d0;
+  background: #f0fdf4;
+  color: #166534;
+}
+
+.users-status-inactive {
+  border: 1px solid #fecaca;
+  background: #fef2f2;
+  color: #991b1b;
+}
+
+.users-status-dot {
+  font-size: 9px;
+}
+
+/* ========================================
+   ACTION GROUP
+======================================== */
+
+.users-action-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* ========================================
    EDIT BUTTON
 ======================================== */
 
@@ -400,6 +451,57 @@
 }
 
 /* ========================================
+   STATUS BUTTONS
+======================================== */
+
+.users-status-btn {
+  min-height: 34px;
+  padding: 0 13px;
+  border-radius: var(--radius-sm);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.users-deactivate-btn {
+  border: 1px solid #fecaca;
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+.users-deactivate-btn:hover {
+  border-color: #fca5a5;
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.users-activate-btn {
+  border: 1px solid #bbf7d0;
+  background: #f0fdf4;
+  color: #166534;
+}
+
+.users-activate-btn:hover {
+  border-color: #86efac;
+  background: #dcfce7;
+  color: #14532d;
+}
+
+.users-status-btn-disabled {
+  border: 1px solid var(--border-light);
+  background: var(--bg-app);
+  color: var(--text-muted);
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+/* ========================================
    TABLE STATE
 ======================================== */
 
@@ -411,6 +513,52 @@
 }
 
 /* ========================================
+   ACCESS CONTROL
+======================================== */
+
+.users-access-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.users-access-card {
+  max-width: 520px;
+  margin: 80px auto;
+  padding: var(--space-8);
+  background: var(--surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  text-align: center;
+}
+
+.users-access-eyebrow {
+  display: block;
+  margin-bottom: var(--space-2);
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.users-access-card h1 {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 26px;
+}
+
+.users-access-card p {
+  margin: var(--space-3) 0 0;
+  color: var(--text-muted);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* ========================================
    EDIT USER MODAL
 ======================================== */
 
@@ -418,13 +566,10 @@
   position: fixed;
   inset: 0;
   z-index: 1000;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   padding: var(--space-5);
-
   background: rgba(15, 23, 42, 0.45);
 }
 
@@ -432,11 +577,8 @@
   width: 100%;
   max-width: 520px;
   max-height: calc(100vh - 40px);
-
   overflow-y: auto;
-
   padding: var(--space-6);
-
   background: var(--surface);
   border: 1px solid var(--border-light);
   border-radius: var(--radius-md);
@@ -452,17 +594,14 @@
   justify-content: space-between;
   align-items: flex-start;
   gap: var(--space-4);
-
   margin-bottom: var(--space-5);
   padding-bottom: var(--space-5);
-
   border-bottom: 1px solid var(--border-light);
 }
 
 .users-modal-eyebrow {
   display: block;
   margin-bottom: var(--space-2);
-
   color: var(--text-muted);
   font-size: 11px;
   font-weight: 700;
@@ -491,23 +630,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
-
   flex-shrink: 0;
-
   width: 34px;
   height: 34px;
-
   border: 1px solid var(--border-light);
   border-radius: var(--radius-sm);
-
   background: var(--surface);
   color: var(--text-muted);
-
   font-size: 22px;
   line-height: 1;
-
   cursor: pointer;
-
   transition:
     background 0.2s ease,
     color 0.2s ease,
@@ -531,13 +663,10 @@
 
 .users-edit-info {
   padding: 10px 12px;
-
   border: 1px solid var(--border-light);
   border-radius: var(--radius-sm);
-
   background: var(--bg-app);
   color: var(--text-muted);
-
   font-size: 12px;
 }
 
@@ -549,11 +678,115 @@
   display: flex;
   justify-content: flex-end;
   gap: var(--space-3);
-
   margin-top: var(--space-1);
   padding-top: var(--space-5);
-
   border-top: 1px solid var(--border-light);
+}
+
+/* ========================================
+   CONFIRMATION MODAL
+======================================== */
+
+.users-confirm-modal {
+  width: 100%;
+  max-width: 440px;
+  padding: var(--space-6);
+  background: var(--surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+}
+
+.users-confirm-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  margin-bottom: var(--space-4);
+  border-radius: 50%;
+  background: #fef2f2;
+  color: #b91c1c;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.users-confirm-content h2 {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 20px;
+  line-height: 1.3;
+}
+
+.users-confirm-content p {
+  margin: var(--space-3) 0 0;
+  color: var(--text-muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.users-confirm-content strong {
+  color: var(--text-primary);
+}
+
+.users-confirm-help {
+  display: block;
+  margin-top: var(--space-3);
+  color: var(--text-muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.users-confirm-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
+  margin-top: var(--space-6);
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--border-light);
+}
+
+.users-danger-btn,
+.users-activate-confirm-btn {
+  min-height: 44px;
+  padding: 0 18px;
+  border-radius: var(--radius-sm);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.users-danger-btn {
+  border: 1px solid #dc2626;
+  background: #dc2626;
+  color: #ffffff;
+}
+
+.users-danger-btn:hover:not(:disabled) {
+  border-color: #b91c1c;
+  background: #b91c1c;
+}
+
+.users-activate-confirm-btn {
+  border: 1px solid #15803d;
+  background: #15803d;
+  color: #ffffff;
+}
+
+.users-activate-confirm-btn:hover:not(:disabled) {
+  border-color: #166534;
+  background: #166534;
+}
+
+.users-danger-btn:disabled,
+.users-activate-confirm-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 /* ========================================
@@ -599,12 +832,20 @@
     padding: var(--space-4);
   }
 
-  .users-modal-actions {
+  .users-confirm-modal {
+    padding: var(--space-5);
+  }
+
+  .users-modal-actions,
+  .users-confirm-actions {
     flex-direction: column-reverse;
   }
 
   .users-modal-actions .users-primary-btn,
-  .users-modal-actions .users-secondary-btn {
+  .users-modal-actions .users-secondary-btn,
+  .users-confirm-actions .users-danger-btn,
+  .users-confirm-actions .users-activate-confirm-btn,
+  .users-confirm-actions .users-secondary-btn {
     width: 100%;
   }
 }

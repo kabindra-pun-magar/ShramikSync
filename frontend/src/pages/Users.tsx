@@ -16,6 +16,7 @@ interface User {
   name: string;
   email: string;
   role: "USER" | "ADMIN";
+  isActive: boolean;
   createdAt: string;
   updatedAt?: string;
 }
@@ -26,7 +27,25 @@ interface EditUserForm {
   role: "USER" | "ADMIN";
 }
 
+interface CurrentUser {
+  id: number;
+  name: string;
+  email: string;
+  role: "USER" | "ADMIN";
+  isActive: boolean;
+}
+
 function Users() {
+  // ========================================
+  // CURRENT USER
+  // ========================================
+
+  const [currentUser, setCurrentUser] =
+    useState<CurrentUser | null>(null);
+
+  const [accessLoading, setAccessLoading] = useState(true);
+  const [accessDenied, setAccessDenied] = useState(false);
+
   // ========================================
   // CREATE USER FORM
   // ========================================
@@ -58,19 +77,60 @@ function Users() {
   // EDIT USER STATE
   // ========================================
 
-  const [editingUser, setEditingUser] = useState<User | null>(
-    null
-  );
+  const [editingUser, setEditingUser] =
+    useState<User | null>(null);
 
-  const [editForm, setEditForm] = useState<EditUserForm>({
-    name: "",
-    email: "",
-    role: "USER",
-  });
+  const [editForm, setEditForm] =
+    useState<EditUserForm>({
+      name: "",
+      email: "",
+      role: "USER",
+    });
 
   const [editLoading, setEditLoading] = useState(false);
   const [editError, setEditError] = useState("");
   const [editSuccess, setEditSuccess] = useState("");
+
+  // ========================================
+  // STATUS CHANGE STATE
+  // ========================================
+
+  const [statusUser, setStatusUser] =
+    useState<User | null>(null);
+
+  const [statusLoading, setStatusLoading] = useState(false);
+  const [statusError, setStatusError] = useState("");
+
+  // ========================================
+  // GET CURRENT USER
+  // ========================================
+
+  const fetchCurrentUser = async () => {
+    setAccessLoading(true);
+
+    try {
+      const response = await API.get("/auth/me");
+
+      const user = response.data.user;
+
+      setCurrentUser(user);
+
+      if (user.role !== "ADMIN") {
+        setAccessDenied(true);
+        return false;
+      }
+
+      setAccessDenied(false);
+      return true;
+    } catch (err: any) {
+      console.error("Fetch current user error:", err);
+
+      setAccessDenied(true);
+      return false;
+    } finally {
+      setAccessLoading(false);
+    }
+  };
 
   // ========================================
   // FETCH USERS
@@ -94,11 +154,19 @@ function Users() {
   };
 
   // ========================================
-  // LOAD USERS WHEN PAGE OPENS
+  // LOAD PAGE
   // ========================================
 
   useEffect(() => {
-    fetchUsers();
+    const loadPage = async () => {
+      const hasAccess = await fetchCurrentUser();
+
+      if (hasAccess) {
+        await fetchUsers();
+      }
+    };
+
+    loadPage();
   }, []);
 
   // ========================================
@@ -106,7 +174,9 @@ function Users() {
   // ========================================
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement
+    >
   ) => {
     const { name, value } = e.target;
 
@@ -157,7 +227,9 @@ function Users() {
     }
 
     if (form.password.length < 6) {
-      setError("Password must be at least 6 characters long.");
+      setError(
+        "Password must be at least 6 characters long."
+      );
       return;
     }
 
@@ -178,12 +250,12 @@ function Users() {
       });
 
       setSuccess(
-        response.data.message || "User created successfully."
+        response.data.message ||
+          "User created successfully."
       );
 
       resetForm();
 
-      // Refresh user list after creating a user
       await fetchUsers();
     } catch (err: any) {
       setError(
@@ -217,7 +289,9 @@ function Users() {
   // ========================================
 
   const handleEditChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement
+    >
   ) => {
     const { name, value } = e.target;
 
@@ -292,10 +366,8 @@ function Users() {
           "User updated successfully."
       );
 
-      // Refresh users list
       await fetchUsers();
 
-      // Close modal after successful update
       setTimeout(() => {
         setEditingUser(null);
         setEditSuccess("");
@@ -311,6 +383,86 @@ function Users() {
   };
 
   // ========================================
+  // OPEN STATUS CONFIRMATION MODAL
+  // ========================================
+
+  const handleStatusClick = (user: User) => {
+    setStatusError("");
+
+    // Frontend protection against self-deactivation.
+    // Backend protection remains authoritative.
+    if (
+      currentUser &&
+      user.id === currentUser.id &&
+      user.isActive
+    ) {
+      setStatusError(
+        "You cannot deactivate your own account."
+      );
+      return;
+    }
+
+    setStatusUser(user);
+  };
+
+  // ========================================
+  // CLOSE STATUS MODAL
+  // ========================================
+
+  const closeStatusModal = () => {
+    if (statusLoading) {
+      return;
+    }
+
+    setStatusUser(null);
+    setStatusError("");
+  };
+
+  // ========================================
+  // ACTIVATE / DEACTIVATE USER
+  // ========================================
+
+  const handleStatusChange = async () => {
+    if (!statusUser) {
+      return;
+    }
+
+    setStatusLoading(true);
+    setStatusError("");
+    setError("");
+    setSuccess("");
+
+    const newStatus = !statusUser.isActive;
+
+    try {
+      const response = await API.patch(
+        `/users/${statusUser.id}/status`,
+        {
+          isActive: newStatus,
+        }
+      );
+
+      setSuccess(
+        response.data.message ||
+          `User ${
+            newStatus ? "activated" : "deactivated"
+          } successfully.`
+      );
+
+      setStatusUser(null);
+
+      await fetchUsers();
+    } catch (err: any) {
+      setStatusError(
+        err.response?.data?.message ||
+          "Failed to update user status."
+      );
+    } finally {
+      setStatusLoading(false);
+    }
+  };
+
+  // ========================================
   // FORMAT DATE
   // ========================================
 
@@ -321,6 +473,51 @@ function Users() {
       day: "numeric",
     });
   };
+
+  // ========================================
+  // ACCESS LOADING
+  // ========================================
+
+  if (accessLoading) {
+    return (
+      <div className="users-page">
+        <div className="users-access-state">
+          Checking user permissions...
+        </div>
+      </div>
+    );
+  }
+
+  // ========================================
+  // ACCESS DENIED
+  // ========================================
+
+  if (
+    accessDenied ||
+    !currentUser ||
+    currentUser.role !== "ADMIN"
+  ) {
+    return (
+      <div className="users-page">
+        <div className="users-access-card">
+          <span className="users-access-eyebrow">
+            ACCESS RESTRICTED
+          </span>
+
+          <h1>Access Denied</h1>
+
+          <p>
+            User Management is available only to
+            administrators.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  // ========================================
+  // ADMIN USERS PAGE
+  // ========================================
 
   return (
     <div className="users-page">
@@ -353,8 +550,8 @@ function Users() {
               <h2>Create New User</h2>
 
               <p>
-                Add a new user account to the ShramikSync
-                system.
+                Add a new user account to the
+                ShramikSync system.
               </p>
             </div>
           </div>
@@ -427,7 +624,8 @@ function Users() {
                 />
 
                 <span className="users-help">
-                  Password must contain at least 6 characters.
+                  Password must contain at least 6
+                  characters.
                 </span>
               </div>
 
@@ -466,8 +664,8 @@ function Users() {
               </select>
 
               <span className="users-help">
-                ADMIN users can create and manage system
-                users.
+                ADMIN users can create and manage
+                system users.
               </span>
             </div>
 
@@ -511,7 +709,9 @@ function Users() {
 
             <span className="users-count">
               {users.length}{" "}
-              {users.length === 1 ? "User" : "Users"}
+              {users.length === 1
+                ? "User"
+                : "Users"}
             </span>
           </div>
 
@@ -532,61 +732,129 @@ function Users() {
                     <th>User</th>
                     <th>Email</th>
                     <th>Role</th>
+                    <th>Status</th>
                     <th>Created</th>
                     <th>Action</th>
                   </tr>
                 </thead>
 
                 <tbody>
-                  {users.map((user) => (
-                    <tr key={user.id}>
-                      <td className="users-id">
-                        #{user.id}
-                      </td>
+                  {users.map((user) => {
+                    const isCurrentUser =
+                      currentUser.id === user.id;
 
-                      <td>
-                        <div className="users-name">
-                          {user.name}
-                        </div>
-                      </td>
+                    return (
+                      <tr key={user.id}>
+                        <td className="users-id">
+                          #{user.id}
+                        </td>
 
-                      <td>
-                        <div className="users-email">
-                          {user.email}
-                        </div>
-                      </td>
+                        <td>
+                          <div className="users-name">
+                            {user.name}
 
-                      <td>
-                        <span
-                          className={`users-role-badge ${
-                            user.role === "ADMIN"
-                              ? "users-role-admin"
-                              : "users-role-user"
-                          }`}
-                        >
-                          {user.role}
-                        </span>
-                      </td>
+                            {isCurrentUser && (
+                              <span className="users-you-badge">
+                                You
+                              </span>
+                            )}
+                          </div>
+                        </td>
 
-                      <td>
-                        <span className="users-date">
-                          {formatDate(user.createdAt)}
-                        </span>
-                      </td>
+                        <td>
+                          <div className="users-email">
+                            {user.email}
+                          </div>
+                        </td>
 
-                      <td>
-                        <button
-                          type="button"
-                          className="users-edit-btn"
-                          onClick={() =>
-                            handleEditClick(user)
-                          }
-                        >
-                          Edit
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
+                        <td>
+                          <span
+                            className={`users-role-badge ${
+                              user.role === "ADMIN"
+                                ? "users-role-admin"
+                                : "users-role-user"
+                            }`}
+                          >
+                            {user.role}
+                          </span>
+                        </td>
+
+                        <td>
+                          <span
+                            className={`users-status-badge ${
+                              user.isActive
+                                ? "users-status-active"
+                                : "users-status-inactive"
+                            }`}
+                          >
+                            <span className="users-status-dot">
+                              ●
+                            </span>
+
+                            {user.isActive
+                              ? "ACTIVE"
+                              : "INACTIVE"}
+                          </span>
+                        </td>
+
+                        <td>
+                          <span className="users-date">
+                            {formatDate(
+                              user.createdAt
+                            )}
+                          </span>
+                        </td>
+
+                        <td>
+                          <div className="users-action-group">
+                            <button
+                              type="button"
+                              className="users-edit-btn"
+                              onClick={() =>
+                                handleEditClick(user)
+                              }
+                            >
+                              Edit
+                            </button>
+
+                            {isCurrentUser &&
+                            user.isActive ? (
+                              <button
+                                type="button"
+                                className="users-status-btn users-status-btn-disabled"
+                                onClick={() =>
+                                  handleStatusClick(
+                                    user
+                                  )
+                                }
+                                title="You cannot deactivate your own account"
+                              >
+                                Deactivate
+                              </button>
+                            ) : (
+                              <button
+                                type="button"
+                                className={`users-status-btn ${
+                                  user.isActive
+                                    ? "users-deactivate-btn"
+                                    : "users-activate-btn"
+                                }`}
+                                onClick={() =>
+                                  handleStatusClick(
+                                    user
+                                  )
+                                }
+                              >
+                                {user.isActive
+                                  ? "Deactivate"
+                                  : "Activate"}
+                              </button>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
@@ -624,8 +892,8 @@ function Users() {
                 </h2>
 
                 <p>
-                  Update the account information for this
-                  user.
+                  Update the account information for
+                  this user.
                 </p>
               </div>
 
@@ -731,6 +999,95 @@ function Users() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* ========================================
+          ACTIVATE / DEACTIVATE CONFIRMATION
+      ======================================== */}
+
+      {statusUser && (
+        <div
+          className="users-modal-overlay"
+          onMouseDown={(e) => {
+            if (e.target === e.currentTarget) {
+              closeStatusModal();
+            }
+          }}
+        >
+          <div
+            className="users-confirm-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="status-modal-title"
+          >
+            <div className="users-confirm-icon">
+              {statusUser.isActive ? "!" : "✓"}
+            </div>
+
+            <div className="users-confirm-content">
+              <h2 id="status-modal-title">
+                {statusUser.isActive
+                  ? "Deactivate User?"
+                  : "Activate User?"}
+              </h2>
+
+              <p>
+                Are you sure you want to{" "}
+                {statusUser.isActive
+                  ? "deactivate"
+                  : "activate"}{" "}
+                <strong>
+                  {statusUser.name}
+                </strong>
+                ?
+              </p>
+
+              {statusUser.isActive && (
+                <span className="users-confirm-help">
+                  This user will no longer be able to
+                  log in until an administrator activates
+                  the account again.
+                </span>
+              )}
+            </div>
+
+            {statusError && (
+              <div className="users-alert users-alert-error">
+                {statusError}
+              </div>
+            )}
+
+            <div className="users-confirm-actions">
+              <button
+                type="button"
+                className="users-secondary-btn"
+                onClick={closeStatusModal}
+                disabled={statusLoading}
+              >
+                Cancel
+              </button>
+
+              <button
+                type="button"
+                className={
+                  statusUser.isActive
+                    ? "users-danger-btn"
+                    : "users-activate-confirm-btn"
+                }
+                onClick={handleStatusChange}
+                disabled={statusLoading}
+              >
+                {statusLoading
+                  ? statusUser.isActive
+                    ? "Deactivating..."
+                    : "Activating..."
+                  : statusUser.isActive
+                    ? "Deactivate"
+                    : "Activate"}
+              </button>
+            </div>
           </div>
         </div>
       )}
