@@ -7,12 +7,16 @@ import "../styles/Login.css";
 interface LoginResponse {
   success: boolean;
   message: string;
-  token?: string;
+
+  accessToken?: string;
+  refreshToken?: string;
+
   user?: {
     id: number;
     name: string;
     email: string;
     role: string;
+    isActive?: boolean;
   };
 }
 
@@ -52,26 +56,78 @@ function Login() {
         }
       );
 
-      if (!response.data.success || !response.data.token) {
+      const {
+        success: loginSuccess,
+        message,
+        accessToken,
+        refreshToken,
+        user,
+      } = response.data;
+
+      /*
+       * ========================================
+       * VALIDATE LOGIN RESPONSE
+       * ========================================
+       */
+
+      if (
+        !loginSuccess ||
+        !accessToken ||
+        !refreshToken
+      ) {
         setError(
-          response.data.message || "Login failed."
+          message || "Login failed."
         );
         return;
       }
 
+      /*
+       * ========================================
+       * STORE ACCESS TOKEN
+       * ========================================
+       *
+       * Existing application code uses
+       * "token", so we keep this key.
+       */
+
       localStorage.setItem(
         "token",
-        response.data.token
+        accessToken
       );
 
-      if (response.data.user) {
+      /*
+       * ========================================
+       * STORE REFRESH TOKEN
+       * ========================================
+       */
+
+      localStorage.setItem(
+        "refreshToken",
+        refreshToken
+      );
+
+      /*
+       * ========================================
+       * STORE USER
+       * ========================================
+       */
+
+      if (user) {
         localStorage.setItem(
           "user",
-          JSON.stringify(response.data.user)
+          JSON.stringify(user)
         );
       }
 
-      setSuccess("Login successful. Redirecting...");
+      setSuccess(
+        "Login successful. Redirecting..."
+      );
+
+      /*
+       * ========================================
+       * REDIRECT TO DASHBOARD
+       * ========================================
+       */
 
       setTimeout(() => {
         navigate("/dashboard", {
@@ -95,7 +151,10 @@ function Login() {
     <div className="login-page">
 
       <div className="login-brand">
-        <Link to="/" className="login-brand-link">
+        <Link
+          to="/"
+          className="login-brand-link"
+        >
           <div className="login-brand-icon">
             S
           </div>
@@ -103,7 +162,6 @@ function Login() {
           <strong>ShramikSync</strong>
         </Link>
       </div>
-
 
       <main className="login-container">
 
@@ -122,7 +180,6 @@ function Login() {
             </p>
 
           </div>
-
 
           <form
             className="login-form"
@@ -154,7 +211,6 @@ function Login() {
 
             </div>
 
-
             <div className="form-group">
 
               <label
@@ -180,7 +236,6 @@ function Login() {
 
             </div>
 
-
             {error && (
               <div
                 className="login-message login-error"
@@ -189,7 +244,6 @@ function Login() {
                 {error}
               </div>
             )}
-
 
             {success && (
               <div
@@ -200,17 +254,17 @@ function Login() {
               </div>
             )}
 
-
             <button
               type="submit"
               className="btn btn-primary login-submit"
               disabled={loading}
             >
-              {loading ? "Signing In..." : "Sign In"}
+              {loading
+                ? "Signing In..."
+                : "Sign In"}
             </button>
 
           </form>
-
 
           <div className="login-footer">
 
