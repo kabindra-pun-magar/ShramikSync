@@ -3,7 +3,7 @@ import { prisma } from "../lib/prisma.js";
 
 // ========================================
 // GET ALL USERS
-// ADMIN ONLY
+// ADMIN + SUPER_ADMIN
 // ========================================
 
 export const getUsers = async (req, res) => {
@@ -40,7 +40,7 @@ export const getUsers = async (req, res) => {
 
 // ========================================
 // CREATE USER
-// ADMIN ONLY
+// ADMIN + SUPER_ADMIN
 // ========================================
 
 export const createUser = async (req, res) => {
@@ -109,12 +109,53 @@ export const createUser = async (req, res) => {
     // VALIDATE ROLE
     // ========================================
 
-    const userRole = role || "USER";
+    const userRole = role
+      ? role.trim().toUpperCase()
+      : "USER";
 
     if (!["USER", "ADMIN"].includes(userRole)) {
       return res.status(400).json({
         success: false,
-        message: "Invalid user role.",
+        message:
+          "Invalid role. Only USER or ADMIN can be created.",
+      });
+    }
+
+    // ========================================
+    // ROLE HIERARCHY
+    // ========================================
+
+    // ADMIN can create USER only.
+    if (
+      req.user.role === "ADMIN" &&
+      userRole !== "USER"
+    ) {
+      return res.status(403).json({
+        success: false,
+        message:
+          "ADMIN users can only create USER accounts.",
+      });
+    }
+
+    // Only SUPER_ADMIN can create ADMIN.
+    if (
+      userRole === "ADMIN" &&
+      req.user.role !== "SUPER_ADMIN"
+    ) {
+      return res.status(403).json({
+        success: false,
+        message:
+          "Only SUPER_ADMIN can create ADMIN accounts.",
+      });
+    }
+
+    // SUPER_ADMIN accounts cannot be created
+    // through normal User Management.
+    if (userRole === "SUPER_ADMIN") {
+      return res.status(403).json({
+        success: false,
+        message:
+          "SUPER_ADMIN accounts cannot be created through user management.",
       });
     }
 
@@ -137,6 +178,7 @@ export const createUser = async (req, res) => {
         email: normalizedEmail,
         password: hashedPassword,
         role: userRole,
+        isActive: true,
       },
     });
 
@@ -152,6 +194,7 @@ export const createUser = async (req, res) => {
         name: user.name,
         email: user.email,
         role: user.role,
+        isActive: user.isActive,
         createdAt: user.createdAt,
       },
     });
@@ -168,7 +211,7 @@ export const createUser = async (req, res) => {
 
 // ========================================
 // UPDATE USER
-// ADMIN ONLY
+// ADMIN + SUPER_ADMIN
 // PUT /api/users/:id
 // ========================================
 
@@ -187,7 +230,11 @@ export const updateUser = async (req, res) => {
       });
     }
 
-    const { name, email, role } = req.body;
+    const {
+      name,
+      email,
+      role,
+    } = req.body;
 
     // ========================================
     // VALIDATE REQUIRED FIELDS
@@ -196,7 +243,8 @@ export const updateUser = async (req, res) => {
     if (!name || !email || !role) {
       return res.status(400).json({
         success: false,
-        message: "Name, email, and role are required.",
+        message:
+          "Name, email, and role are required.",
       });
     }
 
@@ -234,16 +282,16 @@ export const updateUser = async (req, res) => {
     // VALIDATE ROLE
     // ========================================
 
-    if (!["USER", "ADMIN"].includes(normalizedRole)) {
+    if (!["USER", "ADMIN", "SUPER_ADMIN"].includes(normalizedRole)) {
       return res.status(400).json({
         success: false,
         message:
-          "Invalid role. Role must be USER or ADMIN.",
+          "Invalid role. Role must be USER, ADMIN, or SUPER_ADMIN.",
       });
     }
 
     // ========================================
-    // FIND USER
+    // FIND TARGET USER
     // ========================================
 
     const existingUser = await prisma.user.findUnique({
@@ -252,9 +300,20 @@ export const updateUser = async (req, res) => {
       },
     });
 
+    if (!existingUser) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found.",
+      });
+    }
+
+    // ========================================
+    // PREVENT SELF ROLE CHANGE
+    // ========================================
+
     if (
       userId === req.user.userId &&
-      role !== user.role
+      normalizedRole !== existingUser.role
     ) {
       return res.status(400).json({
         success: false,
@@ -262,10 +321,58 @@ export const updateUser = async (req, res) => {
       });
     }
 
-    if (!existingUser) {
-      return res.status(404).json({
+    // ========================================
+    // ADMIN PERMISSIONS
+    // ========================================
+
+    if (req.user.role === "ADMIN") {
+      // ADMIN can edit USER accounts only.
+      if (existingUser.role !== "USER") {
+        return res.status(403).json({
+          success: false,
+          message:
+            "ADMIN users can only modify USER accounts.",
+        });
+      }
+
+      // ADMIN cannot promote USER → ADMIN.
+      if (normalizedRole !== "USER") {
+        return res.status(403).json({
+          success: false,
+          message:
+            "ADMIN users cannot change user roles.",
+        });
+      }
+    }
+
+    // ========================================
+    // PROTECT SUPER_ADMIN
+    // ========================================
+
+    if (
+      existingUser.role === "SUPER_ADMIN" &&
+      req.user.role !== "SUPER_ADMIN"
+    ) {
+      return res.status(403).json({
         success: false,
-        message: "User not found.",
+        message:
+          "You do not have permission to modify a SUPER_ADMIN account.",
+      });
+    }
+
+    // ========================================
+    // PREVENT CREATING / ASSIGNING
+    // SUPER_ADMIN THROUGH USER MANAGEMENT
+    // ========================================
+
+    if (
+      normalizedRole === "SUPER_ADMIN" &&
+      existingUser.role !== "SUPER_ADMIN"
+    ) {
+      return res.status(403).json({
+        success: false,
+        message:
+          "SUPER_ADMIN role cannot be assigned through user management.",
       });
     }
 
@@ -279,7 +386,10 @@ export const updateUser = async (req, res) => {
       },
     });
 
-    if (emailOwner && emailOwner.id !== userId) {
+    if (
+      emailOwner &&
+      emailOwner.id !== userId
+    ) {
       return res.status(409).json({
         success: false,
         message:
@@ -305,6 +415,7 @@ export const updateUser = async (req, res) => {
         name: true,
         email: true,
         role: true,
+        isActive: true,
         createdAt: true,
         updatedAt: true,
       },
@@ -331,7 +442,7 @@ export const updateUser = async (req, res) => {
 
 // ========================================
 // UPDATE USER STATUS
-// ADMIN ONLY
+// ADMIN + SUPER_ADMIN
 // PATCH /api/users/:id/status
 // ========================================
 
@@ -359,7 +470,8 @@ export const updateUserStatus = async (req, res) => {
     if (typeof isActive !== "boolean") {
       return res.status(400).json({
         success: false,
-        message: "isActive must be a boolean value.",
+        message:
+          "isActive must be a boolean value.",
       });
     }
 
@@ -381,8 +493,7 @@ export const updateUserStatus = async (req, res) => {
     }
 
     // ========================================
-    // PREVENT ADMIN FROM DEACTIVATING
-    // THEMSELVES
+    // PREVENT SELF-DEACTIVATION
     // ========================================
 
     if (
@@ -391,7 +502,38 @@ export const updateUserStatus = async (req, res) => {
     ) {
       return res.status(400).json({
         success: false,
-        message: "You cannot deactivate your own account.",
+        message:
+          "You cannot deactivate your own account.",
+      });
+    }
+
+    // ========================================
+    // ADMIN PERMISSIONS
+    // ========================================
+
+    if (req.user.role === "ADMIN") {
+      // ADMIN can activate/deactivate USER only.
+      if (user.role !== "USER") {
+        return res.status(403).json({
+          success: false,
+          message:
+            "ADMIN users can only change the status of USER accounts.",
+        });
+      }
+    }
+
+    // ========================================
+    // PROTECT SUPER_ADMIN
+    // ========================================
+
+    if (
+      user.role === "SUPER_ADMIN" &&
+      req.user.role !== "SUPER_ADMIN"
+    ) {
+      return res.status(403).json({
+        success: false,
+        message:
+          "You do not have permission to modify a SUPER_ADMIN account.",
       });
     }
 
@@ -429,11 +571,15 @@ export const updateUserStatus = async (req, res) => {
       user: updatedUser,
     });
   } catch (error) {
-    console.error("Update user status error:", error);
+    console.error(
+      "Update user status error:",
+      error
+    );
 
     return res.status(500).json({
       success: false,
-      message: "Failed to update user status.",
+      message:
+        "Failed to update user status.",
     });
   }
 };
