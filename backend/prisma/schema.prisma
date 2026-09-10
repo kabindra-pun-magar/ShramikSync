@@ -46,6 +46,17 @@ enum DocumentType {
   OTHER
 }
 
+enum AgencyStatus {
+  ACTIVE
+  INACTIVE
+  PENDING
+}
+
+enum CountryStatus {
+  ACTIVE
+  INACTIVE
+}
+
 // ========================================
 // USER
 // ========================================
@@ -63,7 +74,87 @@ model User {
   candidates    Candidate[]
   employers     Employer[]
   demandLetters DemandLetter[]
+  refreshTokens RefreshToken[]
+  agencies      Agency[]
+  countries     Country[]
 }
+
+
+model RefreshToken {
+  id        Int      @id @default(autoincrement())
+  tokenHash String   @unique
+  userId    Int
+  expiresAt DateTime
+  revokedAt DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+// ========================================
+// AGENCY
+// ========================================
+
+model Agency {
+  id Int @id @default(autoincrement())
+
+  // ========================================
+  // AGENCY INFORMATION
+  // ========================================
+
+  name String
+
+  registrationNumber String? @unique
+
+  licenseNumber String? @unique
+
+  email String?
+
+  phone String?
+
+  country String?
+
+  city String?
+
+  address String?
+
+  // ========================================
+  // STATUS
+  // ========================================
+
+  status AgencyStatus @default(PENDING)
+
+  // ========================================
+  // DATES
+  // ========================================
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // ========================================
+  // OWNERSHIP
+  // ========================================
+
+  createdById Int
+
+  createdBy User @relation(fields: [createdById], references: [id], onDelete: Restrict)
+
+  // ========================================
+  // INDEXES
+  // ========================================
+
+  @@index([createdById])
+  @@index([status])
+  @@index([name])
+  @@index([country])
+  @@index([registrationNumber])
+  @@index([licenseNumber])
+}
+
 
 // ========================================
 // CANDIDATE
@@ -302,4 +393,27 @@ model DemandLetterCandidate {
   @@unique([demandLetterId, candidateId])
   @@index([demandLetterId])
   @@index([candidateId])
+}
+
+model Country {
+  id Int @id @default(autoincrement())
+
+  name String @unique
+
+  iso2Code String? @unique
+  iso3Code String? @unique
+
+  callingCode String?
+
+  status CountryStatus @default(ACTIVE)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  createdById Int
+  createdBy User @relation(fields: [createdById], references: [id], onDelete: Restrict)
+
+  @@index([createdById])
+  @@index([status])
+  @@index([name])
 }

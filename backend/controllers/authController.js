@@ -1,6 +1,66 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { prisma } from "../lib/prisma.js";
+import {
+  createRefreshToken,
+  findValidRefreshToken,
+  revokeRefreshToken,
+  revokeAllUserRefreshTokens,
+} from "../services/refreshTokenService.js";
+
+export const refreshAccessToken = async (req, res) => {
+  try {
+    const { refreshToken } = req.body;
+
+    if (!refreshToken) {
+      return res.status(400).json({
+        success: false,
+        message: "Refresh token is required.",
+      });
+    }
+
+    const storedToken = await findValidRefreshToken(refreshToken);
+
+    if (!storedToken) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid or expired refresh token.",
+      });
+    }
+
+    const user = storedToken.user;
+
+    const accessToken = jwt.sign(
+      {
+        userId: user.id,
+        role: user.role,
+      },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: process.env.ACCESS_TOKEN_EXPIRES_IN || "15m",
+      }
+    );
+
+    // Rotate refresh token
+    await revokeRefreshToken(refreshToken);
+
+    const newRefreshToken = await createRefreshToken(user.id);
+
+    return res.status(200).json({
+      success: true,
+      message: "Access token refreshed successfully.",
+      accessToken,
+      refreshToken: newRefreshToken.token,
+    });
+  } catch (error) {
+    console.error("Refresh token error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Failed to refresh access token.",
+    });
+  }
+};
 
 // ========================================
 // REGISTER USER
@@ -225,16 +285,18 @@ export const loginUser = async (req, res) => {
     // CREATE JWT
     // ========================================
 
-    const token = jwt.sign(
+    const accessToken = jwt.sign(
       {
         userId: user.id,
         role: user.role,
       },
       process.env.JWT_SECRET,
       {
-        expiresIn: "1d",
+        expiresIn: process.env.ACCESS_TOKEN_EXPIRES_IN || "15m",
       }
     );
+
+    const refreshToken = await createRefreshToken(user.id);
 
     // ========================================
     // RETURN SAFE USER DATA
@@ -243,7 +305,8 @@ export const loginUser = async (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Login successful.",
-      token,
+      accessToken,
+      refreshToken: refreshToken.token,
       user: {
         id: user.id,
         name: user.name,
@@ -438,6 +501,53 @@ export const changePassword = async (req, res) => {
       success: false,
       message:
         "Something went wrong while changing the password.",
+    });
+  }
+};
+
+export const logout = async (req, res) => {
+  try {
+    const { refreshToken } = req.body;
+
+    if (!refreshToken) {
+      return res.status(400).json({
+        success: false,
+        message: "Refresh token is required.",
+      });
+    }
+
+    await revokeRefreshToken(refreshToken);
+
+    return res.status(200).json({
+      success: true,
+      message: "Logged out successfully.",
+    });
+  } catch (error) {
+    console.error("Logout error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Failed to logout.",
+    });
+  }
+};
+
+export const logoutAll = async (req, res) => {
+  try {
+    const userId = req.user.userId;
+
+    await revokeAllUserRefreshTokens(userId);
+
+    return res.status(200).json({
+      success: true,
+      message: "Logged out from all devices successfully.",
+    });
+  } catch (error) {
+    console.error("Logout all error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Failed to logout from all devices.",
     });
   }
 };

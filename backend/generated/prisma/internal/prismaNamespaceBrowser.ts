@@ -52,11 +52,14 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   User: 'User',
+  RefreshToken: 'RefreshToken',
+  Agency: 'Agency',
   Candidate: 'Candidate',
   Document: 'Document',
   Employer: 'Employer',
   DemandLetter: 'DemandLetter',
-  DemandLetterCandidate: 'DemandLetterCandidate'
+  DemandLetterCandidate: 'DemandLetterCandidate',
+  Country: 'Country'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -87,6 +90,38 @@ export const UserScalarFieldEnum = {
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+export const RefreshTokenScalarFieldEnum = {
+  id: 'id',
+  tokenHash: 'tokenHash',
+  userId: 'userId',
+  expiresAt: 'expiresAt',
+  revokedAt: 'revokedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type RefreshTokenScalarFieldEnum = (typeof RefreshTokenScalarFieldEnum)[keyof typeof RefreshTokenScalarFieldEnum]
+
+
+export const AgencyScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  registrationNumber: 'registrationNumber',
+  licenseNumber: 'licenseNumber',
+  email: 'email',
+  phone: 'phone',
+  country: 'country',
+  city: 'city',
+  address: 'address',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdById: 'createdById'
+} as const
+
+export type AgencyScalarFieldEnum = (typeof AgencyScalarFieldEnum)[keyof typeof AgencyScalarFieldEnum]
 
 
 export const CandidateScalarFieldEnum = {
@@ -178,6 +213,21 @@ export const DemandLetterCandidateScalarFieldEnum = {
 } as const
 
 export type DemandLetterCandidateScalarFieldEnum = (typeof DemandLetterCandidateScalarFieldEnum)[keyof typeof DemandLetterCandidateScalarFieldEnum]
+
+
+export const CountryScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  iso2Code: 'iso2Code',
+  iso3Code: 'iso3Code',
+  callingCode: 'callingCode',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdById: 'createdById'
+} as const
+
+export type CountryScalarFieldEnum = (typeof CountryScalarFieldEnum)[keyof typeof CountryScalarFieldEnum]
 
 
 export const SortOrder = {

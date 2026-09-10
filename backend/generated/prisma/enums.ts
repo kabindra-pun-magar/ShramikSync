@@ -54,3 +54,20 @@ export const DocumentType = {
 } as const
 
 export type DocumentType = (typeof DocumentType)[keyof typeof DocumentType]
+
+
+export const AgencyStatus = {
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE',
+  PENDING: 'PENDING'
+} as const
+
+export type AgencyStatus = (typeof AgencyStatus)[keyof typeof AgencyStatus]
+
+
+export const CountryStatus = {
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE'
+} as const
+
+export type CountryStatus = (typeof CountryStatus)[keyof typeof CountryStatus]

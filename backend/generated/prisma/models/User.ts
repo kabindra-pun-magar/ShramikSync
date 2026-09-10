@@ -243,6 +243,9 @@ export type UserWhereInput = {
   candidates?: Prisma.CandidateListRelationFilter
   employers?: Prisma.EmployerListRelationFilter
   demandLetters?: Prisma.DemandLetterListRelationFilter
+  refreshTokens?: Prisma.RefreshTokenListRelationFilter
+  agencies?: Prisma.AgencyListRelationFilter
+  countries?: Prisma.CountryListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -257,6 +260,9 @@ export type UserOrderByWithRelationInput = {
   candidates?: Prisma.CandidateOrderByRelationAggregateInput
   employers?: Prisma.EmployerOrderByRelationAggregateInput
   demandLetters?: Prisma.DemandLetterOrderByRelationAggregateInput
+  refreshTokens?: Prisma.RefreshTokenOrderByRelationAggregateInput
+  agencies?: Prisma.AgencyOrderByRelationAggregateInput
+  countries?: Prisma.CountryOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -274,6 +280,9 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   candidates?: Prisma.CandidateListRelationFilter
   employers?: Prisma.EmployerListRelationFilter
   demandLetters?: Prisma.DemandLetterListRelationFilter
+  refreshTokens?: Prisma.RefreshTokenListRelationFilter
+  agencies?: Prisma.AgencyListRelationFilter
+  countries?: Prisma.CountryListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -317,6 +326,9 @@ export type UserCreateInput = {
   candidates?: Prisma.CandidateCreateNestedManyWithoutCreatedByInput
   employers?: Prisma.EmployerCreateNestedManyWithoutCreatedByInput
   demandLetters?: Prisma.DemandLetterCreateNestedManyWithoutCreatedByInput
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  agencies?: Prisma.AgencyCreateNestedManyWithoutCreatedByInput
+  countries?: Prisma.CountryCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -331,6 +343,9 @@ export type UserUncheckedCreateInput = {
   candidates?: Prisma.CandidateUncheckedCreateNestedManyWithoutCreatedByInput
   employers?: Prisma.EmployerUncheckedCreateNestedManyWithoutCreatedByInput
   demandLetters?: Prisma.DemandLetterUncheckedCreateNestedManyWithoutCreatedByInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  agencies?: Prisma.AgencyUncheckedCreateNestedManyWithoutCreatedByInput
+  countries?: Prisma.CountryUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUpdateInput = {
@@ -344,6 +359,9 @@ export type UserUpdateInput = {
   candidates?: Prisma.CandidateUpdateManyWithoutCreatedByNestedInput
   employers?: Prisma.EmployerUpdateManyWithoutCreatedByNestedInput
   demandLetters?: Prisma.DemandLetterUpdateManyWithoutCreatedByNestedInput
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  agencies?: Prisma.AgencyUpdateManyWithoutCreatedByNestedInput
+  countries?: Prisma.CountryUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -358,6 +376,9 @@ export type UserUncheckedUpdateInput = {
   candidates?: Prisma.CandidateUncheckedUpdateManyWithoutCreatedByNestedInput
   employers?: Prisma.EmployerUncheckedUpdateManyWithoutCreatedByNestedInput
   demandLetters?: Prisma.DemandLetterUncheckedUpdateManyWithoutCreatedByNestedInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  agencies?: Prisma.AgencyUncheckedUpdateManyWithoutCreatedByNestedInput
+  countries?: Prisma.CountryUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -458,6 +479,34 @@ export type IntFieldUpdateOperationsInput = {
   divide?: number
 }
 
+export type UserCreateNestedOneWithoutRefreshTokensInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutRefreshTokensInput, Prisma.UserUncheckedCreateWithoutRefreshTokensInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutRefreshTokensInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutRefreshTokensNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutRefreshTokensInput, Prisma.UserUncheckedCreateWithoutRefreshTokensInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutRefreshTokensInput
+  upsert?: Prisma.UserUpsertWithoutRefreshTokensInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutRefreshTokensInput, Prisma.UserUpdateWithoutRefreshTokensInput>, Prisma.UserUncheckedUpdateWithoutRefreshTokensInput>
+}
+
+export type UserCreateNestedOneWithoutAgenciesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAgenciesInput, Prisma.UserUncheckedCreateWithoutAgenciesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAgenciesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutAgenciesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAgenciesInput, Prisma.UserUncheckedCreateWithoutAgenciesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAgenciesInput
+  upsert?: Prisma.UserUpsertWithoutAgenciesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAgenciesInput, Prisma.UserUpdateWithoutAgenciesInput>, Prisma.UserUncheckedUpdateWithoutAgenciesInput>
+}
+
 export type UserCreateNestedOneWithoutCandidatesInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutCandidatesInput, Prisma.UserUncheckedCreateWithoutCandidatesInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutCandidatesInput
@@ -500,6 +549,176 @@ export type UserUpdateOneRequiredWithoutDemandLettersNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutDemandLettersInput, Prisma.UserUpdateWithoutDemandLettersInput>, Prisma.UserUncheckedUpdateWithoutDemandLettersInput>
 }
 
+export type UserCreateNestedOneWithoutCountriesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCountriesInput, Prisma.UserUncheckedCreateWithoutCountriesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCountriesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutCountriesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCountriesInput, Prisma.UserUncheckedCreateWithoutCountriesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCountriesInput
+  upsert?: Prisma.UserUpsertWithoutCountriesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCountriesInput, Prisma.UserUpdateWithoutCountriesInput>, Prisma.UserUncheckedUpdateWithoutCountriesInput>
+}
+
+export type UserCreateWithoutRefreshTokensInput = {
+  name: string
+  email: string
+  password: string
+  role?: string
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  candidates?: Prisma.CandidateCreateNestedManyWithoutCreatedByInput
+  employers?: Prisma.EmployerCreateNestedManyWithoutCreatedByInput
+  demandLetters?: Prisma.DemandLetterCreateNestedManyWithoutCreatedByInput
+  agencies?: Prisma.AgencyCreateNestedManyWithoutCreatedByInput
+  countries?: Prisma.CountryCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserUncheckedCreateWithoutRefreshTokensInput = {
+  id?: number
+  name: string
+  email: string
+  password: string
+  role?: string
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  candidates?: Prisma.CandidateUncheckedCreateNestedManyWithoutCreatedByInput
+  employers?: Prisma.EmployerUncheckedCreateNestedManyWithoutCreatedByInput
+  demandLetters?: Prisma.DemandLetterUncheckedCreateNestedManyWithoutCreatedByInput
+  agencies?: Prisma.AgencyUncheckedCreateNestedManyWithoutCreatedByInput
+  countries?: Prisma.CountryUncheckedCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserCreateOrConnectWithoutRefreshTokensInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutRefreshTokensInput, Prisma.UserUncheckedCreateWithoutRefreshTokensInput>
+}
+
+export type UserUpsertWithoutRefreshTokensInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutRefreshTokensInput, Prisma.UserUncheckedUpdateWithoutRefreshTokensInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutRefreshTokensInput, Prisma.UserUncheckedCreateWithoutRefreshTokensInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutRefreshTokensInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutRefreshTokensInput, Prisma.UserUncheckedUpdateWithoutRefreshTokensInput>
+}
+
+export type UserUpdateWithoutRefreshTokensInput = {
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  candidates?: Prisma.CandidateUpdateManyWithoutCreatedByNestedInput
+  employers?: Prisma.EmployerUpdateManyWithoutCreatedByNestedInput
+  demandLetters?: Prisma.DemandLetterUpdateManyWithoutCreatedByNestedInput
+  agencies?: Prisma.AgencyUpdateManyWithoutCreatedByNestedInput
+  countries?: Prisma.CountryUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutRefreshTokensInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  candidates?: Prisma.CandidateUncheckedUpdateManyWithoutCreatedByNestedInput
+  employers?: Prisma.EmployerUncheckedUpdateManyWithoutCreatedByNestedInput
+  demandLetters?: Prisma.DemandLetterUncheckedUpdateManyWithoutCreatedByNestedInput
+  agencies?: Prisma.AgencyUncheckedUpdateManyWithoutCreatedByNestedInput
+  countries?: Prisma.CountryUncheckedUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserCreateWithoutAgenciesInput = {
+  name: string
+  email: string
+  password: string
+  role?: string
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  candidates?: Prisma.CandidateCreateNestedManyWithoutCreatedByInput
+  employers?: Prisma.EmployerCreateNestedManyWithoutCreatedByInput
+  demandLetters?: Prisma.DemandLetterCreateNestedManyWithoutCreatedByInput
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  countries?: Prisma.CountryCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserUncheckedCreateWithoutAgenciesInput = {
+  id?: number
+  name: string
+  email: string
+  password: string
+  role?: string
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  candidates?: Prisma.CandidateUncheckedCreateNestedManyWithoutCreatedByInput
+  employers?: Prisma.EmployerUncheckedCreateNestedManyWithoutCreatedByInput
+  demandLetters?: Prisma.DemandLetterUncheckedCreateNestedManyWithoutCreatedByInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  countries?: Prisma.CountryUncheckedCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserCreateOrConnectWithoutAgenciesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutAgenciesInput, Prisma.UserUncheckedCreateWithoutAgenciesInput>
+}
+
+export type UserUpsertWithoutAgenciesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutAgenciesInput, Prisma.UserUncheckedUpdateWithoutAgenciesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutAgenciesInput, Prisma.UserUncheckedCreateWithoutAgenciesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutAgenciesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutAgenciesInput, Prisma.UserUncheckedUpdateWithoutAgenciesInput>
+}
+
+export type UserUpdateWithoutAgenciesInput = {
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  candidates?: Prisma.CandidateUpdateManyWithoutCreatedByNestedInput
+  employers?: Prisma.EmployerUpdateManyWithoutCreatedByNestedInput
+  demandLetters?: Prisma.DemandLetterUpdateManyWithoutCreatedByNestedInput
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  countries?: Prisma.CountryUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutAgenciesInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  candidates?: Prisma.CandidateUncheckedUpdateManyWithoutCreatedByNestedInput
+  employers?: Prisma.EmployerUncheckedUpdateManyWithoutCreatedByNestedInput
+  demandLetters?: Prisma.DemandLetterUncheckedUpdateManyWithoutCreatedByNestedInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  countries?: Prisma.CountryUncheckedUpdateManyWithoutCreatedByNestedInput
+}
+
 export type UserCreateWithoutCandidatesInput = {
   name: string
   email: string
@@ -510,6 +729,9 @@ export type UserCreateWithoutCandidatesInput = {
   updatedAt?: Date | string
   employers?: Prisma.EmployerCreateNestedManyWithoutCreatedByInput
   demandLetters?: Prisma.DemandLetterCreateNestedManyWithoutCreatedByInput
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  agencies?: Prisma.AgencyCreateNestedManyWithoutCreatedByInput
+  countries?: Prisma.CountryCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutCandidatesInput = {
@@ -523,6 +745,9 @@ export type UserUncheckedCreateWithoutCandidatesInput = {
   updatedAt?: Date | string
   employers?: Prisma.EmployerUncheckedCreateNestedManyWithoutCreatedByInput
   demandLetters?: Prisma.DemandLetterUncheckedCreateNestedManyWithoutCreatedByInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  agencies?: Prisma.AgencyUncheckedCreateNestedManyWithoutCreatedByInput
+  countries?: Prisma.CountryUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutCandidatesInput = {
@@ -551,6 +776,9 @@ export type UserUpdateWithoutCandidatesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   employers?: Prisma.EmployerUpdateManyWithoutCreatedByNestedInput
   demandLetters?: Prisma.DemandLetterUpdateManyWithoutCreatedByNestedInput
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  agencies?: Prisma.AgencyUpdateManyWithoutCreatedByNestedInput
+  countries?: Prisma.CountryUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCandidatesInput = {
@@ -564,6 +792,9 @@ export type UserUncheckedUpdateWithoutCandidatesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   employers?: Prisma.EmployerUncheckedUpdateManyWithoutCreatedByNestedInput
   demandLetters?: Prisma.DemandLetterUncheckedUpdateManyWithoutCreatedByNestedInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  agencies?: Prisma.AgencyUncheckedUpdateManyWithoutCreatedByNestedInput
+  countries?: Prisma.CountryUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutEmployersInput = {
@@ -576,6 +807,9 @@ export type UserCreateWithoutEmployersInput = {
   updatedAt?: Date | string
   candidates?: Prisma.CandidateCreateNestedManyWithoutCreatedByInput
   demandLetters?: Prisma.DemandLetterCreateNestedManyWithoutCreatedByInput
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  agencies?: Prisma.AgencyCreateNestedManyWithoutCreatedByInput
+  countries?: Prisma.CountryCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutEmployersInput = {
@@ -589,6 +823,9 @@ export type UserUncheckedCreateWithoutEmployersInput = {
   updatedAt?: Date | string
   candidates?: Prisma.CandidateUncheckedCreateNestedManyWithoutCreatedByInput
   demandLetters?: Prisma.DemandLetterUncheckedCreateNestedManyWithoutCreatedByInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  agencies?: Prisma.AgencyUncheckedCreateNestedManyWithoutCreatedByInput
+  countries?: Prisma.CountryUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutEmployersInput = {
@@ -617,6 +854,9 @@ export type UserUpdateWithoutEmployersInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   candidates?: Prisma.CandidateUpdateManyWithoutCreatedByNestedInput
   demandLetters?: Prisma.DemandLetterUpdateManyWithoutCreatedByNestedInput
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  agencies?: Prisma.AgencyUpdateManyWithoutCreatedByNestedInput
+  countries?: Prisma.CountryUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutEmployersInput = {
@@ -630,6 +870,9 @@ export type UserUncheckedUpdateWithoutEmployersInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   candidates?: Prisma.CandidateUncheckedUpdateManyWithoutCreatedByNestedInput
   demandLetters?: Prisma.DemandLetterUncheckedUpdateManyWithoutCreatedByNestedInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  agencies?: Prisma.AgencyUncheckedUpdateManyWithoutCreatedByNestedInput
+  countries?: Prisma.CountryUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutDemandLettersInput = {
@@ -642,6 +885,9 @@ export type UserCreateWithoutDemandLettersInput = {
   updatedAt?: Date | string
   candidates?: Prisma.CandidateCreateNestedManyWithoutCreatedByInput
   employers?: Prisma.EmployerCreateNestedManyWithoutCreatedByInput
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  agencies?: Prisma.AgencyCreateNestedManyWithoutCreatedByInput
+  countries?: Prisma.CountryCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutDemandLettersInput = {
@@ -655,6 +901,9 @@ export type UserUncheckedCreateWithoutDemandLettersInput = {
   updatedAt?: Date | string
   candidates?: Prisma.CandidateUncheckedCreateNestedManyWithoutCreatedByInput
   employers?: Prisma.EmployerUncheckedCreateNestedManyWithoutCreatedByInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  agencies?: Prisma.AgencyUncheckedCreateNestedManyWithoutCreatedByInput
+  countries?: Prisma.CountryUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutDemandLettersInput = {
@@ -683,6 +932,9 @@ export type UserUpdateWithoutDemandLettersInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   candidates?: Prisma.CandidateUpdateManyWithoutCreatedByNestedInput
   employers?: Prisma.EmployerUpdateManyWithoutCreatedByNestedInput
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  agencies?: Prisma.AgencyUpdateManyWithoutCreatedByNestedInput
+  countries?: Prisma.CountryUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutDemandLettersInput = {
@@ -696,6 +948,87 @@ export type UserUncheckedUpdateWithoutDemandLettersInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   candidates?: Prisma.CandidateUncheckedUpdateManyWithoutCreatedByNestedInput
   employers?: Prisma.EmployerUncheckedUpdateManyWithoutCreatedByNestedInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  agencies?: Prisma.AgencyUncheckedUpdateManyWithoutCreatedByNestedInput
+  countries?: Prisma.CountryUncheckedUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserCreateWithoutCountriesInput = {
+  name: string
+  email: string
+  password: string
+  role?: string
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  candidates?: Prisma.CandidateCreateNestedManyWithoutCreatedByInput
+  employers?: Prisma.EmployerCreateNestedManyWithoutCreatedByInput
+  demandLetters?: Prisma.DemandLetterCreateNestedManyWithoutCreatedByInput
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  agencies?: Prisma.AgencyCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserUncheckedCreateWithoutCountriesInput = {
+  id?: number
+  name: string
+  email: string
+  password: string
+  role?: string
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  candidates?: Prisma.CandidateUncheckedCreateNestedManyWithoutCreatedByInput
+  employers?: Prisma.EmployerUncheckedCreateNestedManyWithoutCreatedByInput
+  demandLetters?: Prisma.DemandLetterUncheckedCreateNestedManyWithoutCreatedByInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  agencies?: Prisma.AgencyUncheckedCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserCreateOrConnectWithoutCountriesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCountriesInput, Prisma.UserUncheckedCreateWithoutCountriesInput>
+}
+
+export type UserUpsertWithoutCountriesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCountriesInput, Prisma.UserUncheckedUpdateWithoutCountriesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCountriesInput, Prisma.UserUncheckedCreateWithoutCountriesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutCountriesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCountriesInput, Prisma.UserUncheckedUpdateWithoutCountriesInput>
+}
+
+export type UserUpdateWithoutCountriesInput = {
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  candidates?: Prisma.CandidateUpdateManyWithoutCreatedByNestedInput
+  employers?: Prisma.EmployerUpdateManyWithoutCreatedByNestedInput
+  demandLetters?: Prisma.DemandLetterUpdateManyWithoutCreatedByNestedInput
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  agencies?: Prisma.AgencyUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCountriesInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  candidates?: Prisma.CandidateUncheckedUpdateManyWithoutCreatedByNestedInput
+  employers?: Prisma.EmployerUncheckedUpdateManyWithoutCreatedByNestedInput
+  demandLetters?: Prisma.DemandLetterUncheckedUpdateManyWithoutCreatedByNestedInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  agencies?: Prisma.AgencyUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 
@@ -707,12 +1040,18 @@ export type UserCountOutputType = {
   candidates: number
   employers: number
   demandLetters: number
+  refreshTokens: number
+  agencies: number
+  countries: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   candidates?: boolean | UserCountOutputTypeCountCandidatesArgs
   employers?: boolean | UserCountOutputTypeCountEmployersArgs
   demandLetters?: boolean | UserCountOutputTypeCountDemandLettersArgs
+  refreshTokens?: boolean | UserCountOutputTypeCountRefreshTokensArgs
+  agencies?: boolean | UserCountOutputTypeCountAgenciesArgs
+  countries?: boolean | UserCountOutputTypeCountCountriesArgs
 }
 
 /**
@@ -746,6 +1085,27 @@ export type UserCountOutputTypeCountDemandLettersArgs<ExtArgs extends runtime.Ty
   where?: Prisma.DemandLetterWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountRefreshTokensArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.RefreshTokenWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountAgenciesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AgencyWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountCountriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CountryWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -759,6 +1119,9 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   candidates?: boolean | Prisma.User$candidatesArgs<ExtArgs>
   employers?: boolean | Prisma.User$employersArgs<ExtArgs>
   demandLetters?: boolean | Prisma.User$demandLettersArgs<ExtArgs>
+  refreshTokens?: boolean | Prisma.User$refreshTokensArgs<ExtArgs>
+  agencies?: boolean | Prisma.User$agenciesArgs<ExtArgs>
+  countries?: boolean | Prisma.User$countriesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -800,6 +1163,9 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   candidates?: boolean | Prisma.User$candidatesArgs<ExtArgs>
   employers?: boolean | Prisma.User$employersArgs<ExtArgs>
   demandLetters?: boolean | Prisma.User$demandLettersArgs<ExtArgs>
+  refreshTokens?: boolean | Prisma.User$refreshTokensArgs<ExtArgs>
+  agencies?: boolean | Prisma.User$agenciesArgs<ExtArgs>
+  countries?: boolean | Prisma.User$countriesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -811,6 +1177,9 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     candidates: Prisma.$CandidatePayload<ExtArgs>[]
     employers: Prisma.$EmployerPayload<ExtArgs>[]
     demandLetters: Prisma.$DemandLetterPayload<ExtArgs>[]
+    refreshTokens: Prisma.$RefreshTokenPayload<ExtArgs>[]
+    agencies: Prisma.$AgencyPayload<ExtArgs>[]
+    countries: Prisma.$CountryPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -1218,6 +1587,9 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   candidates<T extends Prisma.User$candidatesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$candidatesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CandidatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   employers<T extends Prisma.User$employersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$employersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EmployerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   demandLetters<T extends Prisma.User$demandLettersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$demandLettersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DemandLetterPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  refreshTokens<T extends Prisma.User$refreshTokensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$refreshTokensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RefreshTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  agencies<T extends Prisma.User$agenciesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$agenciesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AgencyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  countries<T extends Prisma.User$countriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$countriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CountryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1717,6 +2089,78 @@ export type User$demandLettersArgs<ExtArgs extends runtime.Types.Extensions.Inte
   take?: number
   skip?: number
   distinct?: Prisma.DemandLetterScalarFieldEnum | Prisma.DemandLetterScalarFieldEnum[]
+}
+
+/**
+ * User.refreshTokens
+ */
+export type User$refreshTokensArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the RefreshToken
+   */
+  select?: Prisma.RefreshTokenSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the RefreshToken
+   */
+  omit?: Prisma.RefreshTokenOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.RefreshTokenInclude<ExtArgs> | null
+  where?: Prisma.RefreshTokenWhereInput
+  orderBy?: Prisma.RefreshTokenOrderByWithRelationInput | Prisma.RefreshTokenOrderByWithRelationInput[]
+  cursor?: Prisma.RefreshTokenWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.RefreshTokenScalarFieldEnum | Prisma.RefreshTokenScalarFieldEnum[]
+}
+
+/**
+ * User.agencies
+ */
+export type User$agenciesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Agency
+   */
+  select?: Prisma.AgencySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Agency
+   */
+  omit?: Prisma.AgencyOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AgencyInclude<ExtArgs> | null
+  where?: Prisma.AgencyWhereInput
+  orderBy?: Prisma.AgencyOrderByWithRelationInput | Prisma.AgencyOrderByWithRelationInput[]
+  cursor?: Prisma.AgencyWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AgencyScalarFieldEnum | Prisma.AgencyScalarFieldEnum[]
+}
+
+/**
+ * User.countries
+ */
+export type User$countriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Country
+   */
+  select?: Prisma.CountrySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Country
+   */
+  omit?: Prisma.CountryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CountryInclude<ExtArgs> | null
+  where?: Prisma.CountryWhereInput
+  orderBy?: Prisma.CountryOrderByWithRelationInput | Prisma.CountryOrderByWithRelationInput[]
+  cursor?: Prisma.CountryWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CountryScalarFieldEnum | Prisma.CountryScalarFieldEnum[]
 }
 
 /**

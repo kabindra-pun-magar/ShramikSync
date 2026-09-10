@@ -23,6 +23,16 @@ export * from './enums.ts';
  */
 export type User = Prisma.UserModel
 /**
+ * Model RefreshToken
+ * 
+ */
+export type RefreshToken = Prisma.RefreshTokenModel
+/**
+ * Model Agency
+ * 
+ */
+export type Agency = Prisma.AgencyModel
+/**
  * Model Candidate
  * 
  */
@@ -47,3 +57,8 @@ export type DemandLetter = Prisma.DemandLetterModel
  * 
  */
 export type DemandLetterCandidate = Prisma.DemandLetterCandidateModel
+/**
+ * Model Country
+ * 
+ */
+export type Country = Prisma.CountryModel
