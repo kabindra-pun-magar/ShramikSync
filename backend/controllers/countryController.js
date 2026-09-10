@@ -1,60 +1,81 @@
 import { prisma } from "../lib/prisma.js";
 
+// ============================================================
+// HELPERS
+// ============================================================
+
 const normalizeCode = (value) => {
   if (!value) return null;
+
   return value.trim().toUpperCase();
 };
 
 const normalizeName = (value) => {
   if (!value) return value;
+
   return value.trim();
 };
 
+// Get authenticated user's database ID
+const getAuthenticatedUserId = (req) => {
+  return req.user?.id ?? req.user?.userId ?? null;
+};
+
+// ============================================================
+// GET ALL COUNTRIES
 // GET /api/countries
+// ============================================================
+
 export const getCountries = async (req, res) => {
   try {
     const { search, status } = req.query;
 
     const where = {};
 
+    // Search
     if (search) {
+      const searchTerm = search.trim();
+
       where.OR = [
         {
           name: {
-            contains: search.trim(),
+            contains: searchTerm,
             mode: "insensitive",
           },
         },
         {
           iso2Code: {
-            contains: search.trim(),
+            contains: searchTerm,
             mode: "insensitive",
           },
         },
         {
           iso3Code: {
-            contains: search.trim(),
+            contains: searchTerm,
             mode: "insensitive",
           },
         },
         {
           callingCode: {
-            contains: search.trim(),
+            contains: searchTerm,
             mode: "insensitive",
           },
         },
       ];
     }
 
+    // Status filter
     if (status) {
-      if (!["ACTIVE", "INACTIVE"].includes(status.toUpperCase())) {
+      const normalizedStatus = status.toUpperCase();
+
+      if (!["ACTIVE", "INACTIVE"].includes(normalizedStatus)) {
         return res.status(400).json({
           success: false,
           message: "Invalid country status.",
         });
       }
 
-      where.status = status.toUpperCase();
+      where.status = normalizedStatus;
     }
 
     const countries = await prisma.country.findMany({
@@ -88,7 +109,11 @@ export const getCountries = async (req, res) => {
   }
 };
 
+// ============================================================
+// GET COUNTRY BY ID
 // GET /api/countries/:id
+// ============================================================
+
 export const getCountryById = async (req, res) => {
   try {
     const id = Number(req.params.id);
@@ -101,7 +126,9 @@ export const getCountryById = async (req, res) => {
     }
 
     const country = await prisma.country.findUnique({
-      where: { id },
+      where: {
+        id,
+      },
       include: {
         createdBy: {
           select: {
@@ -134,7 +161,11 @@ export const getCountryById = async (req, res) => {
   }
 };
 
+// ============================================================
+// CREATE COUNTRY
 // POST /api/countries
+// ============================================================
+
 export const createCountry = async (req, res) => {
   try {
     const {
@@ -145,10 +176,33 @@ export const createCountry = async (req, res) => {
       status,
     } = req.body;
 
+    // --------------------------------------------------------
+    // Get authenticated user
+    // --------------------------------------------------------
+
+    const userId = getAuthenticatedUserId(req);
+
+    if (!userId) {
+      return res.status(401).json({
+        success: false,
+        message:
+          "Authenticated user ID is missing from the token.",
+      });
+    }
+
+    // --------------------------------------------------------
+    // Normalize input
+    // --------------------------------------------------------
+
     const normalizedName = normalizeName(name);
     const normalizedIso2 = normalizeCode(iso2Code);
     const normalizedIso3 = normalizeCode(iso3Code);
-    const normalizedCallingCode = callingCode?.trim() || null;
+    const normalizedCallingCode =
+      callingCode?.trim() || null;
+
+    // --------------------------------------------------------
+    // Validate name
+    // --------------------------------------------------------
 
     if (!normalizedName) {
       return res.status(400).json({
@@ -157,35 +211,72 @@ export const createCountry = async (req, res) => {
       });
     }
 
-    if (normalizedIso2 && !/^[A-Z]{2}$/.test(normalizedIso2)) {
+    // --------------------------------------------------------
+    // Validate ISO 2
+    // --------------------------------------------------------
+
+    if (
+      normalizedIso2 &&
+      !/^[A-Z]{2}$/.test(normalizedIso2)
+    ) {
       return res.status(400).json({
         success: false,
-        message: "ISO 2 code must contain exactly 2 letters.",
+        message:
+          "ISO 2 code must contain exactly 2 letters.",
       });
     }
 
-    if (normalizedIso3 && !/^[A-Z]{3}$/.test(normalizedIso3)) {
+    // --------------------------------------------------------
+    // Validate ISO 3
+    // --------------------------------------------------------
+
+    if (
+      normalizedIso3 &&
+      !/^[A-Z]{3}$/.test(normalizedIso3)
+    ) {
       return res.status(400).json({
         success: false,
-        message: "ISO 3 code must contain exactly 3 letters.",
+        message:
+          "ISO 3 code must contain exactly 3 letters.",
       });
     }
 
-    if (normalizedCallingCode && !/^\+[1-9][0-9]{0,3}$/.test(normalizedCallingCode)) {
+    // --------------------------------------------------------
+    // Validate calling code
+    // --------------------------------------------------------
+
+    if (
+      normalizedCallingCode &&
+      !/^\+[1-9][0-9]{0,3}$/.test(
+        normalizedCallingCode
+      )
+    ) {
       return res.status(400).json({
         success: false,
-        message: "Calling code must be in a valid format such as +977.",
+        message:
+          "Calling code must be in a valid format such as +977.",
       });
     }
 
-    let countryStatus = status?.toUpperCase() || "ACTIVE";
+    // --------------------------------------------------------
+    // Validate status
+    // --------------------------------------------------------
 
-    if (!["ACTIVE", "INACTIVE"].includes(countryStatus)) {
+    const countryStatus =
+      status?.toUpperCase() || "ACTIVE";
+
+    if (
+      !["ACTIVE", "INACTIVE"].includes(countryStatus)
+    ) {
       return res.status(400).json({
         success: false,
         message: "Invalid country status.",
       });
     }
+
+    // --------------------------------------------------------
+    // Create country
+    // --------------------------------------------------------
 
     const country = await prisma.country.create({
       data: {
@@ -194,7 +285,7 @@ export const createCountry = async (req, res) => {
         iso3Code: normalizedIso3,
         callingCode: normalizedCallingCode,
         status: countryStatus,
-        createdById: req.user.id,
+        createdById: Number(userId),
       },
     });
 
@@ -206,21 +297,28 @@ export const createCountry = async (req, res) => {
   } catch (error) {
     console.error("Create country error:", error);
 
+    // Duplicate unique field
     if (error.code === "P2002") {
       return res.status(409).json({
         success: false,
-        message: "Country name or ISO code already exists.",
+        message:
+          "Country name or ISO code already exists.",
       });
     }
 
     return res.status(500).json({
       success: false,
-      message: "Failed to create country.",
+      message: error.message,
+      code: error.code || null,
     });
   }
 };
 
+// ============================================================
+// UPDATE COUNTRY
 // PUT /api/countries/:id
+// ============================================================
+
 export const updateCountry = async (req, res) => {
   try {
     const id = Number(req.params.id);
@@ -232,9 +330,13 @@ export const updateCountry = async (req, res) => {
       });
     }
 
-    const existingCountry = await prisma.country.findUnique({
-      where: { id },
-    });
+    // Check country exists
+    const existingCountry =
+      await prisma.country.findUnique({
+        where: {
+          id,
+        },
+      });
 
     if (!existingCountry) {
       return res.status(404).json({
@@ -253,6 +355,10 @@ export const updateCountry = async (req, res) => {
 
     const data = {};
 
+    // --------------------------------------------------------
+    // Name
+    // --------------------------------------------------------
+
     if (name !== undefined) {
       const normalizedName = normalizeName(name);
 
@@ -266,52 +372,87 @@ export const updateCountry = async (req, res) => {
       data.name = normalizedName;
     }
 
-    if (iso2Code !== undefined) {
-      const normalizedIso2 = normalizeCode(iso2Code);
+    // --------------------------------------------------------
+    // ISO 2
+    // --------------------------------------------------------
 
-      if (normalizedIso2 && !/^[A-Z]{2}$/.test(normalizedIso2)) {
+    if (iso2Code !== undefined) {
+      const normalizedIso2 =
+        normalizeCode(iso2Code);
+
+      if (
+        normalizedIso2 &&
+        !/^[A-Z]{2}$/.test(normalizedIso2)
+      ) {
         return res.status(400).json({
           success: false,
-          message: "ISO 2 code must contain exactly 2 letters.",
+          message:
+            "ISO 2 code must contain exactly 2 letters.",
         });
       }
 
       data.iso2Code = normalizedIso2;
     }
 
-    if (iso3Code !== undefined) {
-      const normalizedIso3 = normalizeCode(iso3Code);
+    // --------------------------------------------------------
+    // ISO 3
+    // --------------------------------------------------------
 
-      if (normalizedIso3 && !/^[A-Z]{3}$/.test(normalizedIso3)) {
+    if (iso3Code !== undefined) {
+      const normalizedIso3 =
+        normalizeCode(iso3Code);
+
+      if (
+        normalizedIso3 &&
+        !/^[A-Z]{3}$/.test(normalizedIso3)
+      ) {
         return res.status(400).json({
           success: false,
-          message: "ISO 3 code must contain exactly 3 letters.",
+          message:
+            "ISO 3 code must contain exactly 3 letters.",
         });
       }
 
       data.iso3Code = normalizedIso3;
     }
 
+    // --------------------------------------------------------
+    // Calling code
+    // --------------------------------------------------------
+
     if (callingCode !== undefined) {
-      const normalizedCallingCode = callingCode?.trim() || null;
+      const normalizedCallingCode =
+        callingCode?.trim() || null;
 
       if (
         normalizedCallingCode &&
-        !/^\+[1-9][0-9]{0,3}$/.test(normalizedCallingCode)
+        !/^\+[1-9][0-9]{0,3}$/.test(
+          normalizedCallingCode
+        )
       ) {
         return res.status(400).json({
           success: false,
-          message: "Calling code must be in a valid format such as +977.",
+          message:
+            "Calling code must be in a valid format such as +977.",
         });
       }
 
       data.callingCode = normalizedCallingCode;
     }
 
-    if (status !== undefined) {
-      const normalizedStatus = status.toUpperCase();
+    // --------------------------------------------------------
+    // Status
+    // --------------------------------------------------------
 
-      if (!["ACTIVE", "INACTIVE"].includes(normalizedStatus)) {
+    if (status !== undefined) {
+      const normalizedStatus =
+        status.toUpperCase();
+
+      if (
+        !["ACTIVE", "INACTIVE"].includes(
+          normalizedStatus
+        )
+      ) {
         return res.status(400).json({
           success: false,
           message: "Invalid country status.",
@@ -321,8 +462,14 @@ export const updateCountry = async (req, res) => {
       data.status = normalizedStatus;
     }
 
+    // --------------------------------------------------------
+    // Update
+    // --------------------------------------------------------
+
     const country = await prisma.country.update({
-      where: { id },
+      where: {
+        id,
+      },
       data,
     });
 
@@ -337,7 +484,15 @@ export const updateCountry = async (req, res) => {
     if (error.code === "P2002") {
       return res.status(409).json({
         success: false,
-        message: "Country name or ISO code already exists.",
+        message:
+          "Country name or ISO code already exists.",
+      });
+    }
+
+    if (error.code === "P2025") {
+      return res.status(404).json({
+        success: false,
+        message: "Country not found.",
       });
     }
 
@@ -348,8 +503,15 @@ export const updateCountry = async (req, res) => {
   }
 };
 
+// ============================================================
+// UPDATE COUNTRY STATUS
 // PATCH /api/countries/:id/status
-export const updateCountryStatus = async (req, res) => {
+// ============================================================
+
+export const updateCountryStatus = async (
+  req,
+  res
+) => {
   try {
     const id = Number(req.params.id);
 
@@ -362,27 +524,41 @@ export const updateCountryStatus = async (req, res) => {
 
     const { status } = req.body;
 
-    if (!["ACTIVE", "INACTIVE"].includes(status?.toUpperCase())) {
+    const normalizedStatus =
+      status?.toUpperCase();
+
+    if (
+      !["ACTIVE", "INACTIVE"].includes(
+        normalizedStatus
+      )
+    ) {
       return res.status(400).json({
         success: false,
-        message: "Status must be ACTIVE or INACTIVE.",
+        message:
+          "Status must be ACTIVE or INACTIVE.",
       });
     }
 
     const country = await prisma.country.update({
-      where: { id },
+      where: {
+        id,
+      },
       data: {
-        status: status.toUpperCase(),
+        status: normalizedStatus,
       },
     });
 
     return res.status(200).json({
       success: true,
-      message: "Country status updated successfully.",
+      message:
+        "Country status updated successfully.",
       country,
     });
   } catch (error) {
-    console.error("Update country status error:", error);
+    console.error(
+      "Update country status error:",
+      error
+    );
 
     if (error.code === "P2025") {
       return res.status(404).json({
@@ -393,12 +569,17 @@ export const updateCountryStatus = async (req, res) => {
 
     return res.status(500).json({
       success: false,
-      message: "Failed to update country status.",
+      message:
+        "Failed to update country status.",
     });
   }
 };
 
+// ============================================================
+// DELETE COUNTRY
 // DELETE /api/countries/:id
+// ============================================================
+
 export const deleteCountry = async (req, res) => {
   try {
     const id = Number(req.params.id);
@@ -410,9 +591,13 @@ export const deleteCountry = async (req, res) => {
       });
     }
 
-    const country = await prisma.country.findUnique({
-      where: { id },
-    });
+    // Check country exists
+    const country =
+      await prisma.country.findUnique({
+        where: {
+          id,
+        },
+      });
 
     if (!country) {
       return res.status(404).json({
@@ -421,8 +606,11 @@ export const deleteCountry = async (req, res) => {
       });
     }
 
+    // Delete
     await prisma.country.delete({
-      where: { id },
+      where: {
+        id,
+      },
     });
 
     return res.status(200).json({
@@ -430,7 +618,27 @@ export const deleteCountry = async (req, res) => {
       message: "Country deleted successfully.",
     });
   } catch (error) {
-    console.error("Delete country error:", error);
+    console.error(
+      "Delete country error:",
+      error
+    );
+
+    // Country may already be referenced by another
+    // model once foreign-key relationships are added.
+    if (error.code === "P2003") {
+      return res.status(409).json({
+        success: false,
+        message:
+          "Country cannot be deleted because it is being used by another record.",
+      });
+    }
+
+    if (error.code === "P2025") {
+      return res.status(404).json({
+        success: false,
+        message: "Country not found.",
+      });
+    }
 
     return res.status(500).json({
       success: false,

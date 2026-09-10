@@ -13,6 +13,7 @@ import demandLetterRoutes from "./routes/demandLetterRoutes.js";
 import documentRoutes from "./routes/documents.js";
 import reportsRoutes from "./routes/reportsRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
+import countryRoutes from "./routes/countryRoutes.js";
 
 import { authenticateToken } from "./middleware/authMiddleware.js";
 import { authorizeRoles } from "./middleware/roleMiddleware.js";
@@ -89,6 +90,8 @@ app.use("/api/reports", reportsRoutes);
 
 
 app.use("/api/users", userRoutes);
+
+app.use("/api/countries", countryRoutes);
 
 // ========================================
 // DEMAND LETTER ROUTES
