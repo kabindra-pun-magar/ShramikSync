@@ -11,6 +11,7 @@ import Documents from "./pages/Documents";
 import Settings from "./pages/Settings";
 import Users from "./pages/Users";
 import Reports from "./pages/Reports";
+import Countries from "./pages/Countries";
 
 import PrivateRoute from "./components/PrivateRoute";
 import DashboardLayout from "./components/layout/DashboardLayout";
@@ -125,6 +126,16 @@ function App() {
             <Route
               path="/users"
               element={<Users />}
+            />
+
+
+            {/* ========================================
+                COUNTRIES
+            ======================================== */}
+
+            <Route
+              path="/countries"
+              element={<Countries />}
             />
 
           </Route>
